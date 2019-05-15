@@ -204,7 +204,7 @@ MainWindow::~MainWindow()
    szumy, typu piła, wygasające
  * rysowanie widma 2 pola
  * RMS -
- * Github kody publikacja - no
+ * Github kody publikacja - does't allowed
     zapis i odczyt
     lista plikow
 
@@ -214,6 +214,10 @@ QStringList images = directory.entryList(QStringList() << "*.jpg" << "*.JPG",QDi
 foreach(QString filename, images) {
 //do whatever you need to do
 }
+
+QIamge
+Qpixmap
+
  */
 //double rms(double x[], int n)
 double rms(double* x, int n)
@@ -275,7 +279,7 @@ void MainWindow::externalThread_tick()
 
 //                  double amplitude = 20. * log10( mag );
 
-                  i *= 2;
+                  i *= 2;       // przedział zmiennej i: od 0 do 512 mnożony razy dwa
 
                   spectrum[k][i] = mag;            // TODO nie mieści się na wykresie//                  spectrum[k][i] = (out[0]+i)->r * hamming[i];
                   spectrum[k][i-1] = mag;            // TODO nie mieści się na wykresie//                  spectrum[k][i] = (out[0]+i)->r * hamming[i];
@@ -283,13 +287,27 @@ void MainWindow::externalThread_tick()
                   int a = 10;
                   if( a < i && i < DSIZE-a) // Hz
                   {
-                    timeData[1][i] = rms(&spectrum[0][i-a],a*2);
+                    timeData[1][i] = rms(&spectrum[0][i-16],a*2);
                     timeData[1][i-1] = timeData[1][i];
                   }
                   else
                   {
                     timeData[1][i] = 0;
                     timeData[1][i-1] = 0;
+                  }
+
+                   a = 20;
+                  int n = DSIZE2 / a; // Hz (okno)
+
+                  if( meanData.size() != n )
+                    meanData.resize(n);
+
+                  for(int j=0; j<n; j++) // słupki wypełniena
+//                  if ( n > 0 && i % n == 0 )
+                  {
+              //            meanData[j] = std::accumulate( timeData[j].begin(), timeData[j].end(), 0.0)/timeData[j].size();
+                      //                      meanData[i/n] = i/n;
+                    meanData[j] = (double) j/n;
                   }
 
                   i /= 2;
@@ -309,15 +327,25 @@ void MainWindow::externalThread_tick()
              }
         }
 
+        int q=16;
+        int d = DSIZE2/q;
+
+
+        if( meanData.size() != d )
+          meanData.resize(d);
+
+        ui->statusBar->showMessage( "Rozmiar d: " + QString::number(d));
+
+        for (int i = 0; i < d; i++) {
+//            meanData[i]=(double)i/d;
+            meanData[i]=rms(&spectrum[0][d*q],0);
+        }
+
 //        20*log10(sqrt(x)) we can just do 10*log10(x)
 //           window[ctr] = hamming[ctr]*y[ctr];
 
 // furier         do 1KHz   probowanie do 45
 // port 1-wszy pod 11
-
-
-        for(int j=0; j<NCH; j++)
-            meanData[j] = std::accumulate( timeData[j].begin(), timeData[j].end(), 0.0)/timeData[j].size();
 
         update();
 
@@ -360,8 +388,8 @@ void MainWindow::paintEvent(QPaintEvent *event)
               chart.plotColor=Qt::red;
               chart.drawLinearData(painter, timeData[0]);
 
-              chart.plotColor=Qt::yellow;
-              chart.drawLinearData(painter, spectrum[0]);
+//              chart.plotColor=Qt::yellow;
+//              chart.drawLinearData(painter, spectrum[0]);
         }
 
         if( ui->actionSpektrum->isChecked())
@@ -383,14 +411,15 @@ void MainWindow::paintEvent(QPaintEvent *event)
         }
     }
 
-    if(ui->actionBar->isChecked()){
-
+    if(ui->actionBar->isChecked()) {
         chart.plotColor=Qt::cyan;
         chart.drawBarsData(painter, meanData);
+
+
     }
 
 
-    QThread::msleep(10);
+//    QThread::msleep(1);
 }
 
 // -----------------------------------------------------------------------------
@@ -729,4 +758,18 @@ void MainWindow::on_actionKatalog_triggered()
 void MainWindow::on_textEdit_cursorPositionChanged()
 {
 
+}
+
+void MainWindow::draw_bars_Hz_gap(int window_length, int  rms)
+{
+    int a = 20;
+    int n = DSIZE2 / window_length; // Hz (okno)
+
+    meanData.resize(n);
+
+    for(int j=0; j<n; j++) // słupki wypełniena
+    {
+//            meanData[j] = std::accumulate( timeData[j].begin(), timeData[j].end(), 0.0)/timeData[j].size();
+        meanData[j] = (double)j/n;
+    }
 }

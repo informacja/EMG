@@ -364,6 +364,9 @@ color: rgb(255, 255, 255);</string>
    <property name="checkable">
     <bool>true</bool>
    </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
    <property name="icon">
     <iconset resource="resources.qrc">
      <normaloff>:/icons/bars.png</normaloff>:/icons/bars.png</iconset>

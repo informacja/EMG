@@ -37,7 +37,6 @@ private slots:
     void on_actionOtw_rz_triggered(bool checked);
     void on_actionZapisz_domy_lne_triggered();
     void on_actionKatalog_triggered();
-
     void on_textEdit_cursorPositionChanged();
 
 private:
@@ -53,6 +52,8 @@ private:
     void saveSettings( const QVariant &value = DEBUG_FILE EXT, const QString &key = "path", const QString &group = INI_FILES);
     QVariant loadSettings(const QString &key = "path", const QString &group = INI_FILES, const QVariant &defaultValue = QVariant());
     bool simulation_read_data_from_file();
+    void draw_bars_Hz_gap(int window_length, int);
+
 
     Thread thread;
     QSerialPort serial;
