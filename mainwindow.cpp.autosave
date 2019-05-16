@@ -324,7 +324,7 @@ void MainWindow::externalThread_tick()
         }
 
         int q=16;
-        int d = DSIZE2/q;
+//        int d = DSIZE2/q;
 
 
         if( meanData.size() != d )

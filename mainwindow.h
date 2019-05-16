@@ -7,6 +7,7 @@
 #define NCH 3
 #define DSIZE    (NCH*2048)
 #define DSIZE2   (DSIZE/2/NCH)
+#define NBARS     10
 
 //#define DISABLE_INPUT_3                 // Added by Piotr, don't display unused
 #define DEBUG_FILE  "out"

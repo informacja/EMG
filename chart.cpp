@@ -1,6 +1,4 @@
 #include "chart.h"
-#include <QDebug>
-
 
 Chart::Chart()
 {

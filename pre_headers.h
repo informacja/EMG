@@ -17,6 +17,7 @@
 #include <QFile>
 #include <QTextStream>
 #include <QDateTime>
+#include <QDebug>
 //#include "kissfft-131/kiss_fft.h"
 #include <QMimeData>
 #include <QDragEnterEvent>
