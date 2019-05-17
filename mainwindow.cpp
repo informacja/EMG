@@ -16,6 +16,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->actionRun,  SIGNAL(triggered()), this, SLOT(sendCommand()));
     connect(ui->actionLine, SIGNAL(triggered()), this, SLOT(update()));
     connect(ui->actionBar,  SIGNAL(triggered()), this, SLOT(update()));
+//    connect(slider, SIGNAL(valueChanged(int)), SLOT(onSliderValueChanged(int)));
 
                 timeDataCh1.resize(DSIZE2);
     //            timeDataCh2.resize(DSIZE2);
@@ -283,13 +284,13 @@ void MainWindow::externalThread_tick()
                   int a = 10;
                   if( a < i && i < DSIZE-a) // Hz
                   {
-//                    timeData[1][i] = rms(&spectrum[0][i-16],a*2);
-//                    timeData[1][i-1] = timeData[1][i];
+                    timeData[1][i] = rms(&spectrum[0][i-a],a*2);
+                    timeData[1][i-1] = timeData[1][i];
                   }
                   else
                   {
-//                    timeData[1][i] = 0;
-//                    timeData[1][i-1] = 0;
+                    timeData[1][i] = 0;
+                    timeData[1][i-1] = 0;
                   }
 
 //                   a = 20;
@@ -323,17 +324,18 @@ void MainWindow::externalThread_tick()
              }
         }
 
-        int q=16;
-        int d = DSIZE2/q;
+        int d = DSIZE2/NBARS;
 
 
-        if( meanData.size() != d )
-          meanData.resize(d);
+        if( meanData.size() != NBARS )
+          meanData.resize(NBARS);
 
-        ui->statusBar->showMessage( "Rozmiar d: " + QString::number(d));
+        ui->statusBar->showMessage( "Rozmiar d: " + QString::number(DSIZE2));
 
-        for (int i = 0; i < d; i++) {
+        for (int i = 0; i < NBARS; i++) {
 //            meanData[i]=(double)i/d;
+//             if( a < i && i < DSIZE2-a) // Hz
+             meanData[i] = rms(&spectrum[0][(d)*i],d);
 //            meanData[i]=rms(&spectrum[0][d*q],0);
         }
 

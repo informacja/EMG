@@ -7,12 +7,12 @@
 #define NCH 3
 #define DSIZE    (NCH*2048)
 #define DSIZE2   (DSIZE/2/NCH)
-#define NBARS     10
+#define NBARS     32                          // do dzielenia DSIZE2
 
-//#define DISABLE_INPUT_3                 // Added by Piotr, don't display unused
+//#define DISABLE_INPUT_3                     // Added by Piotr, don't display unused
 #define DEBUG_FILE  "out"
 #define EXT ".bin"
-#define B_SIZE DSIZE                 // minimalny rozmiar wczytywaniej paczki danych z pliku
+#define B_SIZE DSIZE                          // minimalny rozmiar wczytywaniej paczki danych z pliku
 #define SQUARE(a) (a*a)
 //#define SOFT_NAME       "EMG"
 #define INI_FILES "Ini_Files"

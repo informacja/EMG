@@ -223,6 +223,43 @@ color: rgb(255, 255, 255);</string>
           </property>
          </widget>
         </item>
+        <item row="1" column="0">
+         <widget class="QSlider" name="pwmValue1">
+          <property name="cursor">
+           <cursorShape>PointingHandCursor</cursorShape>
+          </property>
+          <property name="mouseTracking">
+           <bool>false</bool>
+          </property>
+          <property name="focusPolicy">
+           <enum>Qt::WheelFocus</enum>
+          </property>
+          <property name="minimum">
+           <number>1</number>
+          </property>
+          <property name="maximum">
+           <number>128</number>
+          </property>
+          <property name="pageStep">
+           <number>10</number>
+          </property>
+          <property name="sliderPosition">
+           <number>32</number>
+          </property>
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="invertedAppearance">
+           <bool>false</bool>
+          </property>
+          <property name="invertedControls">
+           <bool>false</bool>
+          </property>
+          <property name="tickPosition">
+           <enum>QSlider::TicksBothSides</enum>
+          </property>
+         </widget>
+        </item>
         <item row="0" column="2">
          <widget class="QLabel" name="pwmLabel3">
           <property name="text">
@@ -233,13 +270,10 @@ color: rgb(255, 255, 255);</string>
           </property>
          </widget>
         </item>
-        <item row="1" column="0">
-         <widget class="QSlider" name="pwmValue1">
+        <item row="1" column="2">
+         <widget class="QSlider" name="pwmValue3">
           <property name="maximum">
            <number>100</number>
-          </property>
-          <property name="pageStep">
-           <number>10</number>
           </property>
           <property name="orientation">
            <enum>Qt::Vertical</enum>
@@ -262,16 +296,10 @@ color: rgb(255, 255, 255);</string>
           </property>
          </widget>
         </item>
-        <item row="1" column="2">
-         <widget class="QSlider" name="pwmValue3">
-          <property name="maximum">
-           <number>100</number>
-          </property>
+        <item row="1" column="3">
+         <widget class="QSlider" name="verticalSlider">
           <property name="orientation">
            <enum>Qt::Vertical</enum>
-          </property>
-          <property name="tickPosition">
-           <enum>QSlider::TicksBothSides</enum>
           </property>
          </widget>
         </item>
@@ -482,7 +510,7 @@ color: rgb(255, 255, 255);</string>
     </hint>
     <hint type="destinationlabel">
      <x>55</x>
-     <y>194</y>
+     <y>220</y>
     </hint>
    </hints>
   </connection>
@@ -498,7 +526,7 @@ color: rgb(255, 255, 255);</string>
     </hint>
     <hint type="destinationlabel">
      <x>96</x>
-     <y>194</y>
+     <y>220</y>
     </hint>
    </hints>
   </connection>
@@ -514,7 +542,7 @@ color: rgb(255, 255, 255);</string>
     </hint>
     <hint type="destinationlabel">
      <x>137</x>
-     <y>194</y>
+     <y>220</y>
     </hint>
    </hints>
   </connection>
