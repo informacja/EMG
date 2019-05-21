@@ -21,6 +21,30 @@ namespace Ui {
 class MainWindow;
 }
 
+class FPS : public QWidget
+{
+
+public:
+FPS() : m_frameCount(0) {}
+
+void paintEvent(QPaintEvent *e) {
+    if (m_frameCount == 0) {
+         m_time.start();
+    } else {
+//        printf("FPS is %f ms\n", m_time.elapsed() / float(m_frameCount));
+        qWarning() << "FPS is " << (m_frameCount / (float(m_time.elapsed()) / 1000.0f)) << endl;
+
+    }
+    m_frameCount++;
+
+    // Painting goes here...
+
+}
+
+QTime m_time;
+int m_frameCount;
+};
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -81,7 +105,11 @@ private:
     QTextStream stream;    
 
     int simulation;
+    FPS fps;
 
 };
+
+
+
 
 #endif // MAINWINDOW_H

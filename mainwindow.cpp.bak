@@ -257,7 +257,7 @@ void MainWindow::externalThread_tick()
         if( ui->actionSave->isChecked() )
             save_to_file( 0 );
 
-        for (int k = 0; k < NCH; k++)
+        for (int k = 0; k < 1/*NCH*/; k++)
         {
             kiss_fft( cfg, in[k], out[k] );
            // kiss_fft( cfg, test, out[k] );

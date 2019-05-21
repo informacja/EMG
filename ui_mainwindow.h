@@ -13,6 +13,7 @@
 #include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QButtonGroup>
+#include <QtWidgets/QCheckBox>
 #include <QtWidgets/QDockWidget>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QGroupBox>
@@ -21,7 +22,6 @@
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenu>
 #include <QtWidgets/QMenuBar>
-#include <QtWidgets/QRadioButton>
 #include <QtWidgets/QSlider>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QTextEdit>
@@ -53,17 +53,18 @@ public:
     QGridLayout *gridLayout_3;
     QGroupBox *groupBox;
     QGridLayout *gridLayout_2;
-    QRadioButton *selectInput1;
-    QRadioButton *selectInput2;
-    QRadioButton *selectInput3;
+    QCheckBox *selectInput1;
+    QCheckBox *selectInput3;
+    QCheckBox *selectInput2;
     QGroupBox *groupBox_2;
     QGridLayout *gridLayout;
     QLabel *pwmLabel1;
     QLabel *pwmLabel2;
-    QLabel *pwmLabel3;
     QSlider *pwmValue1;
-    QSlider *pwmValue2;
+    QLabel *pwmLabel3;
     QSlider *pwmValue3;
+    QSlider *pwmValue2;
+    QSlider *verticalSlider;
     QTextEdit *textEdit;
 
     void setupUi(QMainWindow *MainWindow)
@@ -197,26 +198,26 @@ public:
         gridLayout_2->setSpacing(6);
         gridLayout_2->setContentsMargins(11, 11, 11, 11);
         gridLayout_2->setObjectName(QStringLiteral("gridLayout_2"));
-        selectInput1 = new QRadioButton(groupBox);
+        selectInput1 = new QCheckBox(groupBox);
         selectInput1->setObjectName(QStringLiteral("selectInput1"));
         selectInput1->setChecked(true);
         selectInput1->setAutoExclusive(false);
 
         gridLayout_2->addWidget(selectInput1, 0, 0, 1, 1);
 
-        selectInput2 = new QRadioButton(groupBox);
-        selectInput2->setObjectName(QStringLiteral("selectInput2"));
-        selectInput2->setChecked(true);
-        selectInput2->setAutoExclusive(false);
-
-        gridLayout_2->addWidget(selectInput2, 0, 1, 1, 1);
-
-        selectInput3 = new QRadioButton(groupBox);
+        selectInput3 = new QCheckBox(groupBox);
         selectInput3->setObjectName(QStringLiteral("selectInput3"));
         selectInput3->setChecked(true);
         selectInput3->setAutoExclusive(false);
 
         gridLayout_2->addWidget(selectInput3, 0, 2, 1, 1);
+
+        selectInput2 = new QCheckBox(groupBox);
+        selectInput2->setObjectName(QStringLiteral("selectInput2"));
+        selectInput2->setChecked(false);
+        selectInput2->setAutoExclusive(false);
+
+        gridLayout_2->addWidget(selectInput2, 0, 1, 1, 1);
 
 
         gridLayout_3->addWidget(groupBox, 2, 0, 1, 1);
@@ -241,12 +242,6 @@ public:
 
         gridLayout->addWidget(pwmLabel2, 0, 1, 1, 1);
 
-        pwmLabel3 = new QLabel(groupBox_2);
-        pwmLabel3->setObjectName(QStringLiteral("pwmLabel3"));
-        pwmLabel3->setAlignment(Qt::AlignCenter);
-
-        gridLayout->addWidget(pwmLabel3, 0, 2, 1, 1);
-
         pwmValue1 = new QSlider(groupBox_2);
         pwmValue1->setObjectName(QStringLiteral("pwmValue1"));
         pwmValue1->setCursor(QCursor(Qt::PointingHandCursor));
@@ -263,13 +258,11 @@ public:
 
         gridLayout->addWidget(pwmValue1, 1, 0, 1, 1);
 
-        pwmValue2 = new QSlider(groupBox_2);
-        pwmValue2->setObjectName(QStringLiteral("pwmValue2"));
-        pwmValue2->setMaximum(100);
-        pwmValue2->setOrientation(Qt::Vertical);
-        pwmValue2->setTickPosition(QSlider::TicksBothSides);
+        pwmLabel3 = new QLabel(groupBox_2);
+        pwmLabel3->setObjectName(QStringLiteral("pwmLabel3"));
+        pwmLabel3->setAlignment(Qt::AlignCenter);
 
-        gridLayout->addWidget(pwmValue2, 1, 1, 1, 1);
+        gridLayout->addWidget(pwmLabel3, 0, 2, 1, 1);
 
         pwmValue3 = new QSlider(groupBox_2);
         pwmValue3->setObjectName(QStringLiteral("pwmValue3"));
@@ -278,6 +271,20 @@ public:
         pwmValue3->setTickPosition(QSlider::TicksBothSides);
 
         gridLayout->addWidget(pwmValue3, 1, 2, 1, 1);
+
+        pwmValue2 = new QSlider(groupBox_2);
+        pwmValue2->setObjectName(QStringLiteral("pwmValue2"));
+        pwmValue2->setMaximum(100);
+        pwmValue2->setOrientation(Qt::Vertical);
+        pwmValue2->setTickPosition(QSlider::TicksBothSides);
+
+        gridLayout->addWidget(pwmValue2, 1, 1, 1, 1);
+
+        verticalSlider = new QSlider(groupBox_2);
+        verticalSlider->setObjectName(QStringLiteral("verticalSlider"));
+        verticalSlider->setOrientation(Qt::Vertical);
+
+        gridLayout->addWidget(verticalSlider, 1, 3, 1, 1);
 
 
         gridLayout_3->addWidget(groupBox_2, 3, 0, 1, 1);
@@ -329,12 +336,14 @@ public:
         actionRun->setShortcut(QApplication::translate("MainWindow", "Space", 0));
         actionTrigger->setText(QApplication::translate("MainWindow", "Trigger", 0));
         actionLine->setText(QApplication::translate("MainWindow", "Line", 0));
+        actionLine->setShortcut(QApplication::translate("MainWindow", "4", 0));
         actionBar->setText(QApplication::translate("MainWindow", "Bar", 0));
+        actionBar->setShortcut(QApplication::translate("MainWindow", "5", 0));
         actionSpektrum->setText(QApplication::translate("MainWindow", "Spektrum", 0));
 #ifndef QT_NO_TOOLTIP
         actionSpektrum->setToolTip(QApplication::translate("MainWindow", "Poka\305\274 spektrum", 0));
 #endif // QT_NO_TOOLTIP
-        actionSpektrum->setShortcut(QApplication::translate("MainWindow", "Ctrl+H", 0));
+        actionSpektrum->setShortcut(QApplication::translate("MainWindow", "6", 0));
         actionSave->setText(QApplication::translate("MainWindow", "Zapisz do pliku", 0));
 #ifndef QT_NO_TOOLTIP
         actionSave->setToolTip(QApplication::translate("MainWindow", "Zapis", 0));
@@ -352,8 +361,8 @@ public:
         menuUstwienia->setTitle(QApplication::translate("MainWindow", "Ustwienia", 0));
         groupBox->setTitle(QApplication::translate("MainWindow", "Input", 0));
         selectInput1->setText(QApplication::translate("MainWindow", "1", 0));
-        selectInput2->setText(QApplication::translate("MainWindow", "2", 0));
         selectInput3->setText(QApplication::translate("MainWindow", "3", 0));
+        selectInput2->setText(QApplication::translate("MainWindow", "2", 0));
         groupBox_2->setTitle(QApplication::translate("MainWindow", "PWM [%]", 0));
         pwmLabel1->setText(QApplication::translate("MainWindow", "0", 0));
         pwmLabel2->setText(QApplication::translate("MainWindow", "0", 0));

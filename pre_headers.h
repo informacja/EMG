@@ -51,6 +51,7 @@
 #include <QtWidgets/QTextEdit>
 #include <QtWidgets/QToolBar>
 #include <QtWidgets/QWidget>
+#include <QShortcut>
 
 enum{
     SIMULATION_NO = 0,

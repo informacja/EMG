@@ -6,6 +6,5 @@
         <file>icons/bars.png</file>
         <file>icons/heartbeat.png</file>
         <file>icons/save.png</file>
-        <file>icons/zi.jpg</file>
     </qresource>
 </RCC>

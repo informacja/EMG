@@ -59,5 +59,5 @@ RESOURCES += \
   QMAKE_CXXFLAGS += -MP8
 }
 
-PRECOMPILED_HEADER = pre_headers.h
-CONFIG += precompile_header
+#PRECOMPILED_HEADER = pre_headers.h
+#CONFIG += precompile_header
