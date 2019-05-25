@@ -182,6 +182,7 @@ Makefile: DataTransfer.pro ../../../../Qt/5.7/mingw53_32/mkspecs/win32-g++/qmake
 		../../../../Qt/5.7/mingw53_32/mkspecs/features/win32/qt_config.prf \
 		../../../../Qt/5.7/mingw53_32/mkspecs/win32-g++/qmake.conf \
 		../../../../Qt/5.7/mingw53_32/mkspecs/features/spec_post.prf \
+		.qmake.stash \
 		../../../../Qt/5.7/mingw53_32/mkspecs/features/exclusive_builds.prf \
 		../../../../Qt/5.7/mingw53_32/mkspecs/features/default_pre.prf \
 		../../../../Qt/5.7/mingw53_32/mkspecs/features/win32/default_pre.prf \
@@ -205,8 +206,10 @@ Makefile: DataTransfer.pro ../../../../Qt/5.7/mingw53_32/mkspecs/win32-g++/qmake
 		../../../../Qt/5.7/mingw53_32/mkspecs/features/lex.prf \
 		DataTransfer.pro \
 		../../../../Qt/5.7/mingw53_32/lib/qtmaind.prl \
+		../../../../Qt/5.7/mingw53_32/lib/Qt5Multimedia.prl \
 		../../../../Qt/5.7/mingw53_32/lib/Qt5Widgets.prl \
 		../../../../Qt/5.7/mingw53_32/lib/Qt5Gui.prl \
+		../../../../Qt/5.7/mingw53_32/lib/Qt5Network.prl \
 		../../../../Qt/5.7/mingw53_32/lib/Qt5SerialPort.prl \
 		../../../../Qt/5.7/mingw53_32/lib/Qt5Core.prl
 	$(QMAKE) -spec win32-g++ "CONFIG+=debug" "CONFIG+=qml_debug" -o Makefile DataTransfer.pro
@@ -333,6 +336,7 @@ Makefile: DataTransfer.pro ../../../../Qt/5.7/mingw53_32/mkspecs/win32-g++/qmake
 ../../../../Qt/5.7/mingw53_32/mkspecs/features/win32/qt_config.prf:
 ../../../../Qt/5.7/mingw53_32/mkspecs/win32-g++/qmake.conf:
 ../../../../Qt/5.7/mingw53_32/mkspecs/features/spec_post.prf:
+.qmake.stash:
 ../../../../Qt/5.7/mingw53_32/mkspecs/features/exclusive_builds.prf:
 ../../../../Qt/5.7/mingw53_32/mkspecs/features/default_pre.prf:
 ../../../../Qt/5.7/mingw53_32/mkspecs/features/win32/default_pre.prf:
@@ -356,8 +360,10 @@ Makefile: DataTransfer.pro ../../../../Qt/5.7/mingw53_32/mkspecs/win32-g++/qmake
 ../../../../Qt/5.7/mingw53_32/mkspecs/features/lex.prf:
 DataTransfer.pro:
 ../../../../Qt/5.7/mingw53_32/lib/qtmaind.prl:
+../../../../Qt/5.7/mingw53_32/lib/Qt5Multimedia.prl:
 ../../../../Qt/5.7/mingw53_32/lib/Qt5Widgets.prl:
 ../../../../Qt/5.7/mingw53_32/lib/Qt5Gui.prl:
+../../../../Qt/5.7/mingw53_32/lib/Qt5Network.prl:
 ../../../../Qt/5.7/mingw53_32/lib/Qt5SerialPort.prl:
 ../../../../Qt/5.7/mingw53_32/lib/Qt5Core.prl:
 qmake: FORCE

@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT += core gui
+QT += core gui multimedia
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets serialport
 
@@ -30,6 +30,7 @@ SOURCES += \
     thread.cpp \
     chart.cpp \
 #    kissfft-131/kiss_fft.c
+    wavfile.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -37,6 +38,7 @@ HEADERS += \
     chart.h \
     pre_headers.h \
 #    kissfft-131/kiss_fft.h
+    wavfile.h
 
 FORMS += \
         mainwindow.ui
