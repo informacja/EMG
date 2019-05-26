@@ -297,10 +297,6 @@ void MainWindow::externalThread_tick()
 //                   normBinMag = sqrt(SQUARE(test[i].r) + SQUARE(test[i].i))  ; // do konca nie wiem czemu tu musze mnozyc przec 8
                   double mag = normBinMag;
 
-    //              filtr_average_beside_freq_by_peak( i, freq[i], cx_out, mag ); // peak number, frequency_index[peak number], fft_out, magnitude to averange
-
-//                  double amplitude = 20. * log10( mag );
-
                   i *= 2;       // przedział zmiennej i: od 0 do 512 mnożony razy dwa
 
                   spectrum[k][i] = mag;            // TODO nie mieści się na wykresie//                  spectrum[k][i] = (out[0]+i)->r * hamming[i];

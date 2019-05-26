@@ -27,11 +27,10 @@ CONFIG += c++11
 SOURCES += \
         main.cpp \
         mainwindow.cpp \
-    thread.cpp \
-    chart.cpp \
-#    wavfile.cpp \
-    kissfft-131/kiss_fft.c \
-    spectrum/app/wavfile.cpp
+        thread.cpp \
+        chart.cpp \
+        kissfft-131/kiss_fft.c \
+        spectrum/app/wavfile.cpp
 #    kissfft-131/kiss_fft.c
 #    spectrum/app/engine.cpp \
 #    spectrum/app/frequencyspectrum.cpp \
@@ -49,12 +48,11 @@ SOURCES += \
 
 HEADERS += \
         mainwindow.h \
-    thread.h \
-    chart.h \
-    pre_headers.h \
-    kissfft-131/kiss_fft.h \
-    spectrum/app/wavfile.h
-
+        thread.h \
+        chart.h \
+        pre_headers.h \
+        kissfft-131/kiss_fft.h \
+        spectrum/app/wavfile.h
 #    wavfile.h
 #    spectrum/app/engine.h \
 #    spectrum/app/frequencyspectrum.h \
@@ -69,7 +67,6 @@ HEADERS += \
 #    spectrum/app/tonegeneratordialog.h \
 #    spectrum/app/utils.h \
 #    spectrum/app/waveform.h \
-#    spectrum/app/wavfile.h \
 
 
 FORMS += \
