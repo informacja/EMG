@@ -1,7 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-#include "kissfft-131/kiss_fft.c"
+//#include "kissfft-131/kiss_fft.c"
 // samo .h nie bangla, uzasadnienie poniżej
 //Kissfft is not really something you need to make and install like other libraries. If you need complex ffts,
 //then all you need to do is compile the kiss_fft.c in your project. If you need something more specialized
@@ -26,8 +26,8 @@ MainWindow::MainWindow(QWidget *parent) :
     //            timeDataCh3.fill(0);
 
     ui->statusBar->showMessage("No device");
+//    simulation = SIMULATION_WAV;                    // default
     simulation = SIMULATION_NO;
-
     QString portname;
     const auto infos = QSerialPortInfo::availablePorts();
     for (const QSerialPortInfo &info : infos)
@@ -41,6 +41,7 @@ MainWindow::MainWindow(QWidget *parent) :
 //                serial.setBaudRate( serial.Baud115200,  serial.AllDirections);
                 ui->statusBar->showMessage(tr("Device: %1").arg(info.serialNumber()));
                 serial.clear();
+//                simulation = SIMULATION_NO;
 //                thread.start(thread.HighestPriority);     // zawsze startuj wątek, przeniesione poniżej
             }
             else {
@@ -79,22 +80,27 @@ MainWindow::MainWindow(QWidget *parent) :
     setAcceptDrops(true);
 
     int i = 0;
-    file_out.setFileName( DEBUG_FILE EXT );
+    file_out.setFileName( FILE_NAME EXT );
     while(file_out.exists())
       {
         if( file_out.size() == 0 )  // jeśli plik pusty, to nadpisz
           break;
         i++;
-        file_out.setFileName( DEBUG_FILE + QVariant(i).toString() + EXT );
+        file_out.setFileName( FILE_NAME + QVariant(i).toString() + EXT );
       }
 
-    file_csv.setFileName( DEBUG_FILE ".csv");
+    file_csv.setFileName( FILE_NAME ".csv");
+
 
     if(simulation)
+    {
         file_in.open(QIODevice::ReadOnly);
-    else
-        file_out.open(QIODevice::WriteOnly | QIODevice::Append);
 
+    }
+    else
+    {
+        file_out.open(QIODevice::WriteOnly | QIODevice::Append);
+    }
     file_csv.open(QIODevice::Append);
     stream.setDevice( (QIODevice*) &file_csv );
 
@@ -131,6 +137,15 @@ MainWindow::MainWindow(QWidget *parent) :
 //       QList a(3,2);
 
 //       splitter->setSizes()
+//    wav_file = new WavFile(this);
+//    qDebug() << "Plik otwarty?: " << wav_file->open(FILE_NAME ".wav");
+
+//         wav_file.save
+//         qDebug << "isopen: " << wav_file.re(0X333,64);
+//         qDebug << "isopen: " << wav_file.readLine(100);
+
+
+//         wav_file.
 
 }
 
@@ -195,9 +210,14 @@ MainWindow::~MainWindow()
         free(out[i]);
     }
     kiss_fft_free(cfg);
-//Qlistv
+//Qlistv    
+    delete wav_file;
     delete ui;
 }
+
+//-----------------------------------------------------------------------------
+// Public slots
+//-----------------------------------------------------------------------------
 
 // =============================================================================
 /* ToDo:
@@ -216,6 +236,11 @@ foreach(QString filename, images) {
 //do whatever you need to do
 }
 
+//        20*log10(sqrt(x)) we can just do 10*log10(x)
+//           window[ctr] = hamming[ctr]*y[ctr];
+
+// furier         do 1KHz   probowanie do 45
+// port 1-wszy pod 11
 QIamge
 Qpixmap
 
@@ -339,12 +364,6 @@ void MainWindow::externalThread_tick()
 //            meanData[i]=rms(&spectrum[0][d*q],0);
         }
 
-//        20*log10(sqrt(x)) we can just do 10*log10(x)
-//           window[ctr] = hamming[ctr]*y[ctr];
-
-// furier         do 1KHz   probowanie do 45
-// port 1-wszy pod 11
-
         update();
 
         if(ui->actionRun->isChecked())
@@ -356,6 +375,8 @@ void MainWindow::externalThread_tick()
           QThread::msleep(10);
     }
 }
+
+// -----------------------------------------------------------------------------
 
 void MainWindow::sendCommand()
 {
@@ -413,11 +434,11 @@ void MainWindow::paintEvent(QPaintEvent *event)
     if(ui->actionBar->isChecked()) {
         chart.plotColor=Qt::cyan;
         chart.drawBarsData(painter, meanData);
-
-
     }
 
+#ifdef FPS
     fps.paintEvent(event);
+#endif
 //printf("FPS is %f\n", m_frameCount / (float(m_timer.elapsed()) / 1000.0f));@
 //    QThread::msleep(1);
 }
@@ -466,34 +487,28 @@ bool MainWindow::load_data(bool add_seconds, int milisec)
 
 void MainWindow::save_to_file( bool add_seconds)
 {
-  for (int k = 0; k < NCH; k++)
+  for (int k = 0; k < 1/*NCH*/; k++)
   {
       if(add_seconds)
       {
           stream << "[" << QDateTime::currentMSecsSinceEpoch() << "]" << readdata << endl;
           // no csv
-      }
-      else
-      {
-  //        QTextStream out(&file_out);// out.bin
-  //        for (Qvector<double>::iterator iter = timeData[0].begin(); iter != timeData[0].end(); iter++){
-  //            out << *timeData[0];
-  //        }
-//          QByteArray dat ;//= timeData[0].data();
-  //        dat.fro
+//          file_out.write(( QString::toUtf8( QDateTime::currentMSecsSinceEpoch() ) ));
 
-  //                std::vector a = timeData[0].toStdVector();
-//          file_out.write( dat );                                   // out.bin
-          file_out.write(reinterpret_cast<char*>(timeData[k].data()), static_cast<uint>(timeData[k].size())*sizeof(double));
-
-          qInfo() << k << ": " << timeData[k].size();
-          for (int i = 0; i < timeData[0].size(); i++)
-          {
-              stream <<  timeData[k][i] << ",";    // out.csv
-          }
-  //        qInfo() << file.fileName();
-          stream << endl;
       }
+
+        file_out.write(reinterpret_cast<char*>(timeData[k].data()), static_cast<uint>(timeData[k].size())*sizeof(double));
+
+        qInfo() <<"zapisano kanał "<<  k << ": " << timeData[k].size();
+        for (int i = 0; i < timeData[0].size(); i++)
+        {
+            stream <<  timeData[k][i] << ",";    // out.csv
+        }
+//        qInfo() << file.fileName();
+        stream << endl;
+
+        // save WAV
+
    }
 }
 

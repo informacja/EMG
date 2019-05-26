@@ -10,7 +10,7 @@
 #define NBARS     32                          // do dzielenia DSIZE2
 
 //#define DISABLE_INPUT_3                     // Added by Piotr, don't display unused
-#define DEBUG_FILE  "out"
+#define FILE_NAME  "out"
 #define EXT ".bin"
 #define B_SIZE DSIZE                          // minimalny rozmiar wczytywaniej paczki danych z pliku
 #define SQUARE(a) (a*a)
@@ -74,7 +74,7 @@ private:
     void dropEvent(QDropEvent *e);
     void save_to_file( bool wait_mseconds_0 = 0);
     bool simulation_open_file(  QString fileName );
-    void saveSettings( const QVariant &value = DEBUG_FILE EXT, const QString &key = "path", const QString &group = INI_FILES);
+    void saveSettings( const QVariant &value = FILE_NAME EXT, const QString &key = "path", const QString &group = INI_FILES);
     QVariant loadSettings(const QString &key = "path", const QString &group = INI_FILES, const QVariant &defaultValue = QVariant());
     bool simulation_read_data_from_file();
     void draw_bars_Hz_gap(int window_length, int);
@@ -104,9 +104,9 @@ private:
     QFile file_in, file_out, file_csv;
     QTextStream stream;    
 
-    int simulation;
+    Simulation_Type simulation;
     FPS fps;
-
+    WavFile *wav_file;                           // input or output
 };
 
 

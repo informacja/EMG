@@ -1,0 +1,14 @@
+INPUT(
+./release\main.o
+./release\mainwindow.o
+./release\thread.o
+./release\chart.o
+./release\wavfile.o
+./release\chart.o
+./release\main.o
+./release\mainwindow.o
+./release\thread.o
+./release\qrc_resources.o
+./release\moc_mainwindow.o
+./release\moc_thread.o
+);

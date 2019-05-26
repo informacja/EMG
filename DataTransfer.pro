@@ -29,16 +29,48 @@ SOURCES += \
         mainwindow.cpp \
     thread.cpp \
     chart.cpp \
+#    wavfile.cpp \
+    kissfft-131/kiss_fft.c \
+    spectrum/app/wavfile.cpp
 #    kissfft-131/kiss_fft.c
-    wavfile.cpp
+#    spectrum/app/engine.cpp \
+#    spectrum/app/frequencyspectrum.cpp \
+#    spectrum/app/levelmeter.cpp \
+#    spectrum/app/main.cpp \
+#    spectrum/app/mainwidget.cpp \
+#    spectrum/app/settingsdialog.cpp \
+#    spectrum/app/spectrograph.cpp \
+#    spectrum/app/spectrumanalyser.cpp \
+#    spectrum/app/tonegenerator.cpp \
+#    spectrum/app/tonegeneratordialog.cpp \
+#    spectrum/app/utils.cpp \
+#    spectrum/app/waveform.cpp \
+
 
 HEADERS += \
         mainwindow.h \
     thread.h \
     chart.h \
     pre_headers.h \
-#    kissfft-131/kiss_fft.h
-    wavfile.h
+    kissfft-131/kiss_fft.h \
+    spectrum/app/wavfile.h
+
+#    wavfile.h
+#    spectrum/app/engine.h \
+#    spectrum/app/frequencyspectrum.h \
+#    spectrum/app/levelmeter.h \
+#    spectrum/app/mainwidget.h \
+#    spectrum/app/progressbar.h \
+#    spectrum/app/settingsdialog.h \
+#    spectrum/app/spectrograph.h \
+#    spectrum/app/spectrum.h \
+#    spectrum/app/spectrumanalyser.h \
+#    spectrum/app/tonegenerator.h \
+#    spectrum/app/tonegeneratordialog.h \
+#    spectrum/app/utils.h \
+#    spectrum/app/waveform.h \
+#    spectrum/app/wavfile.h \
+
 
 FORMS += \
         mainwindow.ui
@@ -63,3 +95,9 @@ RESOURCES += \
 
 #PRECOMPILED_HEADER = pre_headers.h
 #CONFIG += precompile_header
+
+SUBDIRS += \
+    spectrum/app/app.pro \
+#    spectrum/spectrum.pro
+
+#DISTFILES +=

@@ -4,7 +4,7 @@
 #include <QApplication>
 // chart.h
 #include <QPainter>
-#include <math.h>
+#include <qmath.h>
 //#include <vector>
 //mainwindow.h
 #include <QMainWindow>
@@ -53,10 +53,15 @@
 #include <QtWidgets/QWidget>
 #include <QShortcut>
 
-enum{
+#include "spectrum/app/wavfile.h"
+
+enum Simulation_Type {
     SIMULATION_NO = 0,
     SIMULATION_BINARY,
-    SIMULATION_CSV
+    SIMULATION_CSV,
+    SIMULATION_WAV
 };
+
+//#define FPS
 
 #endif // PRE_HEADERS_H
