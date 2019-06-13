@@ -25,12 +25,13 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++11
 
 SOURCES += \
-        main.cpp \
-        mainwindow.cpp \
-        thread.cpp \
-        chart.cpp \
-        kissfft-131/kiss_fft.c \
-        spectrum/app/wavfile.cpp
+    main.cpp \
+    mainwindow.cpp \
+    thread.cpp \
+    chart.cpp \
+    kissfft-131/kiss_fft.c \
+    audio/wavfilereader.cpp \
+    audio/wavefilewriter.cpp
 #    kissfft-131/kiss_fft.c
 #    spectrum/app/engine.cpp \
 #    spectrum/app/frequencyspectrum.cpp \
@@ -47,12 +48,13 @@ SOURCES += \
 
 
 HEADERS += \
-        mainwindow.h \
-        thread.h \
-        chart.h \
-        pre_headers.h \
-        kissfft-131/kiss_fft.h \
-        spectrum/app/wavfile.h
+    mainwindow.h \
+    thread.h \
+    chart.h \
+    pre_headers.h \
+    kissfft-131/kiss_fft.h \
+    audio/wavfilereader.h \
+    audio/wavefilewriter.h
 #    wavfile.h
 #    spectrum/app/engine.h \
 #    spectrum/app/frequencyspectrum.h \
@@ -90,11 +92,11 @@ RESOURCES += \
   QMAKE_CXXFLAGS += -MP8
 }
 
+CONFIG += precompile_header
+
 #PRECOMPILED_HEADER = pre_headers.h
-#CONFIG += precompile_header
 
-SUBDIRS += \
-    spectrum/app/app.pro \
+
+#SUBDIRS += \
+#    spectrum/app/app.pro \
 #    spectrum/spectrum.pro
-
-#DISTFILES +=

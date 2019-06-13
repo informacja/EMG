@@ -5,27 +5,31 @@
 
 #include "kissfft-131/kiss_fft.h"
 #define NCH 3
+#define TEMP_NCH 3
 #define DSIZE    (NCH*2048)
 #define DSIZE2   (DSIZE/2/NCH)
+#define BUF_LEN   10e6
 #define NBARS     32                          // do dzielenia DSIZE2
 
-//#define DISABLE_INPUT_3                     // Added by Piotr, don't display unused
+#define FPS FPS
+#define DATA_DIR "./data/"
 #define FILE_NAME  "out"
-#define EXT ".bin"
+#define EXT ".wav"
 #define B_SIZE DSIZE                          // minimalny rozmiar wczytywaniej paczki danych z pliku
 #define SQUARE(a) (a*a)
-//#define SOFT_NAME       "EMG"
 #define INI_FILES "Ini_Files"
 
 namespace Ui {
-class MainWindow;
+    class MainWindow;
 }
 
 class FPS : public QWidget
 {
-
 public:
-FPS() : m_frameCount(0) {}
+    QTime m_time;
+    int m_frameCount;
+
+ FPS()  { m_frameCount = 0;}
 
 void paintEvent(QPaintEvent *e) {
     if (m_frameCount == 0) {
@@ -38,12 +42,10 @@ void paintEvent(QPaintEvent *e) {
     m_frameCount++;
 
     // Painting goes here...
-
 }
-
-QTime m_time;
-int m_frameCount;
 };
+
+// -----------------------------------------------
 
 class MainWindow : public QMainWindow
 {
@@ -67,23 +69,31 @@ private slots:
 private:
     Ui::MainWindow *ui;
     void paintEvent(QPaintEvent *event);
-    void Alloc_memory_sub_constructor();
+    void alloc_memory_sub_constructor();
+    void pointers_set_null();
     inline void auto_actionRun_serial_port(int count_up_to = 100);
-    bool load_data(bool sav_add_seconds = false, int read_wait_milisec = 100);
+    qint64 load_data(bool sav_add_seconds = false);
     void dragEnterEvent(QDragEnterEvent *e);
     void dropEvent(QDropEvent *e);
     void save_to_file( bool wait_mseconds_0 = 0);
     bool simulation_open_file(  QString fileName );
     void saveSettings( const QVariant &value = FILE_NAME EXT, const QString &key = "path", const QString &group = INI_FILES);
     QVariant loadSettings(const QString &key = "path", const QString &group = INI_FILES, const QVariant &defaultValue = QVariant());
-    bool simulation_read_data_from_file();
+    qint64 simulation_read_data_from_file();
     void draw_bars_Hz_gap(int window_length, int);
+    void alloc_files();
+    Simulation_Type find_source_file(QString filename_or_prefered_extension = "" );
 
+signals:
+    void simulation_changed();
+public slots:
+    void set_simulation(const Simulation_Type &newSimul);
 
+private:
     Thread thread;
     QSerialPort serial;
     QByteArray senddata;
-    QByteArray readdata;
+    QByteArray readdata, buff;
     QVector<double> timeDataCh1, timeDataCh2, timeDataCh3;
     QVector<QVector<double> > timeData;
     QVector<double> meanData;
@@ -92,24 +102,34 @@ private:
 
     // Added
     kiss_fft_cfg cfg;
-    int isinverse;
+    int isinverse;                                                  // fft needed
     kiss_fft_cpx * in[NCH];
     kiss_fft_cpx * out[NCH];
     kiss_fft_cpx test[DSIZE2];
 
+    kiss_fft_scalar *hamming, *hann;                                   // okno, tak naprawdę typ to float :D
 
-    kiss_fft_scalar *hamming;                                                   // okno, tak naprawdę typ to float :D
-//    kiss_fft_scalar *tbuf = NULL; // TO DO
-
-    QFile file_in, file_out, file_csv;
-    QTextStream stream;    
-
+    QFile   file_out,
+            file_csv;                                           // read and write
+    QTextStream stream;                                         // for csv read and write;
     Simulation_Type simulation;
     FPS fps;
-    WavFile *wav_file;                           // input or output
+    WavFilerReader *wav_in;                                     // input or output
+    WaveFileWriter *wav_out;
+    QAudioFormat format;
 };
 
 
-
+//class Counter : public QObject
+//{
+//    Q_OBJECT
+//    int m_value;
+////public:
+////    int value() const { return m_value; }
+//public slots:
+//    void setValue(int value);
+//signals:
+//    void valueChanged(int newValue);
+//};
 
 #endif // MAINWINDOW_H

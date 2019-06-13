@@ -11,11 +11,26 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
+    QTime myTimer; myTimer.start();
+
     ui->setupUi(this);
+
+    qDebug() << "setupUi:" <<myTimer.elapsed() << "ms"; myTimer.start();
+
     connect(&thread, SIGNAL(tick()), this, SLOT(externalThread_tick()));
     connect(ui->actionRun,  SIGNAL(triggered()), this, SLOT(sendCommand()));
     connect(ui->actionLine, SIGNAL(triggered()), this, SLOT(update()));
     connect(ui->actionBar,  SIGNAL(triggered()), this, SLOT(update()));
+    connect(this, SIGNAL(simulation_changed()), this, SLOT( set_simulation() ));
+
+//    Counter a, b;
+//    QObject::connect(&a, SIGNAL(valueChanged(int)),
+//                     this, SLOT(say_hello() ));
+
+//      a.setValue(12);  // a.value() == 12, b.value() == 12
+
+//      qDebug() << b.value();
+//    connect(this->simulation, SIGNAL(simulation_changed(Simulation_Type)), this->simulation, SLOT(simulationSet(const Simulation_Type& )));
 //    connect(slider, SIGNAL(valueChanged(int)), SLOT(onSliderValueChanged(int)));
 
                 timeDataCh1.resize(DSIZE2);
@@ -26,8 +41,9 @@ MainWindow::MainWindow(QWidget *parent) :
     //            timeDataCh3.fill(0);
 
     ui->statusBar->showMessage("No device");
-//    simulation = SIMULATION_WAV;                    // default
-    simulation = SIMULATION_NO;
+//    simulation = SIMULATION_STOP;                    // default: find source
+    set_simulation( SIMULATION_STOP );
+
     QString portname;
     const auto infos = QSerialPortInfo::availablePorts();
     for (const QSerialPortInfo &info : infos)
@@ -41,7 +57,7 @@ MainWindow::MainWindow(QWidget *parent) :
 //                serial.setBaudRate( serial.Baud115200,  serial.AllDirections);
                 ui->statusBar->showMessage(tr("Device: %1").arg(info.serialNumber()));
                 serial.clear();
-//                simulation = SIMULATION_NO;
+                simulation = SIMUL_REALTIME;
 //                thread.start(thread.HighestPriority);     // zawsze startuj wątek, przeniesione poniżej
             }
             else {
@@ -53,12 +69,6 @@ MainWindow::MainWindow(QWidget *parent) :
         }
     }
 
-    if(!serial.isOpen())
-      loadSettings();     // ścieżka do pliku z zapisu EMG
-
-      thread.start(thread.HighestPriority);
-//    else
-
     chart.gridNumX=10;
     chart.gridNumY=10;
     chart.minValueX= 1;
@@ -68,16 +78,27 @@ MainWindow::MainWindow(QWidget *parent) :
     chart.chartMode=LinearChart;
     chart.dataSize=DSIZE2;
 
-    Alloc_memory_sub_constructor();
+    alloc_memory_sub_constructor();
+    pointers_set_null();
+    alloc_files();
 
-    isinverse = 0;
+    isinverse = 0;          // for fft
 
     for (int i = 0; i < DSIZE2; i++)
     {
-       hamming[i] = (0.54-((0.46) * cos(2*M_PI*i/(DSIZE2-1))));
+       hamming[i] = static_cast<float>( (0.54-((0.46) * cos(2*M_PI*i/(DSIZE2-1)))) );
+       hann[i]    = static_cast<float>( 0.5 * (1 - cos(2*M_PI*i/DSIZE2)) );
     }
 
     setAcceptDrops(true);
+
+    // Output WAVE settings
+    format.setCodec("audio/pcm");
+    format.setSampleRate(DSIZE2);                           // Hz sample per second
+    format.setChannelCount(1);                              // NCH
+    format.setSampleSize(sizeof(timeData[0][0])*2);         // sizeof(double)*2
+    format.setByteOrder(QAudioFormat::LittleEndian);
+    format.setSampleType(QAudioFormat::SampleType::Float); // nie ma double co zrobić?
 
     int i = 0;
     file_out.setFileName( FILE_NAME EXT );
@@ -92,43 +113,95 @@ MainWindow::MainWindow(QWidget *parent) :
     file_csv.setFileName( FILE_NAME ".csv");
 
 
-    if(simulation)
-    {
-        file_in.open(QIODevice::ReadOnly);
+//    qDebug() << "File exist?" << QFile::exists(wav_path) << wav_path;
 
-    }
-    else
+
+    /* zasady:
+     * jeśli jest plik ini to wczytaj ustawienia
+      szukaj pliku wejścia w katalogu
+
+    */
+
+
+//    jeśli realtime
+//       otwieraj wszystkie pliki zapisuj do domyślnego
+//    else czytaj z jednego źródła
+
+    QString input_file = "../DataTransfer_PWM/2.wav"; //temp
+
+    if( !QCoreApplication::arguments().contains("-nosettings",Qt::CaseSensitivity::CaseInsensitive) )
+        if( !serial.isOpen() )
+            input_file = loadSettings().toString();     // ścieżka do pliku z zapisu EMG
+
+
+    qDebug() << "Symulacja?" << simulation;
+
+    if( simulation == SIMULATION_STOP )
+        simulation = find_source_file(input_file);
+
+    switch(simulation) // teoretycznie do usunięcia
     {
-        file_out.open(QIODevice::WriteOnly | QIODevice::Append);
+        case SIMUL_REALTIME:     // nawiązano połączenie z płytką
+            file_out.open(QIODevice::WriteOnly | QIODevice::Append);    // bin
+            qDebug() << "Plik do zapisu" << wav_out->open(FILE_NAME EXT, format);
+          break;
+        case SIMULATION_CSV:    break;
+        case SIMULATION_WAV:
+        {
+            // get first file in directory
+        //            QString wav_path = "../DataTransfer_PWM/2.wav"; //temp
+
+//            if(!QFile::exists(wav_path)) {
+//                ui->statusBar->showMessage("Nie istnieje plik " + wav_path);
+//                simulation = SIMULATION_STOP;
+//                break;
+//            }
+
+            if( !wav_in->open(input_file) ) // WAV have valid header
+            {
+                ui->statusBar->showMessage("Niepoprawny plik WAV: "+input_file);
+                simulation =SIMULATION_STOP;
+            }
+            else {
+                ui->statusBar->showMessage(input_file);
+            }
+            break;
+        }
+        case SIMULATION_BINARY: break;      /* deprecated */
+        case SIMULATION_STOP:
+            // szukaj plików do otwarcia
+        break;
+//    default: break;
     }
+
     file_csv.open(QIODevice::Append);
     stream.setDevice( (QIODevice*) &file_csv );
 
 //    ui->textEdit->setVisible(ui->actionSave->isChecked());
     ui->textEdit->setText( file_out.fileName() );
 
-#ifdef QT_DEBUG
+//#ifdef QT_DEBUG
 //    ui->selectInput2->setChecked(false);
     ui->selectInput3->setChecked(false);
-#endif //QT_DEBUG
+//#endif //QT_DEBUG
 
-    QSplitter *splitter = new QSplitter(this);
+//    QSplitter *splitter = new QSplitter(this);
 
-    QFileSystemModel *model = new QFileSystemModel;
-       model->setRootPath(QDir::currentPath());
-       QTreeView *tree = new QTreeView(splitter);
-       tree->setModel(model);
-//       QListView *listview = new QListView;
-         QTreeView *treeview = new QTreeView;
-         QTextEdit *textedit = new QTextEdit;
+//    QFileSystemModel *model = new QFileSystemModel;
+//       model->setRootPath(QDir::currentPath());
+//       QTreeView *tree = new QTreeView(splitter);
+//       tree->setModel(model);
+////       QListView *listview = new QListView;
+//         QTreeView *treeview = new QTreeView;
+//         QTextEdit *textedit = new QTextEdit;
 
-         splitter->resize(300,200);
-         splitter->move( 0 , 150);
-         tree->setVisible(false);
-         splitter->setChildrenCollapsible(true);
+//         splitter->resize(300,200);
+//         splitter->move( 0 , 150);
+//         tree->setVisible(false);
+//         splitter->setChildrenCollapsible(true);
+
+
 //         splitter->
-
-
 //         tree->resize(100,100);//setWindowwidth(100);
 
 //         splitter->addWidget(listview);
@@ -137,20 +210,26 @@ MainWindow::MainWindow(QWidget *parent) :
 //       QList a(3,2);
 
 //       splitter->setSizes()
-//    wav_file = new WavFile(this);
-//    qDebug() << "Plik otwarty?: " << wav_file->open(FILE_NAME ".wav");
-
-//         wav_file.save
-//         qDebug << "isopen: " << wav_file.re(0X333,64);
-//         qDebug << "isopen: " << wav_file.readLine(100);
 
 
-//         wav_file.
+//    qDebug() << "Format isvalid: " << format.isValid();
 
+         //TODO
+//         QMimeDatabase db;
+//         QMimeType mime = db.mimeTypeForFile("../.", QMimeDatabase::MatchContent);
+//         qDebug() << mime.name();            // Name of the MIME type ("audio/mpeg").
+//         qDebug() << mime.suffixes();        // Known suffixes for this MIME type ("mp3", "mpga").
+//         qDebug() << mime.preferredSuffix(); // Preferred suffix for this MIME type ("mp3").
+
+
+    thread.start(thread.HighestPriority);
+
+    int nMilliseconds = myTimer.elapsed();
+    qDebug() << "Constructor elapsed time:" << nMilliseconds << "ms";
 }
 
 // -----------------------------------------------------------------------------
-void MainWindow::Alloc_memory_sub_constructor()
+void MainWindow::alloc_memory_sub_constructor()
 {
     timeData.resize(NCH);
     spectrum.resize(NCH);
@@ -166,7 +245,7 @@ void MainWindow::Alloc_memory_sub_constructor()
     meanData.fill(0.0);
 
     // Added
-    cfg = kiss_fft_alloc( DSIZE2, isinverse, 0, 0 );
+    cfg = kiss_fft_alloc( DSIZE2, isinverse, nullptr, nullptr );
     if(cfg == nullptr){
         ui->statusBar->showMessage(tr("Can't alloc cfg in MainWindow(QWidget *parent) "));
         return;
@@ -174,8 +253,8 @@ void MainWindow::Alloc_memory_sub_constructor()
 
     for (int i = 0; i < NCH; i++)
     {
-        in[i]=(kiss_fft_cpx*)KISS_FFT_MALLOC(DSIZE2*sizeof(*in[0]));
-        out[i]=(kiss_fft_cpx*)KISS_FFT_MALLOC(DSIZE2*sizeof(*out[0]));
+        in[i]=static_cast<kiss_fft_cpx*>(KISS_FFT_MALLOC(DSIZE2*sizeof(*in[0])));
+        out[i]=static_cast<kiss_fft_cpx*>(KISS_FFT_MALLOC(DSIZE2*sizeof(*out[0])));
         if(in[i] == nullptr){
             ui->statusBar->showMessage(tr("Can't alloc in[%d] in MainWindow(QWidget *parent) "),i);
             return;
@@ -188,21 +267,40 @@ void MainWindow::Alloc_memory_sub_constructor()
         memset(out[i],0,DSIZE2 * sizeof(*out[0]));
     }
 
-    hamming = (kiss_fft_scalar*) KISS_FFT_MALLOC(DSIZE2*sizeof(hamming[0]));
-    if (hamming == nullptr)
-    {
+    hamming = static_cast<kiss_fft_scalar*>( KISS_FFT_MALLOC(DSIZE2*sizeof(hamming[0])) );
+    hann    = static_cast<kiss_fft_scalar*>( KISS_FFT_MALLOC(DSIZE2*sizeof(hann[0])) );
+    if (hamming == nullptr) {
         ui->statusBar->showMessage(tr("Can't alloc hamming in MainWindow(QWidget *parent) "));
+        return;
+    }
+    if (hann == nullptr) {
+        ui->statusBar->showMessage(tr("Can't alloc hann in MainWindow(QWidget *parent) "));
         return;
     }
 }
 
-MainWindow::~MainWindow()
+void MainWindow::pointers_set_null()
 {
+    wav_out = nullptr;
+    wav_in  = nullptr;
+}
+void MainWindow::alloc_files()
+{
+  wav_in = new WavFilerReader(nullptr);
+  wav_out = new WaveFileWriter(nullptr);
+}
+
+MainWindow::~MainWindow()
+{    
+    wav_in->close();
+    wav_out->close();
+
     thread.terminate();
     thread.wait();
     serial.close();
-    if(file_in.isOpen()) file_in.close();
-    if(file_out.isOpen()) file_out.close();
+
+//    if(wav_in->isOpen()) wav_in->close();
+//    if(file_out.isOpen()) file_out.close();
     if(file_csv.isOpen()) file_csv.close();
     for (int i = 0; i < NCH; i++)
     {
@@ -210,8 +308,14 @@ MainWindow::~MainWindow()
         free(out[i]);
     }
     kiss_fft_free(cfg);
-//Qlistv    
-    delete wav_file;
+
+//Qlistv
+
+//    delete file_csv;
+//    delete file_out;
+    delete [] hamming, hann;
+    delete wav_in;
+    delete wav_out;
     delete ui;
 }
 
@@ -221,6 +325,10 @@ MainWindow::~MainWindow()
 
 // =============================================================================
 /* ToDo:
+ * spektrum / 2 => 512 Hz
+ *
+ *
+ *
    Emulowanie wejścia np. odtwarzanie nagrania
    szumy, typu piła, wygasające
  * rysowanie widma 2 pola
@@ -228,12 +336,17 @@ MainWindow::~MainWindow()
  * Github kody publikacja - does't allowed
     zapis i odczyt
     lista plikow
+    wczytywanie wav- zwracanie rozmiaru zamiast bool
+
 
  * //assume the directory exists and contains some files and you want all jpg and JPG files
 QDir directory("Pictures/MyPictures");
 QStringList images = directory.entryList(QStringList() << "*.jpg" << "*.JPG",QDir::Files);
 foreach(QString filename, images) {
 //do whatever you need to do
+
+// waw header
+// i data descripto r do zmiany później
 }
 
 //        20*log10(sqrt(x)) we can just do 10*log10(x)
@@ -258,21 +371,62 @@ double rms(double* x, int n)
 
 void MainWindow::externalThread_tick()
 {
-  if(!simulation)
-    auto_actionRun_serial_port(30);                                             // automatyczny start
-
+    if( simulation != SIMULATION_STOP )
+        auto_actionRun_serial_port(3);                                             // automatyczny start rysowania po ekranie
+    else {
+      ui->statusBar->showMessage("Przenieś i upuść na program plik typu (WAV, CSV) drag&drop SIMULATION_STOP",1000);
+      ui->actionRun->setChecked(false);
+    }
 
   if(ui->actionRun->isChecked())
-    if ( load_data() )                                                          // serial port lub z pliku
+//    if( buff.size() > 0)                                                        // serial port lub z pliku
     {
-        uint16_t *sample=reinterpret_cast<uint16_t*>(readdata.data());
+//    qDebug() << "simulation:  " <<simulation;
+
+      if(buff.size() == 0)
+      {
+        if (!load_data()){
+           qDebug() << "load data";
+          return;
+        }
+      }
+        uint16_t* sample = reinterpret_cast<uint16_t*>(readdata.data());
+        if (simulation == SIMULATION_WAV)
+        {
+            static size_t krok;
+            sample = reinterpret_cast<uint16_t*>(buff.data());
+            krok += DSIZE;
+            sample += krok;
+              qDebug() <<"krok:" <<  krok<< krok+NCH*DSIZE2;
+            ui->statusBar->showMessage(QString::number(krok));
+//            QThread::msleep(1);
+            if( krok >= buff.size()-DSIZE)
+            {
+                qDebug() <<"exit at krok:" <<  krok  ;
+              ui->actionRun->setChecked(false);
+              buff.clear();
+              buff.resize(0);
+              krok = 0;
+              simulation=SIMULATION_STOP;
+              return;
+            }
+        }
         for(int i=0; i<DSIZE2; i++)
         {
             for(int k=0; k<NCH; k++)
             {
                 timeData[k][i]=(*sample++)/65535.0;
                 (in[k]+i)->i = 0;
-                (in[k]+i)->r = timeData[k][i];//(*sample)/65535.0;
+
+                if(ui->radioBtn_rect->isChecked())
+                {
+                    (in[k]+i)->r = timeData[k][i];//(*sample)/65535.0;
+                    //do nothing
+                }
+                else if (ui->radioBtn_hann->isChecked()) {
+                     (in[k]+i)->r = timeData[k][i] * hann[i];//(*sample)/65535.0;
+                }
+qDebug() <<"2"   ;
 //                float freq =200; test[i].r = sin(2 * M_PI * freq * i / DSIZE2), test[i].i = 0;  test[i].i = 0; test[i].r = kiss_fft_scalar (*sample)/65535.0;
 //                if(ui->pwmValue1->value())
 //                    (in[k]+i)->r *=  ( hamming[i] + ui->pwmValue1->value()/100 );    // TO DO Hamming window
@@ -347,7 +501,6 @@ void MainWindow::externalThread_tick()
 
         int d = DSIZE2/NBARS;
 
-
         if( meanData.size() != NBARS )
           meanData.resize(NBARS);
 
@@ -363,12 +516,12 @@ void MainWindow::externalThread_tick()
         update();
 
         if(ui->actionRun->isChecked())
+          if (simulation == SIMUL_REALTIME)
             sendCommand();
 
         readdata.resize(0); // don't move, clear readdata only if was displayed
 
-        if(simulation)
-          QThread::msleep(10);
+//        if(simulation)
     }
 }
 
@@ -407,13 +560,6 @@ void MainWindow::paintEvent(QPaintEvent *event)
 //              chart.plotColor=Qt::yellow;
 //              chart.drawLinearData(painter, spectrum[0]);
         }
-
-        if( ui->actionSpektrum->isChecked())
-        {
-            chart.plotColor=Qt::gray;
-            chart.drawLinearData(painter, spectrum[0]);
-        }
-
         if(ui->selectInput2->isChecked())
         {
             chart.plotColor=Qt::green;
@@ -425,6 +571,11 @@ void MainWindow::paintEvent(QPaintEvent *event)
             chart.plotColor=Qt::yellow;
             chart.drawLinearData(painter, timeData[2]);
         }
+    }
+    if( ui->actionSpektrum->isChecked())
+    {
+        chart.plotColor=Qt::gray;
+        chart.drawLinearData(painter, spectrum[0]);
     }
 
     if(ui->actionBar->isChecked()) {
@@ -458,13 +609,14 @@ inline void MainWindow::auto_actionRun_serial_port(int count_up_to)
              ui->actionRun->triggered(true);
              waiter = -1;
          }
+         QThread::msleep(10);
      }
     }
 }
 
 // -----------------------------------------------------------------------------
 
-bool MainWindow::load_data(bool add_seconds, int milisec)
+qint64 MainWindow::load_data(bool add_seconds)
 {
     if(simulation)                                  // czytaj dane z pliku
     {
@@ -473,10 +625,10 @@ bool MainWindow::load_data(bool add_seconds, int milisec)
     else if( serial.size() >= DSIZE  )              // zapisz do pliku
     {
         readdata = serial.readAll();
-        return true;
+        return readdata.size();
     }
     else
-        return false;
+        return 0;
 }
 
 // -----------------------------------------------------------------------------
@@ -487,13 +639,13 @@ void MainWindow::save_to_file( bool add_seconds)
   {
       if(add_seconds)
       {
-          stream << "[" << QDateTime::currentMSecsSinceEpoch() << "]" << readdata << endl;
+//          stream << "[" << QDateTime::currentMSecsSinceEpoch() << "]" << readdata << endl;
           // no csv
 //          file_out.write(( QString::toUtf8( QDateTime::currentMSecsSinceEpoch() ) ));
-
       }
 
-        file_out.write(reinterpret_cast<char*>(timeData[k].data()), static_cast<uint>(timeData[k].size())*sizeof(double));
+//        file_out.write(reinterpret_cast<char*>(timeData[k].data()), static_cast<uint>(timeData[k].size())*sizeof(double));
+        wav_out->write(reinterpret_cast<char*>(timeData[k].data()), static_cast<uint>(timeData[k].size())*sizeof(double));
 
         qInfo() <<"zapisano kanał "<<  k << ": " << timeData[k].size();
         for (int i = 0; i < timeData[0].size(); i++)
@@ -524,7 +676,9 @@ void MainWindow::dropEvent(QDropEvent *e)
         qDebug() << "Dropped file:" << fileName;
 
         if( simulation_open_file( fileName ) )
+        {
             break; // don't proces more files in drag&drop
+        }
     }
 }
 
@@ -556,68 +710,80 @@ void MainWindow::on_actionOpen_triggered()
 
     QString fileName = QFileDialog::getOpenFileName(this,
     tr("Otwórz plik danych"), start_dir.path(),
-    tr("Binary and CSV files (*.bin *.csv)\n"
-       "Binary Files (*.bin)\n"
+    tr("Binary, CSV, WAVE files (*.bin *.csv *.wav)\n"
        "Comma Separated Values (*.csv)\n"
+       "WAVE audio file (*.wav)\n"
+       "Binary Files (*.bin)\n"
        "Wszystkie pliki (*.*)"));
 
-    if(simulation_open_file(fileName))
-    {
-        ui->actionRun->setChecked(true);    // start drawing
-    }
+   simulation_open_file(fileName);
 }
 
 // -----------------------------------------------------------------------------
 
-bool MainWindow::simulation_open_file( QString fileName )
+bool MainWindow::simulation_open_file( QString fileName ) // retrun? enum simulation?
 {
-    if(QFileInfo::exists(fileName) && QFileInfo(fileName).isFile())
+  if(QFileInfo::exists(fileName) && QFileInfo(fileName).isFile())
+  {
+    QFileInfo fi(fileName); // to get extension suffix
+    qDebug() << "Si_open_file" << fi.fileName() << "size:" << fi.size();
+    ui->statusBar->showMessage( fileName );
+
+    if ( fi.size() < DSIZE2 )
     {
-        simulation = SIMULATION_NO;
-        stream.resetStatus();
-        if(file_in.isOpen())
-            file_in.close();                 // zamknij poprzedni plik
-
-        file_in.setFileName( fileName );
-        file_in.open(QIODevice::ReadOnly);
-        if ( file_in.size() < B_SIZE )
-        {
-            ui->statusBar->showMessage( "Rozmiar pliku " + file_in.fileName() + " mniejszy od "
-                                        + QVariant(B_SIZE).toString() + " Bajtów" );
-            return false;
-        }
-        ui->statusBar->showMessage( fileName );
-
-        simulation = SIMULATION_BINARY;
-        if(fileName[fileName.length()-4] == '.')
-          if(fileName[fileName.length()-3] == 'c')
-            if(fileName[fileName.length()-2] == 's')
-              if(fileName[fileName.length()-1] == 'v')
-                {
-                  simulation = SIMULATION_CSV;
-                  stream.setDevice( static_cast<QIODevice*> (&file_csv) );
-                  if( !file_csv.isOpen() )
-                  {
-                      simulation = SIMULATION_NO;
-                      QMessageBox msgBox;
-                      msgBox.setText("Nie udało się otworzyć pliku");
-                      msgBox.exec();
-                      return false;
-                  }
-                  return true;
-                }
-        if( !file_in.isOpen() )
-        {
-            simulation = SIMULATION_NO;
-            QMessageBox msgBox;
-            msgBox.setText("Nie udało się otworzyć pliku");
-            msgBox.exec();
-            return false;
-        }
-        return true;
+      ui->statusBar->showMessage( "Plik jest mnijeszy od " + DSIZE2 + fileName );
+      return false;
     }
-    ui->statusBar->showMessage( "Nie udało się otworzyć " + fileName );
-    return false;
+
+    if(  fi.suffix() == "wav" ) {
+      simulation = SIMULATION_WAV;
+    }else if (fi.suffix() == "csv") {
+      simulation = SIMULATION_CSV;
+    }
+
+    stream.resetStatus();
+    switch (simulation)
+    {
+        case SIMULATION_WAV:
+        {
+          wav_in->close();                 // zamknij poprzedni plik
+
+          wav_in->setFileName( fileName );
+          wav_in->open(QIODevice::ReadOnly);
+
+          qDebug() << "isOpen:" << wav_in->isOpen();
+          if( !wav_in->isOpen() )
+              return false;
+
+        } break;
+        case SIMULATION_CSV:
+        {
+          file_csv.close();
+
+          file_csv.setFileName(fileName);
+          file_csv.open(QIODevice::ReadOnly);
+
+          stream.setDevice( static_cast<QIODevice*> (&file_csv) );
+          if( !file_csv.isOpen() )
+          {
+              simulation = SIMULATION_STOP;
+              QMessageBox msgBox;
+              msgBox.setText("Nie udało się otworzyć pliku");
+              msgBox.exec();
+              return false;
+          }
+          break;
+        }default: {
+              ui->statusBar->showMessage("Nieznane rozszerzenie pliku: " + fi.fileName() );
+              return false;
+        }
+    }
+
+    // default if isOpen() for csv or wave
+    ui->actionRun->setChecked(true);
+    return true;
+  }
+  else return false;
 }
 
 // -----------------------------------------------------------------------------
@@ -647,101 +813,128 @@ QVariant MainWindow::loadSettings(const QString &key, const QString &group, cons
     qInfo() << "loadSettings(): " << filename;
 
     if( filename != "" )
-      if(simulation_open_file( QDir::currentPath() +"\\"+ filename))
-          ui->actionRun->setChecked(true);
+      simulation_open_file( QDir::currentPath() +"\\"+ filename );   // open EMG data file
 
     return filename;
 }
 
 // -----------------------------------------------------------------------------
 
-bool MainWindow::simulation_read_data_from_file()
+qint64 MainWindow::simulation_read_data_from_file()
 {
- for (int k = 0; k < NCH; k++)
+ for (int k = 0; k < TEMP_NCH; k++)
  {
-  char buff[B_SIZE];
-  if( simulation == SIMULATION_CSV )
-    {
-      for (int i = 0; i < DSIZE/B_SIZE; i++)
+  switch (simulation)
+  {
+      case SIMUL_REALTIME: return 0;
+      case SIMULATION_CSV:
+      {
+        for (int i = 0; i < DSIZE2; i++)                        //  1024
+          {
+                if(stream.status() != QTextStream::Ok)    // CSV
+                {
+                    qCritical() << "Error read file, buff size: " << buff << endl;
+                    return false; // check status before using the data
+                }
+                if(stream.status() == QTextStream::ReadPastEnd)
+                {
+  //                  stream.reset();
+                    simulation = SIMULATION_STOP;
+                    stream.seek(0);
+                    qCritical() << "Error ReadPastEnd: " << endl;
+                    return false; // check status before using the data
+                }
+                QString a;
+                a = stream.readLine(9); // one chanel
+                qInfo() << "Size bef" << a;
+
+                if (stream.atEnd())
+                   simulation = SIMULATION_STOP;
+                readdata.append(a);
+  //              for (int k = 0; k < a.length(); k++)
+  //                {
+  //                  QString liczba = "";
+  //                  int m = 0;
+  //                  if (a.at(k) != ',') {
+  //                      liczba.append(a[k]);
+  //                  }
+
+
+                //        QByteArray buff = serial.readLine( BSIZE );
+                //         stream << "siz:" << buff.length() << endl;
+                //        for (int i = 0; i < buff.size(); i++) {
+                //            stream << (uint16_t) buff[i] << ",";
+                //        }
+                //        stream << endl;
+//                readdata.append(a);
+  //              buff = reinterpret_cast<char[]>(a.data());
+
+  //      qInfo() << stream.pos();
+          }
+      }
+          break;
+    case SIMULATION_WAV: // TO DO
+//      while (wav_in->atEnd()) {
+//        wav_in->read((char*)timeData[k].data(), (qint64) timeData.size() );
+
+        static int i;
+        ui->statusBar->showMessage(QString::number(i++));
+
+//        qWarning()<<"rozm:" << buff.size();
+        if(wav_in->atEnd() || i  > 100) //TODO
         {
-              if(stream.status() != QTextStream::Ok)    // CSV
-              {
-                  qCritical() << "Error read file, buff size: " << buff << endl;
-                  return false; // check status before using the data
-              }
-              if(stream.status() == QTextStream::ReadPastEnd)
-              {
-//                  stream.reset();
-                  stream.seek(0);
-                  qCritical() << "Error ReadPastEnd: " << endl;
-                  return false; // check status before using the data
-              }
-              QString a;
-              a = stream.readLine(B_SIZE); // TO DO
-//              for (int k = 0; k < a.length(); k++)
-//                {
-//                  QString liczba = "";
-//                  int m = 0;
-//                  if (a.at(k) != ',') {
-//                      liczba.append(a[k]);
-//                  }
-//                  else
-//                    readdata.
-
-//                  a.at(k)
-//                }
-
-
-              //        QByteArray buff = serial.readLine( BSIZE );
-              //         stream << "siz:" << buff.length() << endl;
-              //        for (int i = 0; i < buff.size(); i++) {
-              //            stream << (uint16_t) buff[i] << ",";
-              //        }
-              //        stream << endl;
-              readdata.append(a);
-//              buff = reinterpret_cast<char[]>(a.data());
-
-
-//              QChar *f = a.data();
-
-//              stream >> buff;
-//      qInfo() << stream.pos();
+            simulation = SIMULATION_STOP;
+            ui->statusBar->showMessage("ST0P");
+            qWarning()<<"read wav file i:" <<i<< "size:" << buff.size();
+            return false;
         }
+
+        buff = wav_in->readAll();
+
+        return  buff.size();
+//      }
+
+
+          break;
+    default:
+      return 0;
+  }
+
+  if (timeData[k].size() >= DSIZE ){ // symulator, nie wymaga płytki z EMG
+      return true;
+    } else {
+      qWarning()<<"NIE wczytano danych\n";
+      return false;
     }
-  else // TODO binary optimise full CPU load                                                                          // read binary data
-    { return 0;
+
+   // TODO binary optimise full CPU load                                                                          // read binary data
+    {
 //          qInfo() << file.pos();
-           if( file_in.atEnd() )
+           if( wav_in->atEnd() )
            {
 //            if( file.pos() != 0)  // jezeli nie na początku pliku
-              file_in.seek(0);     // zacznij jeszcze raz czytać plik (zapętl)
+              wav_in->seek(0);     // zacznij jeszcze raz czytać plik (zapętl)
               ui->actionRun->setChecked(false);
            }
 
           //    QThread::msleep(milisec);
-          qint64 size = file_in.read(buff, DSIZE2);
-           size = file_in.read(reinterpret_cast<char*>(timeData[k].data()), static_cast<uint>(timeData[k].size())*sizeof(double));
+//          qint64 size = wav_in->read(buff, DSIZE2);
+//           size = wa/v_in->read(reinterpret_cast<char*>(timeData[k].data()), static_cast<uint>(timeData[k].size())*sizeof(double));
 
-              if( size != DSIZE2){
-          //            return  false;
-            qCritical() << "Error read file, buff size: " << size << endl;
-            if(size == -1)      // jeśli plik pusty lub nie istnieje
-              {
-                simulation = SIMULATION_NO;
-                return false;
-              }
-          }
+//              if( size != DSIZE2){
+//          //            return  false;
+//            qCritical() << "Error read file, buff size: " << size << endl;
+//            if(size == -1)      // jeśli plik pusty lub nie istnieje
+//              {
+//                simulation = SIMUL_REALTIME;
+//                return false;
+//              }
+//          }
 
 //          readdata.append(buff);
 
-          qInfo() << "ReadData size: " << timeData.size() << endl;
+          qInfo() << "timeData size: " << timeData.size() << endl;
 
-    }
-  if (timeData[k].size() >= DSIZE ){ // symulator, nie wymaga płytki z EMG
-      return true;
-    }else {
-      qWarning()<<"NIE wczytano danych\n";
-      return false;
     }
  }
 }
@@ -758,7 +951,7 @@ void MainWindow::on_actionZapisz_domy_lne_triggered()
 
 void MainWindow::on_actionKatalog_triggered()
 {
-    char dst[100] ;
+    char dst[512];
     QString b =  QDir::currentPath();
 //    dst = b.data()
 //    strcpy_s(dst,100, (char*)b);
@@ -773,7 +966,7 @@ void MainWindow::on_textEdit_cursorPositionChanged()
 
 void MainWindow::draw_bars_Hz_gap(int window_length, int  rms)
 {
-    int a = 20;
+//    int a = 20;
     int n = DSIZE2 / window_length; // Hz (okno)
 
     meanData.resize(n);
@@ -781,6 +974,49 @@ void MainWindow::draw_bars_Hz_gap(int window_length, int  rms)
     for(int j=0; j<n; j++) // słupki wypełniena
     {
 //            meanData[j] = std::accumulate( timeData[j].begin(), timeData[j].end(), 0.0)/timeData[j].size();
-        meanData[j] = (double)j/n;
+        meanData[j] = static_cast<double>(j/n);
     }
 }
+
+// signal
+
+//void MainWindow::simulation_changed(Simulation_Type)
+//{
+//  ui->actionSave->setEnabled( !ui->actionSave->isEnabled() );
+//}
+Simulation_Type MainWindow::find_source_file(QString filename)
+{
+    if( QFileInfo(filename).isFile() ) {
+        if( simulation_open_file(filename) == false) {
+            simulation = SIMULATION_STOP;
+        }
+        qDebug() << "Find source: " << filename << simulation;
+        return simulation;
+    }
+    // find by extension
+
+    // glob directory
+    // may request user
+}
+
+
+
+//void MainWindow::set_simulation(const Simulation_Type &newSimul)
+//{
+//    simulation = newSimul;
+//    emit simulation_changed(newSimul);
+//}
+void MainWindow::set_simulation(const Simulation_Type &newSimul)
+{
+//    simulation = newSimul;
+        qDebug() << "Simulation tick";
+    emit simulation_changed();
+}
+
+//void Counter::setValue(int value)
+//{
+//    if (value != m_value) {
+//        m_value = value;
+//        emit valueChanged(value);
+//    }
+//}

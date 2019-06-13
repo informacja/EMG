@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>688</width>
-    <height>406</height>
+    <width>709</width>
+    <height>516</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -37,7 +37,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>688</width>
+     <width>709</width>
      <height>20</height>
     </rect>
    </property>
@@ -107,7 +107,7 @@
    <property name="minimumSize">
     <size>
      <width>171</width>
-     <height>300</height>
+     <height>415</height>
     </size>
    </property>
    <property name="maximumSize">
@@ -134,62 +134,96 @@ color: rgb(255, 255, 255);</string>
    </attribute>
    <widget class="QWidget" name="dockWidgetContents">
     <layout class="QGridLayout" name="gridLayout_3">
-     <item row="2" column="0">
-      <widget class="QGroupBox" name="groupBox">
-       <property name="title">
-        <string>Input</string>
+     <item row="1" column="0">
+      <widget class="QTextEdit" name="textEdit">
+       <property name="enabled">
+        <bool>true</bool>
        </property>
-       <property name="flat">
+       <property name="maximumSize">
+        <size>
+         <width>16777215</width>
+         <height>20</height>
+        </size>
+       </property>
+       <property name="baseSize">
+        <size>
+         <width>0</width>
+         <height>10</height>
+        </size>
+       </property>
+       <property name="autoFillBackground">
+        <bool>true</bool>
+       </property>
+       <property name="inputMethodHints">
+        <set>Qt::ImhNone</set>
+       </property>
+       <property name="tabChangesFocus">
         <bool>false</bool>
        </property>
-       <property name="checkable">
-        <bool>false</bool>
+       <property name="lineWrapMode">
+        <enum>QTextEdit::WidgetWidth</enum>
        </property>
-       <layout class="QGridLayout" name="gridLayout_2">
-        <item row="0" column="0">
-         <widget class="QCheckBox" name="selectInput1">
-          <property name="text">
-           <string>1</string>
-          </property>
-          <property name="checked">
-           <bool>true</bool>
-          </property>
-          <property name="autoExclusive">
-           <bool>false</bool>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="2">
-         <widget class="QCheckBox" name="selectInput3">
-          <property name="text">
-           <string>3</string>
-          </property>
-          <property name="checked">
-           <bool>true</bool>
-          </property>
-          <property name="autoExclusive">
-           <bool>false</bool>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="1">
-         <widget class="QCheckBox" name="selectInput2">
-          <property name="text">
-           <string>2</string>
-          </property>
-          <property name="checked">
-           <bool>false</bool>
-          </property>
-          <property name="autoExclusive">
-           <bool>false</bool>
-          </property>
-         </widget>
-        </item>
-       </layout>
       </widget>
      </item>
      <item row="3" column="0">
+      <widget class="QGroupBox" name="groupBox_3">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
+         <horstretch>0</horstretch>
+         <verstretch>50</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>40</height>
+        </size>
+       </property>
+       <property name="title">
+        <string>Window</string>
+       </property>
+       <widget class="QRadioButton" name="radioBtn_rect">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>20</y>
+          <width>84</width>
+          <height>19</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Rectangle</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+       <widget class="QRadioButton" name="radioBtn_hann">
+        <property name="geometry">
+         <rect>
+          <x>90</x>
+          <y>20</y>
+          <width>51</width>
+          <height>19</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Hann</string>
+        </property>
+        <property name="checked">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </widget>
+     </item>
+     <item row="5" column="0">
       <widget class="QGroupBox" name="groupBox_2">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="title">
         <string>PWM [%]</string>
        </property>
@@ -200,16 +234,6 @@ color: rgb(255, 255, 255);</string>
         <bool>false</bool>
        </property>
        <layout class="QGridLayout" name="gridLayout">
-        <item row="0" column="0">
-         <widget class="QLabel" name="pwmLabel1">
-          <property name="text">
-           <string>0</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignCenter</set>
-          </property>
-         </widget>
-        </item>
         <item row="0" column="1">
          <widget class="QLabel" name="pwmLabel2">
           <property name="text">
@@ -270,16 +294,10 @@ color: rgb(255, 255, 255);</string>
           </property>
          </widget>
         </item>
-        <item row="1" column="2">
-         <widget class="QSlider" name="pwmValue3">
-          <property name="maximum">
-           <number>100</number>
-          </property>
+        <item row="1" column="3">
+         <widget class="QSlider" name="verticalSlider">
           <property name="orientation">
            <enum>Qt::Vertical</enum>
-          </property>
-          <property name="tickPosition">
-           <enum>QSlider::TicksBothSides</enum>
           </property>
          </widget>
         </item>
@@ -296,45 +314,136 @@ color: rgb(255, 255, 255);</string>
           </property>
          </widget>
         </item>
-        <item row="1" column="3">
-         <widget class="QSlider" name="verticalSlider">
+        <item row="1" column="2">
+         <widget class="QSlider" name="pwmValue3">
+          <property name="maximum">
+           <number>100</number>
+          </property>
           <property name="orientation">
            <enum>Qt::Vertical</enum>
+          </property>
+          <property name="tickPosition">
+           <enum>QSlider::TicksBothSides</enum>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0">
+         <widget class="QLabel" name="pwmLabel1">
+          <property name="text">
+           <string>0</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
           </property>
          </widget>
         </item>
        </layout>
       </widget>
      </item>
-     <item row="1" column="0">
-      <widget class="QTextEdit" name="textEdit">
-       <property name="enabled">
-        <bool>true</bool>
+     <item row="2" column="0">
+      <widget class="QGroupBox" name="groupBox">
+       <property name="title">
+        <string>Input</string>
        </property>
-       <property name="maximumSize">
-        <size>
-         <width>16777215</width>
-         <height>20</height>
-        </size>
-       </property>
-       <property name="baseSize">
-        <size>
-         <width>0</width>
-         <height>10</height>
-        </size>
-       </property>
-       <property name="autoFillBackground">
-        <bool>true</bool>
-       </property>
-       <property name="inputMethodHints">
-        <set>Qt::ImhNone</set>
-       </property>
-       <property name="tabChangesFocus">
+       <property name="flat">
         <bool>false</bool>
        </property>
-       <property name="lineWrapMode">
-        <enum>QTextEdit::WidgetWidth</enum>
+       <property name="checkable">
+        <bool>false</bool>
        </property>
+       <layout class="QGridLayout" name="gridLayout_2">
+        <item row="0" column="0">
+         <widget class="QCheckBox" name="selectInput1">
+          <property name="text">
+           <string>1</string>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
+          </property>
+          <property name="autoExclusive">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="2">
+         <widget class="QCheckBox" name="selectInput3">
+          <property name="text">
+           <string>3</string>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
+          </property>
+          <property name="autoExclusive">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QCheckBox" name="selectInput2">
+          <property name="text">
+           <string>2</string>
+          </property>
+          <property name="checked">
+           <bool>false</bool>
+          </property>
+          <property name="autoExclusive">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item row="4" column="0">
+      <widget class="QGroupBox" name="groupBox_4">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>90</height>
+        </size>
+       </property>
+       <property name="title">
+        <string>Zapisz do </string>
+       </property>
+       <widget class="QRadioButton" name="radio_saveAllDir">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>20</y>
+          <width>84</width>
+          <height>19</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Mieszane</string>
+        </property>
+       </widget>
+       <widget class="QRadioButton" name="radio_handOpen">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>40</y>
+          <width>121</width>
+          <height>19</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Dłoń rozluźniona</string>
+        </property>
+       </widget>
+       <widget class="QRadioButton" name="radio_handClose">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>60</y>
+          <width>101</width>
+          <height>19</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Dłoń zaciśnięta</string>
+        </property>
+       </widget>
       </widget>
      </item>
     </layout>
@@ -375,6 +484,9 @@ color: rgb(255, 255, 255);</string>
     <bool>true</bool>
    </property>
    <property name="checked">
+    <bool>false</bool>
+   </property>
+   <property name="enabled">
     <bool>true</bool>
    </property>
    <property name="icon">

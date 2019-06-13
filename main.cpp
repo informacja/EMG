@@ -7,6 +7,13 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
     MainWindow w;
 
+
+    w.show();
+    w.showMaximized();
+//    w.showFullScreen();
+
+//    otwarta d
+
 //    QImage myImage;
 //    myImage.load("C:\\Users\\Puler\\Desktop\\ToDo.png");
 
@@ -32,8 +39,6 @@ int main(int argc, char *argv[])
 //       view.show();
 
 
-    w.show();
-    //    w.showFullScreen();
 //    QShortcut shortcut = new QShortcut(QKeySequence(tr("Ctrl+O", "File|Open")),
 //                             parent);
 

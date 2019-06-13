@@ -52,16 +52,39 @@
 #include <QtWidgets/QToolBar>
 #include <QtWidgets/QWidget>
 #include <QShortcut>
+#include <QMimeDatabase>
 
-#include "spectrum/app/wavfile.h"
+#include <QtCore/QVariant>
+#include <QtWidgets/QAction>
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QButtonGroup>
+#include <QtWidgets/QCheckBox>
+#include <QtWidgets/QDockWidget>
+#include <QtWidgets/QGridLayout>
+#include <QtWidgets/QGroupBox>
+#include <QtWidgets/QHeaderView>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QMainWindow>
+#include <QtWidgets/QMenu>
+#include <QtWidgets/QMenuBar>
+#include <QtWidgets/QSlider>
+#include <QtWidgets/QStatusBar>
+#include <QtWidgets/QTextEdit>
+#include <QtWidgets/QToolBar>
+#include <QtWidgets/QWidget>
+#include "audio/wavfilereader.h"
+#include "audio/wavefilewriter.h"
 
 enum Simulation_Type {
-    SIMULATION_NO = 0,
+        // data from NXP board
+    SIMUL_REALTIME = 0,
+        // from file
     SIMULATION_BINARY,
     SIMULATION_CSV,
-    SIMULATION_WAV
+    SIMULATION_WAV,
+        // fatal error
+    SIMULATION_STOP = 0xFF
 };
 
-//#define FPS
 
 #endif // PRE_HEADERS_H
