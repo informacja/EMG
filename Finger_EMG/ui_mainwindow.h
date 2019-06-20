@@ -10,6 +10,7 @@
 #define UI_MAINWINDOW_H
 
 #include <QtCore/QVariant>
+#include <QtGui/QIcon>
 #include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QCheckBox>
@@ -20,11 +21,15 @@
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenu>
 #include <QtWidgets/QMenuBar>
+#include <QtWidgets/QProgressBar>
+#include <QtWidgets/QPushButton>
 #include <QtWidgets/QRadioButton>
 #include <QtWidgets/QSlider>
 #include <QtWidgets/QStatusBar>
+#include <QtWidgets/QTabWidget>
 #include <QtWidgets/QTextEdit>
 #include <QtWidgets/QToolBar>
+#include <QtWidgets/QToolButton>
 #include <QtWidgets/QWidget>
 
 QT_BEGIN_NAMESPACE
@@ -50,7 +55,13 @@ public:
     QDockWidget *dockWidget;
     QWidget *dockWidgetContents;
     QGridLayout *gridLayout_3;
-    QTextEdit *textEdit;
+    QTabWidget *tabWidget;
+    QWidget *tab_config;
+    QGroupBox *groupBox;
+    QGridLayout *gridLayout_2;
+    QCheckBox *selectInput1;
+    QCheckBox *selectInput3;
+    QCheckBox *selectInput2;
     QGroupBox *groupBox_3;
     QRadioButton *radioBtn_rect;
     QRadioButton *radioBtn_hann;
@@ -63,21 +74,21 @@ public:
     QSlider *pwmValue2;
     QSlider *pwmValue3;
     QLabel *pwmLabel1;
-    QGroupBox *groupBox;
-    QGridLayout *gridLayout_2;
-    QCheckBox *selectInput1;
-    QCheckBox *selectInput3;
-    QCheckBox *selectInput2;
+    QWidget *tab_save;
     QGroupBox *groupBox_4;
     QRadioButton *radio_saveAllDir;
     QRadioButton *radio_handOpen;
     QRadioButton *radio_handClose;
+    QTextEdit *textEdit;
+    QPushButton *pushButton;
+    QProgressBar *progressBar;
+    QToolButton *toolButton;
 
     void setupUi(QMainWindow *MainWindow)
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QString::fromUtf8("MainWindow"));
-        MainWindow->resize(709, 516);
+        MainWindow->resize(709, 437);
         MainWindow->setMinimumSize(QSize(400, 300));
         MainWindow->setAcceptDrops(true);
         MainWindow->setIconSize(QSize(24, 24));
@@ -184,7 +195,7 @@ public:
         sizePolicy.setVerticalStretch(0);
         sizePolicy.setHeightForWidth(dockWidget->sizePolicy().hasHeightForWidth());
         dockWidget->setSizePolicy(sizePolicy);
-        dockWidget->setMinimumSize(QSize(171, 415));
+        dockWidget->setMinimumSize(QSize(171, 525));
         dockWidget->setMaximumSize(QSize(171, 524287));
         dockWidget->setStyleSheet(QString::fromUtf8("background-color: rgb(64, 64, 64);\n"
 "color: rgb(255, 255, 255);"));
@@ -197,21 +208,45 @@ public:
         gridLayout_3->setSpacing(6);
         gridLayout_3->setContentsMargins(11, 11, 11, 11);
         gridLayout_3->setObjectName(QString::fromUtf8("gridLayout_3"));
-        textEdit = new QTextEdit(dockWidgetContents);
-        textEdit->setObjectName(QString::fromUtf8("textEdit"));
-        textEdit->setEnabled(true);
-        textEdit->setMaximumSize(QSize(16777215, 20));
-        textEdit->setBaseSize(QSize(0, 10));
-        textEdit->setAutoFillBackground(true);
-        textEdit->setInputMethodHints(Qt::ImhNone);
-        textEdit->setTabChangesFocus(false);
-        textEdit->setLineWrapMode(QTextEdit::WidgetWidth);
+        tabWidget = new QTabWidget(dockWidgetContents);
+        tabWidget->setObjectName(QString::fromUtf8("tabWidget"));
+        tabWidget->setMinimumSize(QSize(0, 150));
+        tab_config = new QWidget();
+        tab_config->setObjectName(QString::fromUtf8("tab_config"));
+        groupBox = new QGroupBox(tab_config);
+        groupBox->setObjectName(QString::fromUtf8("groupBox"));
+        groupBox->setGeometry(QRect(0, 10, 153, 60));
+        groupBox->setFlat(false);
+        groupBox->setCheckable(false);
+        gridLayout_2 = new QGridLayout(groupBox);
+        gridLayout_2->setSpacing(6);
+        gridLayout_2->setContentsMargins(11, 11, 11, 11);
+        gridLayout_2->setObjectName(QString::fromUtf8("gridLayout_2"));
+        selectInput1 = new QCheckBox(groupBox);
+        selectInput1->setObjectName(QString::fromUtf8("selectInput1"));
+        selectInput1->setChecked(true);
+        selectInput1->setAutoExclusive(false);
 
-        gridLayout_3->addWidget(textEdit, 1, 0, 1, 1);
+        gridLayout_2->addWidget(selectInput1, 0, 0, 1, 1);
 
-        groupBox_3 = new QGroupBox(dockWidgetContents);
+        selectInput3 = new QCheckBox(groupBox);
+        selectInput3->setObjectName(QString::fromUtf8("selectInput3"));
+        selectInput3->setChecked(true);
+        selectInput3->setAutoExclusive(false);
+
+        gridLayout_2->addWidget(selectInput3, 0, 2, 1, 1);
+
+        selectInput2 = new QCheckBox(groupBox);
+        selectInput2->setObjectName(QString::fromUtf8("selectInput2"));
+        selectInput2->setChecked(false);
+        selectInput2->setAutoExclusive(false);
+
+        gridLayout_2->addWidget(selectInput2, 0, 1, 1, 1);
+
+        groupBox_3 = new QGroupBox(tab_config);
         groupBox_3->setObjectName(QString::fromUtf8("groupBox_3"));
-        QSizePolicy sizePolicy1(QSizePolicy::Preferred, QSizePolicy::MinimumExpanding);
+        groupBox_3->setGeometry(QRect(0, 70, 153, 60));
+        QSizePolicy sizePolicy1(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
         sizePolicy1.setHorizontalStretch(0);
         sizePolicy1.setVerticalStretch(50);
         sizePolicy1.setHeightForWidth(groupBox_3->sizePolicy().hasHeightForWidth());
@@ -225,12 +260,10 @@ public:
         radioBtn_hann->setObjectName(QString::fromUtf8("radioBtn_hann"));
         radioBtn_hann->setGeometry(QRect(90, 20, 51, 19));
         radioBtn_hann->setChecked(false);
-
-        gridLayout_3->addWidget(groupBox_3, 3, 0, 1, 1);
-
-        groupBox_2 = new QGroupBox(dockWidgetContents);
+        groupBox_2 = new QGroupBox(tab_config);
         groupBox_2->setObjectName(QString::fromUtf8("groupBox_2"));
-        QSizePolicy sizePolicy2(QSizePolicy::Preferred, QSizePolicy::MinimumExpanding);
+        groupBox_2->setGeometry(QRect(0, 140, 153, 241));
+        QSizePolicy sizePolicy2(QSizePolicy::Expanding, QSizePolicy::Expanding);
         sizePolicy2.setHorizontalStretch(0);
         sizePolicy2.setVerticalStretch(0);
         sizePolicy2.setHeightForWidth(groupBox_2->sizePolicy().hasHeightForWidth());
@@ -297,43 +330,12 @@ public:
 
         gridLayout->addWidget(pwmLabel1, 0, 0, 1, 1);
 
-
-        gridLayout_3->addWidget(groupBox_2, 5, 0, 1, 1);
-
-        groupBox = new QGroupBox(dockWidgetContents);
-        groupBox->setObjectName(QString::fromUtf8("groupBox"));
-        groupBox->setFlat(false);
-        groupBox->setCheckable(false);
-        gridLayout_2 = new QGridLayout(groupBox);
-        gridLayout_2->setSpacing(6);
-        gridLayout_2->setContentsMargins(11, 11, 11, 11);
-        gridLayout_2->setObjectName(QString::fromUtf8("gridLayout_2"));
-        selectInput1 = new QCheckBox(groupBox);
-        selectInput1->setObjectName(QString::fromUtf8("selectInput1"));
-        selectInput1->setChecked(true);
-        selectInput1->setAutoExclusive(false);
-
-        gridLayout_2->addWidget(selectInput1, 0, 0, 1, 1);
-
-        selectInput3 = new QCheckBox(groupBox);
-        selectInput3->setObjectName(QString::fromUtf8("selectInput3"));
-        selectInput3->setChecked(true);
-        selectInput3->setAutoExclusive(false);
-
-        gridLayout_2->addWidget(selectInput3, 0, 2, 1, 1);
-
-        selectInput2 = new QCheckBox(groupBox);
-        selectInput2->setObjectName(QString::fromUtf8("selectInput2"));
-        selectInput2->setChecked(false);
-        selectInput2->setAutoExclusive(false);
-
-        gridLayout_2->addWidget(selectInput2, 0, 1, 1, 1);
-
-
-        gridLayout_3->addWidget(groupBox, 2, 0, 1, 1);
-
-        groupBox_4 = new QGroupBox(dockWidgetContents);
+        tabWidget->addTab(tab_config, QString());
+        tab_save = new QWidget();
+        tab_save->setObjectName(QString::fromUtf8("tab_save"));
+        groupBox_4 = new QGroupBox(tab_save);
         groupBox_4->setObjectName(QString::fromUtf8("groupBox_4"));
+        groupBox_4->setGeometry(QRect(0, 40, 153, 90));
         groupBox_4->setMinimumSize(QSize(0, 90));
         radio_saveAllDir = new QRadioButton(groupBox_4);
         radio_saveAllDir->setObjectName(QString::fromUtf8("radio_saveAllDir"));
@@ -344,8 +346,34 @@ public:
         radio_handClose = new QRadioButton(groupBox_4);
         radio_handClose->setObjectName(QString::fromUtf8("radio_handClose"));
         radio_handClose->setGeometry(QRect(10, 60, 101, 19));
+        textEdit = new QTextEdit(tab_save);
+        textEdit->setObjectName(QString::fromUtf8("textEdit"));
+        textEdit->setEnabled(true);
+        textEdit->setGeometry(QRect(0, 10, 153, 20));
+        textEdit->setMaximumSize(QSize(16777215, 20));
+        textEdit->setBaseSize(QSize(0, 10));
+        textEdit->setAutoFillBackground(true);
+        textEdit->setInputMethodHints(Qt::ImhNone);
+        textEdit->setTabChangesFocus(false);
+        textEdit->setLineWrapMode(QTextEdit::WidgetWidth);
+        pushButton = new QPushButton(tab_save);
+        pushButton->setObjectName(QString::fromUtf8("pushButton"));
+        pushButton->setGeometry(QRect(10, 190, 80, 21));
+        progressBar = new QProgressBar(tab_save);
+        progressBar->setObjectName(QString::fromUtf8("progressBar"));
+        progressBar->setGeometry(QRect(10, 220, 118, 23));
+        progressBar->setValue(24);
+        toolButton = new QToolButton(tab_save);
+        toolButton->setObjectName(QString::fromUtf8("toolButton"));
+        toolButton->setGeometry(QRect(10, 250, 31, 31));
+        toolButton->setCursor(QCursor(Qt::PointingHandCursor));
+        QIcon icon6;
+        icon6.addFile(QString::fromUtf8("../../gettyimages-137225933-170667a.png"), QSize(), QIcon::Normal, QIcon::Off);
+        toolButton->setIcon(icon6);
+        toolButton->setIconSize(QSize(32, 32));
+        tabWidget->addTab(tab_save, QString());
 
-        gridLayout_3->addWidget(groupBox_4, 4, 0, 1, 1);
+        gridLayout_3->addWidget(tabWidget, 1, 0, 1, 1);
 
         dockWidget->setWidget(dockWidgetContents);
         MainWindow->addDockWidget(static_cast<Qt::DockWidgetArea>(1), dockWidget);
@@ -371,6 +399,9 @@ public:
         QObject::connect(pwmValue1, SIGNAL(valueChanged(int)), pwmLabel1, SLOT(setNum(int)));
         QObject::connect(pwmValue2, SIGNAL(valueChanged(int)), pwmLabel2, SLOT(setNum(int)));
         QObject::connect(pwmValue3, SIGNAL(valueChanged(int)), pwmLabel3, SLOT(setNum(int)));
+
+        tabWidget->setCurrentIndex(1);
+
 
         QMetaObject::connectSlotsByName(MainWindow);
     } // setupUi
@@ -417,6 +448,10 @@ public:
         actionZapisz_domy_lne->setText(QApplication::translate("MainWindow", "Zapisz domy\305\233lne", nullptr));
         actionKatalog->setText(QApplication::translate("MainWindow", "Katalog", nullptr));
         menuUstwienia->setTitle(QApplication::translate("MainWindow", "Ustwienia", nullptr));
+        groupBox->setTitle(QApplication::translate("MainWindow", "Input", nullptr));
+        selectInput1->setText(QApplication::translate("MainWindow", "1", nullptr));
+        selectInput3->setText(QApplication::translate("MainWindow", "3", nullptr));
+        selectInput2->setText(QApplication::translate("MainWindow", "2", nullptr));
         groupBox_3->setTitle(QApplication::translate("MainWindow", "Window", nullptr));
         radioBtn_rect->setText(QApplication::translate("MainWindow", "Rectangle", nullptr));
         radioBtn_hann->setText(QApplication::translate("MainWindow", "Hann", nullptr));
@@ -424,14 +459,14 @@ public:
         pwmLabel2->setText(QApplication::translate("MainWindow", "0", nullptr));
         pwmLabel3->setText(QApplication::translate("MainWindow", "0", nullptr));
         pwmLabel1->setText(QApplication::translate("MainWindow", "0", nullptr));
-        groupBox->setTitle(QApplication::translate("MainWindow", "Input", nullptr));
-        selectInput1->setText(QApplication::translate("MainWindow", "1", nullptr));
-        selectInput3->setText(QApplication::translate("MainWindow", "3", nullptr));
-        selectInput2->setText(QApplication::translate("MainWindow", "2", nullptr));
+        tabWidget->setTabText(tabWidget->indexOf(tab_config), QApplication::translate("MainWindow", "Konfiguracja", nullptr));
         groupBox_4->setTitle(QApplication::translate("MainWindow", "Zapisz do ", nullptr));
         radio_saveAllDir->setText(QApplication::translate("MainWindow", "Mieszane", nullptr));
         radio_handOpen->setText(QApplication::translate("MainWindow", "D\305\202o\305\204 rozlu\305\272niona", nullptr));
         radio_handClose->setText(QApplication::translate("MainWindow", "D\305\202o\305\204 zaci\305\233ni\304\231ta", nullptr));
+        pushButton->setText(QApplication::translate("MainWindow", "PushButton", nullptr));
+        toolButton->setText(QApplication::translate("MainWindow", "...", nullptr));
+        tabWidget->setTabText(tabWidget->indexOf(tab_save), QApplication::translate("MainWindow", "Zapis ", nullptr));
     } // retranslateUi
 
 };

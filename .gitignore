@@ -1,3 +1,10 @@
 *.user
 /debug
 /release
+
+*.o
+*.Release
+*.Debug
+*moc*.cpp
+*moc*.h
+*.pro.user.*

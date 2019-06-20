@@ -15,7 +15,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ui->setupUi(this);
 
-    qDebug() << "setupUi:" <<myTimer.elapsed() << "ms"; myTimer.start();
+    qDebug() << "setupUi:" << myTimer.elapsed() << "ms"; myTimer.start();
 
     connect(&thread, SIGNAL(tick()), this, SLOT(externalThread_tick()));
     connect(ui->actionRun,  SIGNAL(triggered()), this, SLOT(sendCommand()));
@@ -77,6 +77,8 @@ MainWindow::MainWindow(QWidget *parent) :
     chart.maxValueY= 1;
     chart.chartMode=LinearChart;
     chart.dataSize=DSIZE2;
+    chart.backgroundColor = QColor::Invalid;
+
 
     alloc_memory_sub_constructor();
     pointers_set_null();
@@ -1020,3 +1022,15 @@ void MainWindow::set_simulation(const Simulation_Type &newSimul)
 //        emit valueChanged(value);
 //    }
 //}
+
+void MainWindow::on_toolButton_clicked()
+{
+    ui->progressBar->setValue(0);
+    for (int i = 0; i <= 100; i++)
+    {
+      ui->progressBar->setValue(i);
+      QThread::msleep(1);
+    }
+
+    ui->progressBar->setValue(0);
+}

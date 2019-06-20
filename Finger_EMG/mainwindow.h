@@ -66,6 +66,8 @@ private slots:
     void on_actionKatalog_triggered();
     void on_textEdit_cursorPositionChanged();
 
+    void on_toolButton_clicked();
+
 private:
     Ui::MainWindow *ui;
     void paintEvent(QPaintEvent *event);
