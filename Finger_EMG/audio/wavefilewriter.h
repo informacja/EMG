@@ -63,6 +63,7 @@ public:
     bool write(const char* data, qint64 data_len);                   // added
     bool close();
     bool isOpen() const { return file.isOpen(); }
+    QString fileName() { return file.fileName(); }
 private:
     bool writeHeader(const QAudioFormat &format);
     bool writeDataLength();

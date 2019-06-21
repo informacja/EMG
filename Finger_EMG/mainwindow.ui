@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>709</width>
-    <height>437</height>
+    <width>725</width>
+    <height>640</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -37,7 +37,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>709</width>
+     <width>725</width>
      <height>20</height>
     </rect>
    </property>
@@ -107,7 +107,7 @@
    <property name="minimumSize">
     <size>
      <width>171</width>
-     <height>525</height>
+     <height>400</height>
     </size>
    </property>
    <property name="maximumSize">
@@ -152,9 +152,9 @@ color: rgb(255, 255, 255);</string>
         <widget class="QGroupBox" name="groupBox">
          <property name="geometry">
           <rect>
-           <x>0</x>
+           <x>10</x>
            <y>10</y>
-           <width>153</width>
+           <width>131</width>
            <height>60</height>
           </rect>
          </property>
@@ -168,13 +168,13 @@ color: rgb(255, 255, 255);</string>
           <bool>false</bool>
          </property>
          <layout class="QGridLayout" name="gridLayout_2">
-          <item row="0" column="0">
-           <widget class="QCheckBox" name="selectInput1">
+          <item row="0" column="1">
+           <widget class="QCheckBox" name="selectInput2">
             <property name="text">
-             <string>1</string>
+             <string>2</string>
             </property>
             <property name="checked">
-             <bool>true</bool>
+             <bool>false</bool>
             </property>
             <property name="autoExclusive">
              <bool>false</bool>
@@ -194,28 +194,41 @@ color: rgb(255, 255, 255);</string>
             </property>
            </widget>
           </item>
-          <item row="0" column="1">
-           <widget class="QCheckBox" name="selectInput2">
+          <item row="0" column="0">
+           <widget class="QCheckBox" name="selectInput1">
             <property name="text">
-             <string>2</string>
+             <string>1</string>
             </property>
             <property name="checked">
-             <bool>false</bool>
+             <bool>true</bool>
             </property>
             <property name="autoExclusive">
              <bool>false</bool>
             </property>
            </widget>
           </item>
+          <item row="1" column="1">
+           <spacer name="verticalSpacer_2">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
          </layout>
         </widget>
         <widget class="QGroupBox" name="groupBox_3">
          <property name="geometry">
           <rect>
-           <x>0</x>
-           <y>70</y>
-           <width>153</width>
-           <height>60</height>
+           <x>10</x>
+           <y>80</y>
+           <width>121</width>
+           <height>71</height>
           </rect>
          </property>
          <property name="sizePolicy">
@@ -252,8 +265,8 @@ color: rgb(255, 255, 255);</string>
          <widget class="QRadioButton" name="radioBtn_hann">
           <property name="geometry">
            <rect>
-            <x>90</x>
-            <y>20</y>
+            <x>10</x>
+            <y>40</y>
             <width>51</width>
             <height>19</height>
            </rect>
@@ -270,13 +283,13 @@ color: rgb(255, 255, 255);</string>
          <property name="geometry">
           <rect>
            <x>0</x>
-           <y>140</y>
+           <y>160</y>
            <width>153</width>
-           <height>241</height>
+           <height>171</height>
           </rect>
          </property>
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Maximum">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
@@ -404,9 +417,9 @@ color: rgb(255, 255, 255);</string>
         <widget class="QGroupBox" name="groupBox_4">
          <property name="geometry">
           <rect>
-           <x>0</x>
-           <y>40</y>
-           <width>153</width>
+           <x>10</x>
+           <y>50</y>
+           <width>131</width>
            <height>90</height>
           </rect>
          </property>
@@ -459,15 +472,15 @@ color: rgb(255, 255, 255);</string>
           </property>
          </widget>
         </widget>
-        <widget class="QTextEdit" name="textEdit">
+        <widget class="QTextEdit" name="tEdit_out">
          <property name="enabled">
           <bool>true</bool>
          </property>
          <property name="geometry">
           <rect>
-           <x>0</x>
-           <y>10</y>
-           <width>153</width>
+           <x>10</x>
+           <y>190</y>
+           <width>131</width>
            <height>20</height>
           </rect>
          </property>
@@ -496,17 +509,17 @@ color: rgb(255, 255, 255);</string>
           <enum>QTextEdit::WidgetWidth</enum>
          </property>
         </widget>
-        <widget class="QPushButton" name="pushButton">
+        <widget class="QPushButton" name="pushButto_kat">
          <property name="geometry">
           <rect>
-           <x>10</x>
-           <y>190</y>
-           <width>80</width>
+           <x>20</x>
+           <y>150</y>
+           <width>111</width>
            <height>21</height>
           </rect>
          </property>
          <property name="text">
-          <string>PushButton</string>
+          <string>Otwórz katalog</string>
          </property>
         </widget>
         <widget class="QProgressBar" name="progressBar">
@@ -514,7 +527,7 @@ color: rgb(255, 255, 255);</string>
           <rect>
            <x>10</x>
            <y>220</y>
-           <width>118</width>
+           <width>131</width>
            <height>23</height>
           </rect>
          </property>
@@ -546,6 +559,25 @@ color: rgb(255, 255, 255);</string>
            <width>32</width>
            <height>32</height>
           </size>
+         </property>
+        </widget>
+        <widget class="QSpinBox" name="spinBox_save">
+         <property name="geometry">
+          <rect>
+           <x>50</x>
+           <y>260</y>
+           <width>43</width>
+           <height>22</height>
+          </rect>
+         </property>
+         <property name="minimum">
+          <number>1</number>
+         </property>
+         <property name="maximum">
+          <number>1000</number>
+         </property>
+         <property name="value">
+          <number>10</number>
          </property>
         </widget>
        </widget>

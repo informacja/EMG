@@ -11,7 +11,7 @@
 #define BUF_LEN   10e6
 #define NBARS     32                          // do dzielenia DSIZE2
 
-#define FPS FPS
+//#define FPS FPS
 #define DATA_DIR "./data/"
 #define FILE_NAME  "out"
 #define EXT ".wav"
@@ -68,6 +68,8 @@ private slots:
 
     void on_toolButton_clicked();
 
+    void on_pushButto_kat_clicked();
+
 private:
     Ui::MainWindow *ui;
     void paintEvent(QPaintEvent *event);
@@ -84,7 +86,8 @@ private:
     qint64 simulation_read_data_from_file();
     void draw_bars_Hz_gap(int window_length, int);
     void alloc_files();
-    Simulation_Type find_source_file(QString filename_or_prefered_extension = "" );
+    Simulation_Type find_source_file(QString filename_or_prefered_extension = "" );    
+    QString get_unique_filename(QString filename, bool allow_empty = true);
 
 signals:
     void simulation_changed();
@@ -119,8 +122,8 @@ private:
     WavFilerReader *wav_in;                                     // input or output
     WaveFileWriter *wav_out;
     QAudioFormat format;
+    int coutDownToZero;
 };
-
 
 //class Counter : public QObject
 //{

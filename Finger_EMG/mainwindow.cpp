@@ -79,12 +79,12 @@ MainWindow::MainWindow(QWidget *parent) :
     chart.dataSize=DSIZE2;
     chart.backgroundColor = QColor::Invalid;
 
-
     alloc_memory_sub_constructor();
     pointers_set_null();
     alloc_files();
 
     isinverse = 0;          // for fft
+    coutDownToZero = 0;
 
     for (int i = 0; i < DSIZE2; i++)
     {
@@ -103,15 +103,8 @@ MainWindow::MainWindow(QWidget *parent) :
     format.setSampleType(QAudioFormat::SampleType::Float); // nie ma double co zrobić?
 
     int i = 0;
-    file_out.setFileName( FILE_NAME EXT );
-    while(file_out.exists())
-      {
-        if( file_out.size() == 0 )  // jeśli plik pusty, to nadpisz
-          break;
-        i++;
-        file_out.setFileName( FILE_NAME + QVariant(i).toString() + EXT );
-      }
 
+    file_out.setFileName( get_unique_filename(FILE_NAME EXT) );
     file_csv.setFileName( FILE_NAME ".csv");
 
 
@@ -145,7 +138,7 @@ MainWindow::MainWindow(QWidget *parent) :
     {
         case SIMUL_REALTIME:     // nawiązano połączenie z płytką
             file_out.open(QIODevice::WriteOnly | QIODevice::Append);    // bin
-            qDebug() << "Plik do zapisu" << wav_out->open(FILE_NAME EXT, format);
+            qDebug() << "Plik do zapisu" << wav_out->open( get_unique_filename(FILE_NAME ".wav"), format);
           break;
         case SIMULATION_CSV:    break;
         case SIMULATION_WAV:
@@ -180,7 +173,7 @@ MainWindow::MainWindow(QWidget *parent) :
     stream.setDevice( (QIODevice*) &file_csv );
 
 //    ui->textEdit->setVisible(ui->actionSave->isChecked());
-    ui->textEdit->setText( file_out.fileName() );
+    ui->tEdit_out->setText( wav_out->fileName() );
 
 //#ifdef QT_DEBUG
 //    ui->selectInput2->setChecked(false);
@@ -388,7 +381,7 @@ void MainWindow::externalThread_tick()
       if(buff.size() == 0)
       {
         if (!load_data()){
-           qDebug() << "load data";
+//           qDebug() << "load data";
           return;
         }
       }
@@ -428,14 +421,14 @@ void MainWindow::externalThread_tick()
                 else if (ui->radioBtn_hann->isChecked()) {
                      (in[k]+i)->r = timeData[k][i] * hann[i];//(*sample)/65535.0;
                 }
-qDebug() <<"2"   ;
+//qDebug() <<"2"   ;
 //                float freq =200; test[i].r = sin(2 * M_PI * freq * i / DSIZE2), test[i].i = 0;  test[i].i = 0; test[i].r = kiss_fft_scalar (*sample)/65535.0;
 //                if(ui->pwmValue1->value())
 //                    (in[k]+i)->r *=  ( hamming[i] + ui->pwmValue1->value()/100 );    // TO DO Hamming window
             }
         }
 
-        if( ui->actionSave->isChecked() )
+        if( ui->actionSave->isChecked() || coutDownToZero )
             save_to_file( 0 );
 
         for (int k = 0; k < NCH; k++)
@@ -637,6 +630,13 @@ qint64 MainWindow::load_data(bool add_seconds)
 
 void MainWindow::save_to_file( bool add_seconds)
 {
+
+  if ( coutDownToZero-- >= 0 )
+  {
+    ui->progressBar->setValue(ui->spinBox_save->value()-coutDownToZero);
+    qDebug() << "to zero count:" << coutDownToZero;
+  }
+
   for (int k = 0; k < 1/*NCH*/; k++)
   {
       if(add_seconds)
@@ -693,12 +693,12 @@ void MainWindow::on_textEdit_textChanged()
 
 void MainWindow::on_actionSave_triggered()
 {
-     ui->textEdit->setVisible(ui->actionSave->isChecked());
+     ui->tEdit_out->setVisible(ui->actionSave->isChecked());
      if(ui->actionSave->isChecked() == true)
      {
          if(file_out.isOpen())
             file_out.close();
-         file_out.setFileName(ui->textEdit->toPlainText());
+         file_out.setFileName(ui->tEdit_out->toPlainText());
          file_out.open(QIODevice::Append);
      }
 }
@@ -1025,12 +1025,49 @@ void MainWindow::set_simulation(const Simulation_Type &newSimul)
 
 void MainWindow::on_toolButton_clicked()
 {
-    ui->progressBar->setValue(0);
-    for (int i = 0; i <= 100; i++)
-    {
-      ui->progressBar->setValue(i);
-      QThread::msleep(1);
-    }
+  ui->progressBar->setRange(0, ui->spinBox_save->value());
+  ui->progressBar->setValue(0);
 
-    ui->progressBar->setValue(0);
+    wav_out->close();
+    ui->tEdit_out->setText( get_unique_filename(ui->tEdit_out->toPlainText()) );
+    wav_out->open( ui->tEdit_out->toPlainText(), format );
+    coutDownToZero =  ui->spinBox_save->value();
+    qDebug() << "is open wav" << wav_out->isOpen() << wav_out->fileName();
+      ui->progressBar->setValue(100);
+//    file_out.open();
+/// save
+//    for (int i = 0; i <= 100; i++)
+//    {
+
+////      QThread::msleep(1);
+//    }
+
+}
+
+// -----------------------------------------------------------------------------
+
+
+QString MainWindow::get_unique_filename(QString filename, bool allow_empty)
+{
+  int i = 0;
+  if(filename.isEmpty())
+    filename = FILE_NAME EXT;
+
+  QFileInfo fi(filename);
+
+  while( fi.exists(filename) )
+  {
+    if(allow_empty)
+      if( fi.size() == 0 )  // jeśli plik pusty, to nadpisz
+        break;
+    i++;
+    QRegularExpression re("(\\d*)");
+    filename = fi.completeBaseName().replace(re, "") + QVariant(i).toString() + "." + fi.completeSuffix();
+  }
+  return filename;
+}
+
+void MainWindow::on_pushButto_kat_clicked()
+{
+  QDesktopServices::openUrl( QUrl::fromLocalFile( QDir::currentPath() ));
 }
