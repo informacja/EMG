@@ -32,6 +32,7 @@
 #include <QtWidgets/QTextEdit>
 #include <QtWidgets/QToolBar>
 #include <QtWidgets/QToolButton>
+#include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
 
 QT_BEGIN_NAMESPACE
@@ -78,12 +79,13 @@ public:
     QSlider *pwmValue3;
     QLabel *pwmLabel1;
     QWidget *tab_save;
+    QVBoxLayout *verticalLayout;
     QGroupBox *groupBox_4;
     QRadioButton *radio_saveAllDir;
     QRadioButton *radio_handOpen;
     QRadioButton *radio_handClose;
-    QTextEdit *tEdit_out;
     QPushButton *pushButto_kat;
+    QTextEdit *tEdit_out;
     QProgressBar *progressBar;
     QToolButton *toolButton;
     QSpinBox *spinBox_save;
@@ -341,9 +343,12 @@ public:
         tabWidget->addTab(tab_config, QString());
         tab_save = new QWidget();
         tab_save->setObjectName(QString::fromUtf8("tab_save"));
+        verticalLayout = new QVBoxLayout(tab_save);
+        verticalLayout->setSpacing(6);
+        verticalLayout->setContentsMargins(11, 11, 11, 11);
+        verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
         groupBox_4 = new QGroupBox(tab_save);
         groupBox_4->setObjectName(QString::fromUtf8("groupBox_4"));
-        groupBox_4->setGeometry(QRect(10, 50, 131, 90));
         groupBox_4->setMinimumSize(QSize(0, 90));
         radio_saveAllDir = new QRadioButton(groupBox_4);
         radio_saveAllDir->setObjectName(QString::fromUtf8("radio_saveAllDir"));
@@ -354,37 +359,50 @@ public:
         radio_handClose = new QRadioButton(groupBox_4);
         radio_handClose->setObjectName(QString::fromUtf8("radio_handClose"));
         radio_handClose->setGeometry(QRect(10, 60, 101, 19));
+
+        verticalLayout->addWidget(groupBox_4);
+
+        pushButto_kat = new QPushButton(tab_save);
+        pushButto_kat->setObjectName(QString::fromUtf8("pushButto_kat"));
+
+        verticalLayout->addWidget(pushButto_kat);
+
         tEdit_out = new QTextEdit(tab_save);
         tEdit_out->setObjectName(QString::fromUtf8("tEdit_out"));
         tEdit_out->setEnabled(true);
-        tEdit_out->setGeometry(QRect(10, 190, 131, 20));
         tEdit_out->setMaximumSize(QSize(16777215, 20));
         tEdit_out->setBaseSize(QSize(0, 10));
         tEdit_out->setAutoFillBackground(true);
         tEdit_out->setInputMethodHints(Qt::ImhNone);
         tEdit_out->setTabChangesFocus(false);
         tEdit_out->setLineWrapMode(QTextEdit::WidgetWidth);
-        pushButto_kat = new QPushButton(tab_save);
-        pushButto_kat->setObjectName(QString::fromUtf8("pushButto_kat"));
-        pushButto_kat->setGeometry(QRect(20, 150, 111, 21));
+
+        verticalLayout->addWidget(tEdit_out);
+
         progressBar = new QProgressBar(tab_save);
         progressBar->setObjectName(QString::fromUtf8("progressBar"));
-        progressBar->setGeometry(QRect(10, 220, 131, 23));
         progressBar->setValue(24);
+
+        verticalLayout->addWidget(progressBar);
+
         toolButton = new QToolButton(tab_save);
         toolButton->setObjectName(QString::fromUtf8("toolButton"));
-        toolButton->setGeometry(QRect(10, 250, 31, 31));
         toolButton->setCursor(QCursor(Qt::PointingHandCursor));
         QIcon icon6;
         icon6.addFile(QString::fromUtf8("../../gettyimages-137225933-170667a.png"), QSize(), QIcon::Normal, QIcon::Off);
         toolButton->setIcon(icon6);
         toolButton->setIconSize(QSize(32, 32));
+
+        verticalLayout->addWidget(toolButton);
+
         spinBox_save = new QSpinBox(tab_save);
         spinBox_save->setObjectName(QString::fromUtf8("spinBox_save"));
-        spinBox_save->setGeometry(QRect(50, 260, 43, 22));
         spinBox_save->setMinimum(1);
         spinBox_save->setMaximum(1000);
         spinBox_save->setValue(10);
+
+        verticalLayout->addWidget(spinBox_save);
+
         tabWidget->addTab(tab_save, QString());
 
         gridLayout_3->addWidget(tabWidget, 1, 0, 1, 1);

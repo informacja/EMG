@@ -1,5 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+//#include "iir/Iir.h"
+//#include "iir/iir/Butterworth.h"
 
 //#include "kissfft-131/kiss_fft.c"
 // samo .h nie bangla, uzasadnienie poniżej
@@ -11,6 +13,13 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
+
+//  const int order = 4; // 4th order (=2 biquads)
+//  Iir::Butterworth::LowPass<order> f;
+//  const float samplingrate = 1000; // Hz
+//  const float cutoff_frequency = 5; // Hz
+//  f.setup (samplingrate, cutoff_frequency);
+
     QTime myTimer; myTimer.start();
 
     ui->setupUi(this);
@@ -22,7 +31,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->actionLine, SIGNAL(triggered()), this, SLOT(update()));
     connect(ui->actionBar,  SIGNAL(triggered()), this, SLOT(update()));
     connect(this, SIGNAL(simulation_changed()), this, SLOT( set_simulation() ));
-
+//    connect(ui->spinBox_save, SIGNAL(ui->spin), ui->progressBar, SLOT(ui->setpo))
 //    Counter a, b;
 //    QObject::connect(&a, SIGNAL(valueChanged(int)),
 //                     this, SLOT(say_hello() ));
@@ -366,6 +375,7 @@ double rms(double* x, int n)
 
 void MainWindow::externalThread_tick()
 {
+
     if( simulation != SIMULATION_STOP )
         auto_actionRun_serial_port(3);                                             // automatyczny start rysowania po ekranie
     else {
