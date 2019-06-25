@@ -22,7 +22,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->actionRun,  SIGNAL(triggered()), this, SLOT(sendCommand()));
     connect(ui->actionLine, SIGNAL(triggered()), this, SLOT(update()));
     connect(ui->actionBar,  SIGNAL(triggered()), this, SLOT(update()));
-    connect(this, SIGNAL(simulation_changed()), this, SLOT( set_simulation() ));
+//    connect(this, SIGNAL(simulation_changed()), this, SLOT( set_simulation(Simulation_Type) ));
 //    connect(ui->spinBox_hz, SIGNAL(valueChanged()), this, SLOT( ui->pwmValue1->setValue(ui->spinBox_hz->value()) ));
     connect(ui->spinBox_HiPass, SIGNAL(valueChanged(int)), this, SLOT( set_butterworth_HiPass(int) ));
     connect(ui->spinBox_BandStop, SIGNAL(valueChanged(int)), this, SLOT( set_butterworth_BandStop_fq(int) ));
@@ -121,7 +121,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     int i = 0;
 
-    file_out.setFileName( get_unique_filename(FILE_NAME EXT) );
+//    file_out.setFileName( get_unique_filename(FILE_NAME EXT) ); // depracated to uninitlalize
     file_csv.setFileName( FILE_NAME ".csv");
 
 
@@ -141,10 +141,9 @@ MainWindow::MainWindow(QWidget *parent) :
 
     QString input_file = "../DataTransfer_PWM/2.wav"; //temp
 
-    if( !QCoreApplication::arguments().contains("-nosettings",Qt::CaseSensitivity::CaseInsensitive) )
+    if( !QCoreApplication::arguments().contains("-nosettings", Qt::CaseSensitivity::CaseInsensitive) )
         if( !serial.isOpen() )
             input_file = loadSettings().toString();     // ścieżka do pliku z zapisu EMG
-
 
     qDebug() << "Symulacja?" << simulation;
 
@@ -154,9 +153,11 @@ MainWindow::MainWindow(QWidget *parent) :
     switch(simulation) // teoretycznie do usunięcia
     {
         case SIMUL_REALTIME:     // nawiązano połączenie z płytką
-            file_out.open(QIODevice::WriteOnly | QIODevice::Append);    // bin
-            qDebug() << "Plik do zapisu" << wav_out->open( get_unique_filename(FILE_NAME ".wav"), format);
-          break;
+        {
+//            file_out.open(QIODevice::WriteOnly | QIODevice::Append);    // bin
+            QString fName = get_unique_filename(FILE_NAME ".wav");
+            qDebug() << "Plik do zapisu" << wav_out->open( fName, format) << fName;
+        } break;
         case SIMULATION_CSV:    break;
         case SIMULATION_WAV:
         {
@@ -304,7 +305,8 @@ void MainWindow::alloc_files()
 MainWindow::~MainWindow()
 {    
     wav_in->close();
-    wav_out->close();
+//    qDebug() << "len"<< wav_out->get_len();
+      wav_out->close();
 
     thread.terminate();
     thread.wait();
@@ -382,12 +384,11 @@ double rms(double* x, int n)
 
 void MainWindow::externalThread_tick()
 {
-
-    if( simulation != SIMULATION_STOP )
+    if( simulation != SIMULATION_STOP ) {
         auto_actionRun_serial_port(3);                                             // automatyczny start rysowania po ekranie
-    else {
-      ui->statusBar->showMessage("Przenieś i upuść na program plik typu (WAV, CSV) drag&drop SIMULATION_STOP",1000);
-      ui->actionRun->setChecked(false);
+    } else {
+        ui->statusBar->showMessage("Przenieś i upuść na program plik typu (WAV, CSV) drag&drop SIMULATION_STOP",1000);
+        ui->actionRun->setChecked(false);
     }
 
   if(ui->actionRun->isChecked())
@@ -726,13 +727,13 @@ void MainWindow::on_textEdit_textChanged()
 void MainWindow::on_actionSave_triggered()
 {
      ui->tEdit_out->setVisible(ui->actionSave->isChecked());
-     if(ui->actionSave->isChecked() == true)
-     {
-         if(file_out.isOpen())
-            file_out.close();
-         file_out.setFileName(ui->tEdit_out->toPlainText());
-         file_out.open(QIODevice::Append);
-     }
+//     if(ui->actionSave->isChecked() == true)
+//     {
+//         if(file_out.isOpen())
+//            file_out.close();
+//         file_out.setFileName(ui->tEdit_out->toPlainText());
+//         file_out.open(QIODevice::Append);
+//     }
 }
 
 // -----------------------------------------------------------------------------
@@ -1044,7 +1045,7 @@ void MainWindow::set_simulation(const Simulation_Type &newSimul)
 {
 //    simulation = newSimul;
         qDebug() << "Simulation tick";
-    emit simulation_changed();
+    emit simulation_changed(newSimul);
 }
 
 //void Counter::setValue(int value)

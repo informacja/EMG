@@ -92,8 +92,9 @@ private:
     Simulation_Type find_source_file(QString filename_or_prefered_extension = "" );    
     QString get_unique_filename(QString filename, bool allow_empty = true);
 
+//Q_SIGNALS:
 signals:
-    void simulation_changed();
+    void simulation_changed(Simulation_Type);
 public slots:
     void set_simulation(const Simulation_Type &newSimul);
     void set_butterworth_BandStop_fq(int cutoff_frequency);

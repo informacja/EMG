@@ -1,6 +1,6 @@
 *.user
-/debug
-/release
+Finger_EMG/debug/*
+Finger_EMG/release/*
 
 *.o
 *.Release
@@ -9,4 +9,8 @@
 *moc*.h
 *.pro.user.*
 *.autosave
-out??.wav
+out*.wav
+*/out.csv
+Finger_EMG/Makefile
+Finger_EMG/out.csv
+Finger_EMG/release/qrc_resources.cpp

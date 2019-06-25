@@ -121,7 +121,13 @@ bool WaveFileWriter::close()
     bool result = false;
     if (file.isOpen()) {
         Q_ASSERT(m_dataLength < INT_MAX);
-        result = writeDataLength();
+//       qDebug() << m_dataLength;
+        if ( m_dataLength == 0 ) // nie zapisuj nagłówka, jeśli nie ma danych
+        {
+           file.resize(0);
+        } else {
+          result = writeDataLength();
+        }
         m_dataLength = 0;
         file.close();
     }

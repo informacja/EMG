@@ -57,7 +57,6 @@ SOURCES += \
 
 
 HEADERS += \
-    iir/Iir.h \
     iir/iir/Biquad.h \
     iir/iir/Butterworth.h \
     iir/iir/Cascade.h \
@@ -71,10 +70,8 @@ HEADERS += \
     iir/iir/RBJ.h \
     iir/iir/State.h \
     iir/iir/Types.h \
-    kissfft-131/_kiss_fft_guts.h \
-    kissfft-131/kissfft.hh \
-    kissfft-131/test/pstats.h \
     mainwindow.h \
+    release/moc_predefs.h \
     thread.h \
     chart.h \
     pre_headers.h \
@@ -129,4 +126,5 @@ CONFIG += precompile_header
 #    spectrum/spectrum.pro
 
 LIBS += -L"iir/"
+LIBS += -L"iir/iir"
 LIBS += -L"kissfft-131"
