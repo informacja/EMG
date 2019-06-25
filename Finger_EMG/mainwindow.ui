@@ -2,12 +2,15 @@
 <ui version="4.0">
  <class>MainWindow</class>
  <widget class="QMainWindow" name="MainWindow">
+  <property name="windowModality">
+   <enum>Qt::NonModal</enum>
+  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>743</width>
-    <height>545</height>
+    <width>854</width>
+    <height>572</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -20,7 +23,7 @@
    <bool>true</bool>
   </property>
   <property name="windowTitle">
-   <string>PWM Controller</string>
+   <string>Finger EMG</string>
   </property>
   <property name="iconSize">
    <size>
@@ -37,7 +40,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>743</width>
+     <width>854</width>
      <height>20</height>
     </rect>
    </property>
@@ -146,7 +149,7 @@ color: rgb(255, 255, 255);</string>
         <enum>QTabWidget::Triangular</enum>
        </property>
        <property name="currentIndex">
-        <number>0</number>
+        <number>1</number>
        </property>
        <property name="usesScrollButtons">
         <bool>true</bool>
@@ -281,7 +284,7 @@ color: rgb(255, 255, 255);</string>
            </layout>
           </widget>
          </item>
-         <item>
+         <item alignment="Qt::AlignHCenter">
           <widget class="QGroupBox" name="groupBox_5">
            <property name="sizePolicy">
             <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
@@ -290,11 +293,11 @@ color: rgb(255, 255, 255);</string>
             </sizepolicy>
            </property>
            <property name="title">
-            <string>Filtr</string>
+            <string>Butterworth filtr</string>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_6">
             <item>
-             <widget class="QCheckBox" name="checkBox_butterworth">
+             <widget class="QCheckBox" name="checkBox_bandStop">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                 <horstretch>0</horstretch>
@@ -302,7 +305,7 @@ color: rgb(255, 255, 255);</string>
                </sizepolicy>
               </property>
               <property name="text">
-               <string>Butterworth </string>
+               <string>Band Stop</string>
               </property>
               <property name="shortcut">
                <string>Ctrl+6</string>
@@ -312,8 +315,53 @@ color: rgb(255, 255, 255);</string>
               </property>
              </widget>
             </item>
-            <item>
-             <widget class="QSpinBox" name="spinBox_hz">
+            <item alignment="Qt::AlignHCenter">
+             <widget class="QSpinBox" name="spinBox_BandStop">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="sizeIncrement">
+               <size>
+                <width>22</width>
+                <height>22</height>
+               </size>
+              </property>
+              <property name="baseSize">
+               <size>
+                <width>22</width>
+                <height>11</height>
+               </size>
+              </property>
+              <property name="layoutDirection">
+               <enum>Qt::LeftToRight</enum>
+              </property>
+              <property name="autoFillBackground">
+               <bool>false</bool>
+              </property>
+              <property name="inputMethodHints">
+               <set>Qt::ImhDigitsOnly</set>
+              </property>
+              <property name="wrapping">
+               <bool>true</bool>
+              </property>
+              <property name="buttonSymbols">
+               <enum>QAbstractSpinBox::UpDownArrows</enum>
+              </property>
+              <property name="specialValueText">
+               <string>drfg</string>
+              </property>
+              <property name="accelerated">
+               <bool>true</bool>
+              </property>
               <property name="suffix">
                <string> Hz</string>
               </property>
@@ -337,13 +385,71 @@ color: rgb(255, 255, 255);</string>
               </property>
              </widget>
             </item>
+            <item alignment="Qt::AlignHCenter">
+             <widget class="QSpinBox" name="spinBox_BandStop_width">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="suffix">
+               <string> width</string>
+              </property>
+              <property name="minimum">
+               <number>1</number>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="checkBox_highPass">
+              <property name="text">
+               <string>High Pass</string>
+              </property>
+              <property name="shortcut">
+               <string>Ctrl+7</string>
+              </property>
+             </widget>
+            </item>
+            <item alignment="Qt::AlignHCenter">
+             <widget class="QSpinBox" name="spinBox_HiPass">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="suffix">
+               <string> Hz</string>
+              </property>
+              <property name="minimum">
+               <number>1</number>
+              </property>
+              <property name="maximum">
+               <number>512</number>
+              </property>
+              <property name="value">
+               <number>60</number>
+              </property>
+             </widget>
+            </item>
+            <item alignment="Qt::AlignHCenter|Qt::AlignVCenter">
+             <widget class="QCheckBox" name="checkBox_fill1">
+              <property name="text">
+               <string>Fill data to 1 (test)</string>
+              </property>
+              <property name="autoExclusive">
+               <bool>false</bool>
+              </property>
+             </widget>
+            </item>
            </layout>
           </widget>
          </item>
          <item>
           <widget class="QGroupBox" name="groupBox_2">
            <property name="sizePolicy">
-            <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
+            <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -358,6 +464,42 @@ color: rgb(255, 255, 255);</string>
             <bool>false</bool>
            </property>
            <layout class="QGridLayout" name="gridLayout">
+            <item row="0" column="0">
+             <widget class="QLabel" name="pwmLabel1">
+              <property name="text">
+               <string>0</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="QSlider" name="pwmValue2">
+              <property name="maximum">
+               <number>100</number>
+              </property>
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="tickPosition">
+               <enum>QSlider::TicksBothSides</enum>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="2">
+             <widget class="QSlider" name="pwmValue3">
+              <property name="maximum">
+               <number>100</number>
+              </property>
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="tickPosition">
+               <enum>QSlider::TicksBothSides</enum>
+              </property>
+             </widget>
+            </item>
             <item row="0" column="1">
              <widget class="QLabel" name="pwmLabel2">
               <property name="text">
@@ -368,6 +510,16 @@ color: rgb(255, 255, 255);</string>
               </property>
               <property name="buddy">
                <cstring>pwmLabel2</cstring>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="2">
+             <widget class="QLabel" name="pwmLabel3">
+              <property name="text">
+               <string>0</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
               </property>
              </widget>
             </item>
@@ -405,59 +557,6 @@ color: rgb(255, 255, 255);</string>
               </property>
               <property name="tickPosition">
                <enum>QSlider::TicksBothSides</enum>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="2">
-             <widget class="QLabel" name="pwmLabel3">
-              <property name="text">
-               <string>0</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignCenter</set>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="3">
-             <widget class="QSlider" name="verticalSlider">
-              <property name="orientation">
-               <enum>Qt::Vertical</enum>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="1">
-             <widget class="QSlider" name="pwmValue2">
-              <property name="maximum">
-               <number>100</number>
-              </property>
-              <property name="orientation">
-               <enum>Qt::Vertical</enum>
-              </property>
-              <property name="tickPosition">
-               <enum>QSlider::TicksBothSides</enum>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="2">
-             <widget class="QSlider" name="pwmValue3">
-              <property name="maximum">
-               <number>100</number>
-              </property>
-              <property name="orientation">
-               <enum>Qt::Vertical</enum>
-              </property>
-              <property name="tickPosition">
-               <enum>QSlider::TicksBothSides</enum>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="0">
-             <widget class="QLabel" name="pwmLabel1">
-              <property name="text">
-               <string>0</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignCenter</set>
               </property>
              </widget>
             </item>
@@ -799,6 +898,28 @@ color: rgb(255, 255, 255);</string>
   </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <tabstops>
+  <tabstop>tabWidget</tabstop>
+  <tabstop>selectInput1</tabstop>
+  <tabstop>selectInput2</tabstop>
+  <tabstop>selectInput3</tabstop>
+  <tabstop>radioBtn_rect</tabstop>
+  <tabstop>radioBtn_hann</tabstop>
+  <tabstop>checkBox_bandStop</tabstop>
+  <tabstop>spinBox_BandStop</tabstop>
+  <tabstop>pwmValue1</tabstop>
+  <tabstop>pwmValue2</tabstop>
+  <tabstop>pwmValue3</tabstop>
+  <tabstop>radio_saveAllDir</tabstop>
+  <tabstop>radio_handOpen</tabstop>
+  <tabstop>radio_handClose</tabstop>
+  <tabstop>pushButto_kat</tabstop>
+  <tabstop>tEdit_out</tabstop>
+  <tabstop>toolButton</tabstop>
+  <tabstop>spinBox_save</tabstop>
+  <tabstop>checkBox_highPass</tabstop>
+  <tabstop>spinBox_HiPass</tabstop>
+ </tabstops>
  <resources>
   <include location="resources.qrc"/>
  </resources>
@@ -810,12 +931,12 @@ color: rgb(255, 255, 255);</string>
    <slot>setNum(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>55</x>
-     <y>300</y>
+     <x>54</x>
+     <y>492</y>
     </hint>
     <hint type="destinationlabel">
-     <x>55</x>
-     <y>220</y>
+     <x>54</x>
+     <y>446</y>
     </hint>
    </hints>
   </connection>
@@ -826,12 +947,12 @@ color: rgb(255, 255, 255);</string>
    <slot>setNum(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>96</x>
-     <y>319</y>
+     <x>85</x>
+     <y>492</y>
     </hint>
     <hint type="destinationlabel">
-     <x>96</x>
-     <y>220</y>
+     <x>85</x>
+     <y>446</y>
     </hint>
    </hints>
   </connection>
@@ -842,12 +963,12 @@ color: rgb(255, 255, 255);</string>
    <slot>setNum(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>137</x>
-     <y>306</y>
+     <x>116</x>
+     <y>492</y>
     </hint>
     <hint type="destinationlabel">
-     <x>137</x>
-     <y>220</y>
+     <x>116</x>
+     <y>446</y>
     </hint>
    </hints>
   </connection>

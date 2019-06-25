@@ -16,7 +16,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ui->setupUi(this);
 
-
     qDebug() << "setupUi:" << myTimer.elapsed() << "ms"; myTimer.start();
 
     connect(&thread, SIGNAL(tick()), this, SLOT(externalThread_tick()));
@@ -25,7 +24,9 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->actionBar,  SIGNAL(triggered()), this, SLOT(update()));
     connect(this, SIGNAL(simulation_changed()), this, SLOT( set_simulation() ));
 //    connect(ui->spinBox_hz, SIGNAL(valueChanged()), this, SLOT( ui->pwmValue1->setValue(ui->spinBox_hz->value()) ));
-    connect(ui->spinBox_hz, SIGNAL(valueChanged(int)), this, SLOT( set_butterworth(int) ));
+    connect(ui->spinBox_HiPass, SIGNAL(valueChanged(int)), this, SLOT( set_butterworth_HiPass(int) ));
+    connect(ui->spinBox_BandStop, SIGNAL(valueChanged(int)), this, SLOT( set_butterworth_BandStop_fq(int) ));
+    connect(ui->spinBox_BandStop_width, SIGNAL(valueChanged(int)), this, SLOT( set_butterworth_BandStop_width(int) ));
 
 //    connect(ui->spinBox_save, SIGNAL(ui->spin), ui->progressBar, SLOT(ui->setpo))
 //    Counter a, b;
@@ -99,11 +100,16 @@ MainWindow::MainWindow(QWidget *parent) :
 
 //    const int order = 4; // 4th order (=2 biquads)
 //    Iir::Butterworth::LowPass<order> f;
-    const float samplingrate = DSIZE2; // Hz
-    const float cutoff_frequency = 50; // Hz
-    f.setup (samplingrate, cutoff_frequency, 10);
+    const double samplingrate = DSIZE; // Hz
+    const double cutoff_frequency = 50; // Hz
+    fHiPass.setup(samplingrate, cutoff_frequency);
+    fBandStop.setup(samplingrate, cutoff_frequency, 10);
 
     setAcceptDrops(true);
+    ui->spinBox_HiPass->setMaximum(DSIZE2);
+    ui->spinBox_BandStop->setMaximum(DSIZE2);
+    ui->spinBox_BandStop->setValue(static_cast<int>(cutoff_frequency));
+
 
     // Output WAVE settings
     format.setCodec("audio/pcm");
@@ -427,15 +433,25 @@ void MainWindow::externalThread_tick()
                 (in[k]+i)->i = 0;
 
                 if(ui->radioBtn_rect->isChecked()) {
-                    (in[k]+i)->r = timeData[k][i];//(*sample)/65535.0;
+                  (in[k]+i)->r = timeData[k][i];//(*sample)/65535.0;
                     // do nothing, just assingn
                 }
                 else if (ui->radioBtn_hann->isChecked()) {
                     (in[k]+i)->r = timeData[k][i] * hann[i];//(*sample)/65535.0;
                 }
 
-                if( ui->checkBox_butterworth->isChecked() ) {
-                    (in[k]+i)->r = f.filter( (in[k]+i)->r );
+                { // filtracja
+                  if( ui->checkBox_fill1->isChecked() ) {
+                      (in[k]+i)->r = 1;
+                  }
+
+                  if( ui->checkBox_bandStop->isChecked() ) {
+                    (in[k]+i)->r = fBandStop.filter( (in[k]+i)->r );
+                  }
+
+                  if( ui->checkBox_highPass->isChecked() ) {
+                    (in[k]+i)->r = fHiPass.filter( (in[k]+i)->r );
+                  }
                 }
 //qDebug() <<"2"   ;
 //                float freq =200; test[i].r = sin(2 * M_PI * freq * i / DSIZE2), test[i].i = 0;  test[i].i = 0; test[i].r = kiss_fft_scalar (*sample)/65535.0;
@@ -1087,13 +1103,17 @@ QString MainWindow::get_unique_filename(QString filename, bool allow_empty)
   return filename;
 }
 
-void MainWindow::on_pushButto_kat_clicked()
-{
+void MainWindow::on_pushButto_kat_clicked(){
   QDesktopServices::openUrl( QUrl::fromLocalFile( QDir::currentPath() ));
 }
 
-void MainWindow::set_butterworth(int cutoff_frequency)
-{
-  f.reset();
-  f.setup(DSIZE2*2, cutoff_frequency ,5);
+void MainWindow::set_butterworth_BandStop_fq(int cutoff_frequency){
+  fBandStop.setup( DSIZE, cutoff_frequency, ui->spinBox_BandStop_width->value());
+}
+
+void MainWindow::set_butterworth_BandStop_width(int width){
+  fBandStop.setup( DSIZE, ui->spinBox_BandStop->value(), width);
+}
+void MainWindow::set_butterworth_HiPass(int cutoff_frequency){
+  fHiPass.setup( DSIZE, cutoff_frequency);
 }

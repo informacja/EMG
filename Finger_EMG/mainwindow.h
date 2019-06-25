@@ -12,7 +12,7 @@
 #define DSIZE2   (DSIZE/2/NCH)
 #define BUF_LEN   10e6
 #define NBARS     32                          // do dzielenia DSIZE2
-#define ORDER     (NCH)
+#define ORDER     (1)
 
 //#define FPS FPS
 #define DATA_DIR "./data/"
@@ -96,7 +96,9 @@ signals:
     void simulation_changed();
 public slots:
     void set_simulation(const Simulation_Type &newSimul);
-    void set_butterworth(int cutoff_frequency);
+    void set_butterworth_BandStop_fq(int cutoff_frequency);
+    void set_butterworth_BandStop_width(int width);
+    void set_butterworth_HiPass(int cutoff_frequency);
 
 private:
     Thread thread;
@@ -117,7 +119,8 @@ private:
     kiss_fft_cpx test[DSIZE2];
 
     kiss_fft_scalar *hamming, *hann;                                   // okno, tak naprawdę typ to float :D
-    Iir::Butterworth::BandStop<ORDER> f;
+    Iir::Butterworth::HighPass<ORDER> fHiPass;
+    Iir::Butterworth::BandStop<ORDER> fBandStop;
 
     QFile   file_out,
             file_csv;                                           // read and write

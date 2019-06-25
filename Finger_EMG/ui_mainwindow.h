@@ -73,17 +73,20 @@ public:
     QRadioButton *radioBtn_hann;
     QGroupBox *groupBox_5;
     QVBoxLayout *verticalLayout_6;
-    QCheckBox *checkBox_butterworth;
-    QSpinBox *spinBox_hz;
+    QCheckBox *checkBox_bandStop;
+    QSpinBox *spinBox_BandStop;
+    QSpinBox *spinBox_BandStop_width;
+    QCheckBox *checkBox_highPass;
+    QSpinBox *spinBox_HiPass;
+    QCheckBox *checkBox_fill1;
     QGroupBox *groupBox_2;
     QGridLayout *gridLayout;
-    QLabel *pwmLabel2;
-    QSlider *pwmValue1;
-    QLabel *pwmLabel3;
-    QSlider *verticalSlider;
+    QLabel *pwmLabel1;
     QSlider *pwmValue2;
     QSlider *pwmValue3;
-    QLabel *pwmLabel1;
+    QLabel *pwmLabel2;
+    QLabel *pwmLabel3;
+    QSlider *pwmValue1;
     QWidget *tab_save;
     QVBoxLayout *verticalLayout;
     QGroupBox *groupBox_4;
@@ -103,7 +106,8 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QString::fromUtf8("MainWindow"));
-        MainWindow->resize(743, 545);
+        MainWindow->setWindowModality(Qt::NonModal);
+        MainWindow->resize(854, 572);
         MainWindow->setMinimumSize(QSize(400, 300));
         MainWindow->setAcceptDrops(true);
         MainWindow->setIconSize(QSize(24, 24));
@@ -176,7 +180,7 @@ public:
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QString::fromUtf8("menuBar"));
         menuBar->setEnabled(true);
-        menuBar->setGeometry(QRect(0, 0, 743, 20));
+        menuBar->setGeometry(QRect(0, 0, 854, 20));
 #ifndef QT_NO_TOOLTIP
         menuBar->setToolTip(QString::fromUtf8("sdf"));
 #endif // QT_NO_TOOLTIP
@@ -309,76 +313,91 @@ public:
         verticalLayout_6->setSpacing(6);
         verticalLayout_6->setContentsMargins(11, 11, 11, 11);
         verticalLayout_6->setObjectName(QString::fromUtf8("verticalLayout_6"));
-        checkBox_butterworth = new QCheckBox(groupBox_5);
-        checkBox_butterworth->setObjectName(QString::fromUtf8("checkBox_butterworth"));
+        checkBox_bandStop = new QCheckBox(groupBox_5);
+        checkBox_bandStop->setObjectName(QString::fromUtf8("checkBox_bandStop"));
         QSizePolicy sizePolicy3(QSizePolicy::Preferred, QSizePolicy::Preferred);
         sizePolicy3.setHorizontalStretch(0);
         sizePolicy3.setVerticalStretch(0);
-        sizePolicy3.setHeightForWidth(checkBox_butterworth->sizePolicy().hasHeightForWidth());
-        checkBox_butterworth->setSizePolicy(sizePolicy3);
-        checkBox_butterworth->setChecked(true);
+        sizePolicy3.setHeightForWidth(checkBox_bandStop->sizePolicy().hasHeightForWidth());
+        checkBox_bandStop->setSizePolicy(sizePolicy3);
+        checkBox_bandStop->setChecked(true);
 
-        verticalLayout_6->addWidget(checkBox_butterworth);
+        verticalLayout_6->addWidget(checkBox_bandStop);
 
-        spinBox_hz = new QSpinBox(groupBox_5);
-        spinBox_hz->setObjectName(QString::fromUtf8("spinBox_hz"));
-        spinBox_hz->setMinimum(1);
-        spinBox_hz->setMaximum(512);
-        spinBox_hz->setSingleStep(1);
-        spinBox_hz->setStepType(QAbstractSpinBox::DefaultStepType);
-        spinBox_hz->setValue(50);
+        spinBox_BandStop = new QSpinBox(groupBox_5);
+        spinBox_BandStop->setObjectName(QString::fromUtf8("spinBox_BandStop"));
+        QSizePolicy sizePolicy4(QSizePolicy::Maximum, QSizePolicy::Fixed);
+        sizePolicy4.setHorizontalStretch(0);
+        sizePolicy4.setVerticalStretch(0);
+        sizePolicy4.setHeightForWidth(spinBox_BandStop->sizePolicy().hasHeightForWidth());
+        spinBox_BandStop->setSizePolicy(sizePolicy4);
+        spinBox_BandStop->setMaximumSize(QSize(16777215, 16777215));
+        spinBox_BandStop->setSizeIncrement(QSize(22, 22));
+        spinBox_BandStop->setBaseSize(QSize(22, 11));
+        spinBox_BandStop->setLayoutDirection(Qt::LeftToRight);
+        spinBox_BandStop->setAutoFillBackground(false);
+        spinBox_BandStop->setInputMethodHints(Qt::ImhDigitsOnly);
+        spinBox_BandStop->setWrapping(true);
+        spinBox_BandStop->setButtonSymbols(QAbstractSpinBox::UpDownArrows);
+        spinBox_BandStop->setAccelerated(true);
+        spinBox_BandStop->setMinimum(1);
+        spinBox_BandStop->setMaximum(1024);
+        spinBox_BandStop->setSingleStep(1);
+        spinBox_BandStop->setStepType(QAbstractSpinBox::DefaultStepType);
+        spinBox_BandStop->setValue(50);
 
-        verticalLayout_6->addWidget(spinBox_hz);
+        verticalLayout_6->addWidget(spinBox_BandStop, 0, Qt::AlignHCenter);
+
+        spinBox_BandStop_width = new QSpinBox(groupBox_5);
+        spinBox_BandStop_width->setObjectName(QString::fromUtf8("spinBox_BandStop_width"));
+        sizePolicy4.setHeightForWidth(spinBox_BandStop_width->sizePolicy().hasHeightForWidth());
+        spinBox_BandStop_width->setSizePolicy(sizePolicy4);
+        spinBox_BandStop_width->setMinimum(1);
+
+        verticalLayout_6->addWidget(spinBox_BandStop_width, 0, Qt::AlignHCenter);
+
+        checkBox_highPass = new QCheckBox(groupBox_5);
+        checkBox_highPass->setObjectName(QString::fromUtf8("checkBox_highPass"));
+
+        verticalLayout_6->addWidget(checkBox_highPass);
+
+        spinBox_HiPass = new QSpinBox(groupBox_5);
+        spinBox_HiPass->setObjectName(QString::fromUtf8("spinBox_HiPass"));
+        sizePolicy4.setHeightForWidth(spinBox_HiPass->sizePolicy().hasHeightForWidth());
+        spinBox_HiPass->setSizePolicy(sizePolicy4);
+        spinBox_HiPass->setMinimum(1);
+        spinBox_HiPass->setMaximum(512);
+        spinBox_HiPass->setValue(60);
+
+        verticalLayout_6->addWidget(spinBox_HiPass, 0, Qt::AlignHCenter);
+
+        checkBox_fill1 = new QCheckBox(groupBox_5);
+        checkBox_fill1->setObjectName(QString::fromUtf8("checkBox_fill1"));
+        checkBox_fill1->setAutoExclusive(false);
+
+        verticalLayout_6->addWidget(checkBox_fill1, 0, Qt::AlignHCenter|Qt::AlignVCenter);
 
 
-        verticalLayout_2->addWidget(groupBox_5);
+        verticalLayout_2->addWidget(groupBox_5, 0, Qt::AlignHCenter);
 
         groupBox_2 = new QGroupBox(tab_config);
         groupBox_2->setObjectName(QString::fromUtf8("groupBox_2"));
-        QSizePolicy sizePolicy4(QSizePolicy::Fixed, QSizePolicy::Expanding);
-        sizePolicy4.setHorizontalStretch(0);
-        sizePolicy4.setVerticalStretch(0);
-        sizePolicy4.setHeightForWidth(groupBox_2->sizePolicy().hasHeightForWidth());
-        groupBox_2->setSizePolicy(sizePolicy4);
+        QSizePolicy sizePolicy5(QSizePolicy::Preferred, QSizePolicy::Expanding);
+        sizePolicy5.setHorizontalStretch(0);
+        sizePolicy5.setVerticalStretch(0);
+        sizePolicy5.setHeightForWidth(groupBox_2->sizePolicy().hasHeightForWidth());
+        groupBox_2->setSizePolicy(sizePolicy5);
         groupBox_2->setFlat(false);
         groupBox_2->setCheckable(false);
         gridLayout = new QGridLayout(groupBox_2);
         gridLayout->setSpacing(6);
         gridLayout->setContentsMargins(11, 11, 11, 11);
         gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
-        pwmLabel2 = new QLabel(groupBox_2);
-        pwmLabel2->setObjectName(QString::fromUtf8("pwmLabel2"));
-        pwmLabel2->setAlignment(Qt::AlignCenter);
+        pwmLabel1 = new QLabel(groupBox_2);
+        pwmLabel1->setObjectName(QString::fromUtf8("pwmLabel1"));
+        pwmLabel1->setAlignment(Qt::AlignCenter);
 
-        gridLayout->addWidget(pwmLabel2, 0, 1, 1, 1);
-
-        pwmValue1 = new QSlider(groupBox_2);
-        pwmValue1->setObjectName(QString::fromUtf8("pwmValue1"));
-        pwmValue1->setCursor(QCursor(Qt::PointingHandCursor));
-        pwmValue1->setMouseTracking(false);
-        pwmValue1->setFocusPolicy(Qt::WheelFocus);
-        pwmValue1->setMinimum(1);
-        pwmValue1->setMaximum(128);
-        pwmValue1->setPageStep(10);
-        pwmValue1->setSliderPosition(32);
-        pwmValue1->setOrientation(Qt::Vertical);
-        pwmValue1->setInvertedAppearance(false);
-        pwmValue1->setInvertedControls(false);
-        pwmValue1->setTickPosition(QSlider::TicksBothSides);
-
-        gridLayout->addWidget(pwmValue1, 1, 0, 1, 1);
-
-        pwmLabel3 = new QLabel(groupBox_2);
-        pwmLabel3->setObjectName(QString::fromUtf8("pwmLabel3"));
-        pwmLabel3->setAlignment(Qt::AlignCenter);
-
-        gridLayout->addWidget(pwmLabel3, 0, 2, 1, 1);
-
-        verticalSlider = new QSlider(groupBox_2);
-        verticalSlider->setObjectName(QString::fromUtf8("verticalSlider"));
-        verticalSlider->setOrientation(Qt::Vertical);
-
-        gridLayout->addWidget(verticalSlider, 1, 3, 1, 1);
+        gridLayout->addWidget(pwmLabel1, 0, 0, 1, 1);
 
         pwmValue2 = new QSlider(groupBox_2);
         pwmValue2->setObjectName(QString::fromUtf8("pwmValue2"));
@@ -396,11 +415,33 @@ public:
 
         gridLayout->addWidget(pwmValue3, 1, 2, 1, 1);
 
-        pwmLabel1 = new QLabel(groupBox_2);
-        pwmLabel1->setObjectName(QString::fromUtf8("pwmLabel1"));
-        pwmLabel1->setAlignment(Qt::AlignCenter);
+        pwmLabel2 = new QLabel(groupBox_2);
+        pwmLabel2->setObjectName(QString::fromUtf8("pwmLabel2"));
+        pwmLabel2->setAlignment(Qt::AlignCenter);
 
-        gridLayout->addWidget(pwmLabel1, 0, 0, 1, 1);
+        gridLayout->addWidget(pwmLabel2, 0, 1, 1, 1);
+
+        pwmLabel3 = new QLabel(groupBox_2);
+        pwmLabel3->setObjectName(QString::fromUtf8("pwmLabel3"));
+        pwmLabel3->setAlignment(Qt::AlignCenter);
+
+        gridLayout->addWidget(pwmLabel3, 0, 2, 1, 1);
+
+        pwmValue1 = new QSlider(groupBox_2);
+        pwmValue1->setObjectName(QString::fromUtf8("pwmValue1"));
+        pwmValue1->setCursor(QCursor(Qt::PointingHandCursor));
+        pwmValue1->setMouseTracking(false);
+        pwmValue1->setFocusPolicy(Qt::WheelFocus);
+        pwmValue1->setMinimum(1);
+        pwmValue1->setMaximum(128);
+        pwmValue1->setPageStep(10);
+        pwmValue1->setSliderPosition(32);
+        pwmValue1->setOrientation(Qt::Vertical);
+        pwmValue1->setInvertedAppearance(false);
+        pwmValue1->setInvertedControls(false);
+        pwmValue1->setTickPosition(QSlider::TicksBothSides);
+
+        gridLayout->addWidget(pwmValue1, 1, 0, 1, 1);
 
 
         verticalLayout_2->addWidget(groupBox_2);
@@ -414,11 +455,11 @@ public:
         verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
         groupBox_4 = new QGroupBox(tab_save);
         groupBox_4->setObjectName(QString::fromUtf8("groupBox_4"));
-        QSizePolicy sizePolicy5(QSizePolicy::Preferred, QSizePolicy::Fixed);
-        sizePolicy5.setHorizontalStretch(0);
-        sizePolicy5.setVerticalStretch(0);
-        sizePolicy5.setHeightForWidth(groupBox_4->sizePolicy().hasHeightForWidth());
-        groupBox_4->setSizePolicy(sizePolicy5);
+        QSizePolicy sizePolicy6(QSizePolicy::Preferred, QSizePolicy::Fixed);
+        sizePolicy6.setHorizontalStretch(0);
+        sizePolicy6.setVerticalStretch(0);
+        sizePolicy6.setHeightForWidth(groupBox_4->sizePolicy().hasHeightForWidth());
+        groupBox_4->setSizePolicy(sizePolicy6);
         groupBox_4->setMinimumSize(QSize(0, 90));
         verticalLayout_5 = new QVBoxLayout(groupBox_4);
         verticalLayout_5->setSpacing(6);
@@ -500,6 +541,25 @@ public:
 #ifndef QT_NO_SHORTCUT
         pwmLabel2->setBuddy(pwmLabel2);
 #endif // QT_NO_SHORTCUT
+        QWidget::setTabOrder(tabWidget, selectInput1);
+        QWidget::setTabOrder(selectInput1, selectInput2);
+        QWidget::setTabOrder(selectInput2, selectInput3);
+        QWidget::setTabOrder(selectInput3, radioBtn_rect);
+        QWidget::setTabOrder(radioBtn_rect, radioBtn_hann);
+        QWidget::setTabOrder(radioBtn_hann, checkBox_bandStop);
+        QWidget::setTabOrder(checkBox_bandStop, spinBox_BandStop);
+        QWidget::setTabOrder(spinBox_BandStop, pwmValue1);
+        QWidget::setTabOrder(pwmValue1, pwmValue2);
+        QWidget::setTabOrder(pwmValue2, pwmValue3);
+        QWidget::setTabOrder(pwmValue3, radio_saveAllDir);
+        QWidget::setTabOrder(radio_saveAllDir, radio_handOpen);
+        QWidget::setTabOrder(radio_handOpen, radio_handClose);
+        QWidget::setTabOrder(radio_handClose, pushButto_kat);
+        QWidget::setTabOrder(pushButto_kat, tEdit_out);
+        QWidget::setTabOrder(tEdit_out, toolButton);
+        QWidget::setTabOrder(toolButton, spinBox_save);
+        QWidget::setTabOrder(spinBox_save, checkBox_highPass);
+        QWidget::setTabOrder(checkBox_highPass, spinBox_HiPass);
 
         menuBar->addAction(menuUstwienia->menuAction());
         menuUstwienia->addAction(actionOtw_rz);
@@ -520,7 +580,7 @@ public:
         QObject::connect(pwmValue2, SIGNAL(valueChanged(int)), pwmLabel2, SLOT(setNum(int)));
         QObject::connect(pwmValue3, SIGNAL(valueChanged(int)), pwmLabel3, SLOT(setNum(int)));
 
-        tabWidget->setCurrentIndex(0);
+        tabWidget->setCurrentIndex(1);
 
 
         QMetaObject::connectSlotsByName(MainWindow);
@@ -528,7 +588,7 @@ public:
 
     void retranslateUi(QMainWindow *MainWindow)
     {
-        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "PWM Controller", nullptr));
+        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "Finger EMG", nullptr));
         actionRun->setText(QApplication::translate("MainWindow", "Run", nullptr));
 #ifndef QT_NO_SHORTCUT
         actionRun->setShortcut(QApplication::translate("MainWindow", "Space", nullptr));
@@ -590,17 +650,25 @@ public:
 #ifndef QT_NO_SHORTCUT
         radioBtn_hann->setShortcut(QApplication::translate("MainWindow", "Ctrl+5", nullptr));
 #endif // QT_NO_SHORTCUT
-        groupBox_5->setTitle(QApplication::translate("MainWindow", "Filtr", nullptr));
-        checkBox_butterworth->setText(QApplication::translate("MainWindow", "Butterworth ", nullptr));
+        groupBox_5->setTitle(QApplication::translate("MainWindow", "Butterworth filtr", nullptr));
+        checkBox_bandStop->setText(QApplication::translate("MainWindow", "Band Stop", nullptr));
 #ifndef QT_NO_SHORTCUT
-        checkBox_butterworth->setShortcut(QApplication::translate("MainWindow", "Ctrl+6", nullptr));
+        checkBox_bandStop->setShortcut(QApplication::translate("MainWindow", "Ctrl+6", nullptr));
 #endif // QT_NO_SHORTCUT
-        spinBox_hz->setSuffix(QApplication::translate("MainWindow", " Hz", nullptr));
-        spinBox_hz->setPrefix(QString());
+        spinBox_BandStop->setSpecialValueText(QApplication::translate("MainWindow", "drfg", nullptr));
+        spinBox_BandStop->setSuffix(QApplication::translate("MainWindow", " Hz", nullptr));
+        spinBox_BandStop->setPrefix(QString());
+        spinBox_BandStop_width->setSuffix(QApplication::translate("MainWindow", " width", nullptr));
+        checkBox_highPass->setText(QApplication::translate("MainWindow", "High Pass", nullptr));
+#ifndef QT_NO_SHORTCUT
+        checkBox_highPass->setShortcut(QApplication::translate("MainWindow", "Ctrl+7", nullptr));
+#endif // QT_NO_SHORTCUT
+        spinBox_HiPass->setSuffix(QApplication::translate("MainWindow", " Hz", nullptr));
+        checkBox_fill1->setText(QApplication::translate("MainWindow", "Fill data to 1 (test)", nullptr));
         groupBox_2->setTitle(QApplication::translate("MainWindow", "PWM [%]", nullptr));
+        pwmLabel1->setText(QApplication::translate("MainWindow", "0", nullptr));
         pwmLabel2->setText(QApplication::translate("MainWindow", "0", nullptr));
         pwmLabel3->setText(QApplication::translate("MainWindow", "0", nullptr));
-        pwmLabel1->setText(QApplication::translate("MainWindow", "0", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(tab_config), QApplication::translate("MainWindow", "Konfiguracja", nullptr));
         groupBox_4->setTitle(QApplication::translate("MainWindow", "Zapisz do ", nullptr));
         radio_saveAllDir->setText(QApplication::translate("MainWindow", "Mieszane", nullptr));
