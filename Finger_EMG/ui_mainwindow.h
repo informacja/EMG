@@ -323,7 +323,7 @@ public:
         spinBox_hz = new QSpinBox(groupBox_5);
         spinBox_hz->setObjectName(QString::fromUtf8("spinBox_hz"));
         spinBox_hz->setMinimum(1);
-        spinBox_hz->setMaximum(100);
+        spinBox_hz->setMaximum(512);
         spinBox_hz->setSingleStep(1);
         spinBox_hz->setStepType(QAbstractSpinBox::DefaultStepType);
         spinBox_hz->setValue(50);

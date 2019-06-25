@@ -12,7 +12,7 @@
 #define DSIZE2   (DSIZE/2/NCH)
 #define BUF_LEN   10e6
 #define NBARS     32                          // do dzielenia DSIZE2
-#define ORDER     4
+#define ORDER     (NCH)
 
 //#define FPS FPS
 #define DATA_DIR "./data/"
@@ -117,7 +117,7 @@ private:
     kiss_fft_cpx test[DSIZE2];
 
     kiss_fft_scalar *hamming, *hann;                                   // okno, tak naprawdę typ to float :D
-    Iir::Butterworth::LowPass<ORDER> f;
+    Iir::Butterworth::BandStop<ORDER> f;
 
     QFile   file_out,
             file_csv;                                           // read and write

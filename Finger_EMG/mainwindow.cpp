@@ -101,13 +101,13 @@ MainWindow::MainWindow(QWidget *parent) :
 //    Iir::Butterworth::LowPass<order> f;
     const float samplingrate = DSIZE2; // Hz
     const float cutoff_frequency = 50; // Hz
-    f.setup (samplingrate, cutoff_frequency);
+    f.setup (samplingrate, cutoff_frequency, 10);
 
     setAcceptDrops(true);
 
     // Output WAVE settings
     format.setCodec("audio/pcm");
-    format.setSampleRate(DSIZE2);                           // Hz sample per second
+    format.setSampleRate(DSIZE2*2);                           // Hz sample per second
     format.setChannelCount(1);                              // NCH
     format.setSampleSize(sizeof(timeData[0][0])*2);         // sizeof(double)*2
     format.setByteOrder(QAudioFormat::LittleEndian);
@@ -1095,5 +1095,5 @@ void MainWindow::on_pushButto_kat_clicked()
 void MainWindow::set_butterworth(int cutoff_frequency)
 {
   f.reset();
-  f.setup(DSIZE2, cutoff_frequency );
+  f.setup(DSIZE2*2, cutoff_frequency ,5);
 }
