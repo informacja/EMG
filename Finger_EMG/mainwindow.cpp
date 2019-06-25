@@ -155,7 +155,7 @@ MainWindow::MainWindow(QWidget *parent) :
         case SIMUL_REALTIME:     // nawiązano połączenie z płytką
         {
 //            file_out.open(QIODevice::WriteOnly | QIODevice::Append);    // bin
-            QString fName = get_unique_filename(FILE_NAME ".wav");
+            QString fName = get_unique_filename(FILE_NAME ".wav", true);
             qDebug() << "Plik do zapisu" << wav_out->open( fName, format) << fName;
         } break;
         case SIMULATION_CSV:    break;
@@ -1083,7 +1083,6 @@ void MainWindow::on_toolButton_clicked()
 
 // -----------------------------------------------------------------------------
 
-
 QString MainWindow::get_unique_filename(QString filename, bool allow_empty)
 {
   int i = 0;
@@ -1092,7 +1091,7 @@ QString MainWindow::get_unique_filename(QString filename, bool allow_empty)
 
   QFileInfo fi(filename);
 
-  while( fi.exists(filename) )
+  while( fi.exists() )
   {
     if(allow_empty)
       if( fi.size() == 0 )  // jeśli plik pusty, to nadpisz
@@ -1100,6 +1099,7 @@ QString MainWindow::get_unique_filename(QString filename, bool allow_empty)
     i++;
     QRegularExpression re("(\\d*)");
     filename = fi.completeBaseName().replace(re, "") + QVariant(i).toString() + "." + fi.completeSuffix();
+    fi.setFile(filename);
   }
   return filename;
 }

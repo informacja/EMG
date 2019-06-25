@@ -64,7 +64,6 @@ public:
     bool close();
     bool isOpen() const { return file.isOpen(); }
     QString fileName() { return file.fileName(); }
-//    qint64 get_len() {return m_dataLength; }
 private:
     bool writeHeader(const QAudioFormat &format);
     bool writeDataLength();
