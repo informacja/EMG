@@ -9,3 +9,4 @@
 *moc*.h
 *.pro.user.*
 *.autosave
+out??.wav

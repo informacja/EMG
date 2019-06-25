@@ -1,7 +1,5 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-//#include "iir/Iir.h"
-//#include "iir/iir/Butterworth.h"
 
 //#include "kissfft-131/kiss_fft.c"
 // samo .h nie bangla, uzasadnienie poniżej
@@ -14,15 +12,10 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
 
-//  const int order = 4; // 4th order (=2 biquads)
-//  Iir::Butterworth::LowPass<order> f;
-//  const float samplingrate = 1000; // Hz
-//  const float cutoff_frequency = 5; // Hz
-//  f.setup (samplingrate, cutoff_frequency);
-
     QTime myTimer; myTimer.start();
 
     ui->setupUi(this);
+
 
     qDebug() << "setupUi:" << myTimer.elapsed() << "ms"; myTimer.start();
 
@@ -31,6 +24,9 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->actionLine, SIGNAL(triggered()), this, SLOT(update()));
     connect(ui->actionBar,  SIGNAL(triggered()), this, SLOT(update()));
     connect(this, SIGNAL(simulation_changed()), this, SLOT( set_simulation() ));
+//    connect(ui->spinBox_hz, SIGNAL(valueChanged()), this, SLOT( ui->pwmValue1->setValue(ui->spinBox_hz->value()) ));
+    connect(ui->spinBox_hz, SIGNAL(valueChanged(int)), this, SLOT( set_butterworth(int) ));
+
 //    connect(ui->spinBox_save, SIGNAL(ui->spin), ui->progressBar, SLOT(ui->setpo))
 //    Counter a, b;
 //    QObject::connect(&a, SIGNAL(valueChanged(int)),
@@ -100,6 +96,12 @@ MainWindow::MainWindow(QWidget *parent) :
        hamming[i] = static_cast<float>( (0.54-((0.46) * cos(2*M_PI*i/(DSIZE2-1)))) );
        hann[i]    = static_cast<float>( 0.5 * (1 - cos(2*M_PI*i/DSIZE2)) );
     }
+
+//    const int order = 4; // 4th order (=2 biquads)
+//    Iir::Butterworth::LowPass<order> f;
+    const float samplingrate = DSIZE2; // Hz
+    const float cutoff_frequency = 50; // Hz
+    f.setup (samplingrate, cutoff_frequency);
 
     setAcceptDrops(true);
 
@@ -231,7 +233,6 @@ MainWindow::MainWindow(QWidget *parent) :
     int nMilliseconds = myTimer.elapsed();
     qDebug() << "Constructor elapsed time:" << nMilliseconds << "ms";
 }
-
 // -----------------------------------------------------------------------------
 void MainWindow::alloc_memory_sub_constructor()
 {
@@ -416,6 +417,8 @@ void MainWindow::externalThread_tick()
               return;
             }
         }
+
+
         for(int i=0; i<DSIZE2; i++)
         {
             for(int k=0; k<NCH; k++)
@@ -423,13 +426,16 @@ void MainWindow::externalThread_tick()
                 timeData[k][i]=(*sample++)/65535.0;
                 (in[k]+i)->i = 0;
 
-                if(ui->radioBtn_rect->isChecked())
-                {
+                if(ui->radioBtn_rect->isChecked()) {
                     (in[k]+i)->r = timeData[k][i];//(*sample)/65535.0;
-                    //do nothing
+                    // do nothing, just assingn
                 }
                 else if (ui->radioBtn_hann->isChecked()) {
-                     (in[k]+i)->r = timeData[k][i] * hann[i];//(*sample)/65535.0;
+                    (in[k]+i)->r = timeData[k][i] * hann[i];//(*sample)/65535.0;
+                }
+
+                if( ui->checkBox_butterworth->isChecked() ) {
+                    (in[k]+i)->r = f.filter( (in[k]+i)->r );
                 }
 //qDebug() <<"2"   ;
 //                float freq =200; test[i].r = sin(2 * M_PI * freq * i / DSIZE2), test[i].i = 0;  test[i].i = 0; test[i].r = kiss_fft_scalar (*sample)/65535.0;
@@ -1035,6 +1041,8 @@ void MainWindow::set_simulation(const Simulation_Type &newSimul)
 
 void MainWindow::on_toolButton_clicked()
 {
+
+
   ui->progressBar->setRange(0, ui->spinBox_save->value());
   ui->progressBar->setValue(0);
 
@@ -1044,6 +1052,8 @@ void MainWindow::on_toolButton_clicked()
     coutDownToZero =  ui->spinBox_save->value();
     qDebug() << "is open wav" << wav_out->isOpen() << wav_out->fileName();
       ui->progressBar->setValue(100);
+
+
 //    file_out.open();
 /// save
 //    for (int i = 0; i <= 100; i++)
@@ -1080,4 +1090,10 @@ QString MainWindow::get_unique_filename(QString filename, bool allow_empty)
 void MainWindow::on_pushButto_kat_clicked()
 {
   QDesktopServices::openUrl( QUrl::fromLocalFile( QDir::currentPath() ));
+}
+
+void MainWindow::set_butterworth(int cutoff_frequency)
+{
+  f.reset();
+  f.setup(DSIZE2, cutoff_frequency );
 }
