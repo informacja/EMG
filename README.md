@@ -14,7 +14,7 @@
 <img src="docs/highPass.gif">
 
 ### Asymptota szumu 
-<img src="docs/noise.gif">
+<img src="docs/noise.png">
 
 
 
