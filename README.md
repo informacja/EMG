@@ -1,11 +1,20 @@
 ## ButterWorth
 ## Bez filtracji
-<img src="docs/nonFilter.png">
+<img src="docs/no.png">
+
 ## Po wycięciu 50Hz
+
 <img src="docs/filtered.png">
-# Band Stop
+
+## Band Stop
+
 <img src="docs/bandStop.gif">
-# High Pass
+
+## High Pass
 <img src="docs/highPass.gif">
+
+### Asymptota szumu 
+<img src="docs/noise.gif">
+
 
 
