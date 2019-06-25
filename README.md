@@ -4,8 +4,8 @@
 ## Po wycięciu 50Hz
 <img src="docs/filtered.png">
 # Band Stop
-<img src="docs/BandStop.gif">
+<img src="docs/bandStop.gif">
 # High Pass
-<img src="docs/HiPass.gif">
+<img src="docs/highPass.gif">
 
 
