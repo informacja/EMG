@@ -4,12 +4,15 @@
 #include "pre_headers.h"
 
 #include "kissfft-131/kiss_fft.h"
+#include "iir/Iir.h"
+
 #define NCH 3
 #define TEMP_NCH 3
 #define DSIZE    (NCH*2048)
 #define DSIZE2   (DSIZE/2/NCH)
 #define BUF_LEN   10e6
 #define NBARS     32                          // do dzielenia DSIZE2
+#define ORDER     4
 
 //#define FPS FPS
 #define DATA_DIR "./data/"
@@ -93,6 +96,7 @@ signals:
     void simulation_changed();
 public slots:
     void set_simulation(const Simulation_Type &newSimul);
+    void set_butterworth(int cutoff_frequency);
 
 private:
     Thread thread;
@@ -113,6 +117,7 @@ private:
     kiss_fft_cpx test[DSIZE2];
 
     kiss_fft_scalar *hamming, *hann;                                   // okno, tak naprawdę typ to float :D
+    Iir::Butterworth::LowPass<ORDER> f;
 
     QFile   file_out,
             file_csv;                                           // read and write

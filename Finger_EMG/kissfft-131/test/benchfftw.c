@@ -7,7 +7,7 @@
  */
 #include <stdio.h>
 #include <stdlib.h>
-#include <fftw3.h>
+//#include <fftw3.h>
 #include <unistd.h>
 #include "pstats.h"
 
