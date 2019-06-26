@@ -666,7 +666,11 @@ void MainWindow::save_to_file( bool add_seconds)
 
   if ( coutDownToZero-- >= 0 )
   {
-    ui->progressBar->setValue(ui->spinBox_save->value()-coutDownToZero);
+    if( coutDownToZero+1 == ui->spinBox_nDataPerFile->value() ) {
+      stream <<  ui->lineEdit_path->text()<< "/" << ui->lineEdit_fileN->text()
+             << " " << QTime::currentTime().toString() << " " << QDate::currentDate().toString() << endl;
+    }
+    ui->progressBar->setValue(ui->spinBox_nDataPerFile->value()-coutDownToZero);
     qDebug() << "to zero count:" << coutDownToZero;
   }
 
@@ -1056,7 +1060,7 @@ void MainWindow::on_toolButton_clicked()
 {
   QString fName = "";
 
-  ui->progressBar->setRange(0, ui->spinBox_save->value());
+  ui->progressBar->setRange(0, ui->spinBox_nDataPerFile->value());
   ui->progressBar->setValue(0);
 
     wav_out->close();  
@@ -1074,7 +1078,7 @@ void MainWindow::on_toolButton_clicked()
     ui->lineEdit_fileN->setText( fi.completeBaseName()+ "." +fi.completeSuffix() );
 
     wav_out->open( fName, format );
-    coutDownToZero =  ui->spinBox_save->value();
+    coutDownToZero =  ui->spinBox_nDataPerFile->value();
     qDebug() << "is open wav" << wav_out->isOpen() << wav_out->fileName();
     ui->progressBar->setValue(100);
 }

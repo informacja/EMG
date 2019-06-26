@@ -768,7 +768,7 @@ color: rgb(255, 255, 255);</string>
             </widget>
            </item>
            <item row="0" column="1">
-            <widget class="QSpinBox" name="spinBox_save">
+            <widget class="QSpinBox" name="spinBox_nDataPerFile">
              <property name="minimum">
               <number>1</number>
              </property>

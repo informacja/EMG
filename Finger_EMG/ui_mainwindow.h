@@ -109,7 +109,7 @@ public:
     QProgressBar *progressBar;
     QFormLayout *formLayout;
     QLabel *label_Nsample;
-    QSpinBox *spinBox_save;
+    QSpinBox *spinBox_nDataPerFile;
     QFrame *line_5;
     QFrame *line;
     QToolButton *toolButton;
@@ -572,13 +572,13 @@ public:
 
         formLayout->setWidget(0, QFormLayout::LabelRole, label_Nsample);
 
-        spinBox_save = new QSpinBox(tab_save);
-        spinBox_save->setObjectName(QString::fromUtf8("spinBox_save"));
-        spinBox_save->setMinimum(1);
-        spinBox_save->setMaximum(1000);
-        spinBox_save->setValue(10);
+        spinBox_nDataPerFile = new QSpinBox(tab_save);
+        spinBox_nDataPerFile->setObjectName(QString::fromUtf8("spinBox_nDataPerFile"));
+        spinBox_nDataPerFile->setMinimum(1);
+        spinBox_nDataPerFile->setMaximum(1000);
+        spinBox_nDataPerFile->setValue(10);
 
-        formLayout->setWidget(0, QFormLayout::FieldRole, spinBox_save);
+        formLayout->setWidget(0, QFormLayout::FieldRole, spinBox_nDataPerFile);
 
 
         verticalLayout->addLayout(formLayout);
