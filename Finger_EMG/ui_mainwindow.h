@@ -302,13 +302,13 @@ public:
         verticalLayout_3->setSizeConstraint(QLayout::SetMinimumSize);
         radioBtn_rect = new QRadioButton(groupBox_3);
         radioBtn_rect->setObjectName(QString::fromUtf8("radioBtn_rect"));
-        radioBtn_rect->setChecked(true);
+        radioBtn_rect->setChecked(false);
 
         verticalLayout_3->addWidget(radioBtn_rect);
 
         radioBtn_hann = new QRadioButton(groupBox_3);
         radioBtn_hann->setObjectName(QString::fromUtf8("radioBtn_hann"));
-        radioBtn_hann->setChecked(false);
+        radioBtn_hann->setChecked(true);
 
         verticalLayout_3->addWidget(radioBtn_hann);
 
@@ -333,7 +333,7 @@ public:
         sizePolicy3.setVerticalStretch(0);
         sizePolicy3.setHeightForWidth(checkBox_bandStop->sizePolicy().hasHeightForWidth());
         checkBox_bandStop->setSizePolicy(sizePolicy3);
-        checkBox_bandStop->setChecked(true);
+        checkBox_bandStop->setChecked(false);
 
         verticalLayout_6->addWidget(checkBox_bandStop);
 
@@ -576,7 +576,7 @@ public:
         spinBox_nDataPerFile->setObjectName(QString::fromUtf8("spinBox_nDataPerFile"));
         spinBox_nDataPerFile->setMinimum(1);
         spinBox_nDataPerFile->setMaximum(1000);
-        spinBox_nDataPerFile->setValue(10);
+        spinBox_nDataPerFile->setValue(3);
 
         formLayout->setWidget(0, QFormLayout::FieldRole, spinBox_nDataPerFile);
 
@@ -796,6 +796,7 @@ public:
         toolButton->setText(QApplication::translate("MainWindow", "Enter", nullptr));
 #ifndef QT_NO_SHORTCUT
         toolButton->setShortcut(QApplication::translate("MainWindow", "Enter", nullptr));
+        toolButton->setShortcut(QApplication::translate("MainWindow", "Return", nullptr));
 #endif // QT_NO_SHORTCUT
         tabWidget->setTabText(tabWidget->indexOf(tab_save), QApplication::translate("MainWindow", "Zapis ", nullptr));
     } // retranslateUi

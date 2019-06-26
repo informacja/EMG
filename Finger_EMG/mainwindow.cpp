@@ -115,9 +115,11 @@ MainWindow::MainWindow(QWidget *parent) :
     format.setCodec("audio/pcm");
     format.setSampleRate(DSIZE2);                         // Hz sample per second
     format.setChannelCount(1);                              // NCH TODO:
-    format.setSampleSize(sizeof(timeData[0][0]));           // sizeof(double)
+    format.setSampleSize(sizeof(timeData[0][0])*4);           // sizeof(double)
     format.setByteOrder(QAudioFormat::LittleEndian);
     format.setSampleType(QAudioFormat::SampleType::Float); // nie ma double co zrobić?
+
+    ui->lineEdit_path->setText(( SAMPLE_DIR ));
 
     int i = 0;
 
@@ -438,7 +440,8 @@ void MainWindow::externalThread_tick()
                     // do nothing, just assingn
                 }
                 else if (ui->radioBtn_hann->isChecked()) {
-                    (in[k]+i)->r = timeData[k][i] * hann[i];//(*sample)/65535.0;
+                    timeData[k][i] *= hann[i];
+                    (in[k]+i)->r = timeData[k][i];//(*sample)/65535.0;
                 }
 
                 { // filtracja
