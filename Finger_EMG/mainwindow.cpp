@@ -1143,27 +1143,18 @@ void MainWindow::set_butterworth_HiPass(int cutoff_frequency){
   fHiPass.setup( DSIZE, cutoff_frequency);
 }
 
-void MainWindow::on_radio_saveAllDir_clicked()
-{
-  ui->lineEdit_path->setText("../sample/mix");
+void MainWindow::on_radio_saveAllDir_clicked(){
+  ui->lineEdit_path->setText( SAMPLE_DIR "/mix");
 }
-
-void MainWindow::on_radio_handOpen_clicked()
-{
-    ui->lineEdit_path->setText("../sample/hand/open");
+void MainWindow::on_radio_handOpen_clicked(){
+    ui->lineEdit_path->setText( SAMPLE_DIR "/hand/open");
 }
-
-void MainWindow::on_radio_handClose_clicked()
-{
-    ui->lineEdit_path->setText("../sample/hand/closed");
+void MainWindow::on_radio_handClose_clicked(){
+    ui->lineEdit_path->setText( SAMPLE_DIR "/hand/closed");
 }
-
-void MainWindow::on_radioButton_clicked()
-{
-  ui->lineEdit_path->setText("../sample/first_finger");
+void MainWindow::on_radioButton_clicked(){
+  ui->lineEdit_path->setText( SAMPLE_DIR "/first_finger");
 }
-
-void MainWindow::on_radioButton_2_clicked()
-{
-  ui->lineEdit_path->setText("../sample/thumb");
+void MainWindow::on_radioButton_2_clicked(){
+  ui->lineEdit_path->setText( SAMPLE_DIR "/thumb");
 }
