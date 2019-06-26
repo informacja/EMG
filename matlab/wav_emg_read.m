@@ -44,11 +44,13 @@ shift = [ info.SampleRate*(i-1)+1, info.SampleRate*i]
  plot(abs(data_fft(:,1)),'r');
 
     pause(0.111);         
-%     fprintf('Próbka nr: %d', i); input('');
+%     fprintf('Prï¿½bka nr: %d', i); input('');
 end
 %  data_fft = fft(data) ;% data
 %  plot(abs(data_fft(:,1)));
  return;
+ 
+ 
 [y,fs] = audioread(filename);
 
  whos y
@@ -66,9 +68,6 @@ plot(freq,unwrap(angle(ydft)));
 xlabel('Hz');
 
 return;
-
-[Y, FS]=audioread(filename, shift, 'double');
-size(Y)
 % below from csv-------------------------------------------------------------------------
 
 Fs=FS;

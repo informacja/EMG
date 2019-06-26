@@ -7,12 +7,12 @@
  */
 #include <stdio.h>
 #include <stdlib.h>
-#include <sys/times.h>
+//#include <sys/times.h>
 #include <unistd.h>
-#include "kiss_fft.h"
-#include "kiss_fftr.h"
-#include "kiss_fftnd.h"
-#include "kiss_fftndr.h"
+#include "kissfft-131/kiss_fft.h"/*
+#include "kissfft-131/kiss_fftr.h"
+#include "kissfft-131/kiss_fftnd.h"
+#include "kissfft-131/kiss_fftndr.h"*/
 
 #include "pstats.h"
 

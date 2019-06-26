@@ -25,6 +25,15 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++11
 
 SOURCES += \
+    iir/iir/Biquad.cpp \
+    iir/iir/Butterworth.cpp \
+    iir/iir/Cascade.cpp \
+    iir/iir/ChebyshevI.cpp \
+    iir/iir/ChebyshevII.cpp \
+    iir/iir/Custom.cpp \
+    iir/iir/PoleFilter.cpp \
+    iir/iir/RBJ.cpp \
+    iir/iir/State.cpp \
     main.cpp \
     mainwindow.cpp \
     thread.cpp \
@@ -48,13 +57,28 @@ SOURCES += \
 
 
 HEADERS += \
+    iir/iir/Biquad.h \
+    iir/iir/Butterworth.h \
+    iir/iir/Cascade.h \
+    iir/iir/ChebyshevI.h \
+    iir/iir/ChebyshevII.h \
+    iir/iir/Common.h \
+    iir/iir/Custom.h \
+    iir/iir/Layout.h \
+    iir/iir/MathSupplement.h \
+    iir/iir/PoleFilter.h \
+    iir/iir/RBJ.h \
+    iir/iir/State.h \
+    iir/iir/Types.h \
     mainwindow.h \
+    release/moc_predefs.h \
     thread.h \
     chart.h \
     pre_headers.h \
     kissfft-131/kiss_fft.h \
     audio/wavfilereader.h \
-    audio/wavefilewriter.h
+    audio/wavefilewriter.h \
+    ui_mainwindow.h
 #    wavfile.h
 #    spectrum/app/engine.h \
 #    spectrum/app/frequencyspectrum.h \
@@ -100,3 +124,7 @@ CONFIG += precompile_header
 #SUBDIRS += \
 #    spectrum/app/app.pro \
 #    spectrum/spectrum.pro
+
+LIBS += -L"iir/"
+LIBS += -L"iir/iir"
+LIBS += -L"kissfft-131"

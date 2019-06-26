@@ -2,11 +2,12 @@ function [m] = readCsvEMG(filename)
 
 % Do komentowania u¿ywamy skrótu Ctrl + R
 
-filename = 'zacisk_slaby.csv';          
-filename = 'bezczynnosc.csv';           % bardzo ma³y pik przy 50 Hz (w pierwszym kwadracie wykresu)
-filename = 'zacisk silny.csv';          % ma³a amplituda mo¿e byæ spowodowana s³abym przyleganiem do cia³a
-% filename = '50Hz.csv';                  % gdy nic nie jest podpiête do elektrody, widzimy harmoniczne
 
+% filename = 'zacisk_slaby.csv';          
+% filename = 'bezczynnosc.csv';           % bardzo ma³y pik przy 50 Hz (w pierwszym kwadracie wykresu)
+% filename = 'zacisk silny.csv';          % ma³a amplituda mo¿e byæ spowodowana s³abym przyleganiem do cia³a
+% filename = '50Hz.csv';                  % gdy nic nie jest podpiête do elektrody, widzimy harmoniczne
+ filename = 'sample/peak.csv';                  % gdy nic nie jest podpiête do elektrody, widzimy harmoniczne
 %% Wczytywanie danych
 M = csvread(filename);
 
