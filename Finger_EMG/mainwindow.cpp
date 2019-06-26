@@ -27,6 +27,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->spinBox_HiPass, SIGNAL(valueChanged(int)), this, SLOT( set_butterworth_HiPass(int) ));
     connect(ui->spinBox_BandStop, SIGNAL(valueChanged(int)), this, SLOT( set_butterworth_BandStop_fq(int) ));
     connect(ui->spinBox_BandStop_width, SIGNAL(valueChanged(int)), this, SLOT( set_butterworth_BandStop_width(int) ));
+    connect(ui->lineEdit_path, SIGNAL(textChanged(QString)), this, SLOT( set_lineEdit_qnique_filename(QString) ));
 
 //    connect(ui->spinBox_save, SIGNAL(ui->spin), ui->progressBar, SLOT(ui->setpo))
 //    Counter a, b;
@@ -115,11 +116,10 @@ MainWindow::MainWindow(QWidget *parent) :
     format.setCodec("audio/pcm");
     format.setSampleRate(DSIZE2);                         // Hz sample per second
     format.setChannelCount(1);                              // NCH TODO:
-    format.setSampleSize(sizeof(timeData[0][0])*4);           // sizeof(double)
+    format.setSampleSize(sizeof(timeData[0][0])*4);           // sizeof(double) => 8 ( I multiplayng by 4 to get valid 32 bits)
     format.setByteOrder(QAudioFormat::LittleEndian);
     format.setSampleType(QAudioFormat::SampleType::Float); // nie ma double co zrobić?
 
-    ui->lineEdit_path->setText(( SAMPLE_DIR ));
 
     int i = 0;
 
@@ -194,6 +194,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 //    ui->textEdit->setVisible(ui->actionSave->isChecked());
     ui->lineEdit_fileN->setText( wav_out->fileName() );
+    ui->lineEdit_path->setText( SAMPLE_DIR );
 
 //#ifdef QT_DEBUG
 //    ui->selectInput2->setChecked(false);
@@ -405,64 +406,9 @@ void MainWindow::externalThread_tick()
           return;
         }
       }
-        uint16_t* sample = reinterpret_cast<uint16_t*>(readdata.data());
-        if (simulation == SIMULATION_WAV)
-        {
-            static size_t krok;
-            sample = reinterpret_cast<uint16_t*>(buff.data());
-            krok += DSIZE;
-            sample += krok;
-              qDebug() <<"krok:" <<  krok<< krok+NCH*DSIZE2;
-            ui->statusBar->showMessage(QString::number(krok));
-//            QThread::msleep(1);
-            if( krok >= buff.size()-DSIZE)
-            {
-                qDebug() <<"exit at krok:" <<  krok  ;
-              ui->actionRun->setChecked(false);
-              buff.clear();
-              buff.resize(0);
-              krok = 0;
-              simulation=SIMULATION_STOP;
-              return;
-            }
-        }
 
 
-        for(int i=0; i<DSIZE2; i++)
-        {
-            for(int k=0; k<NCH; k++)
-            {
-                timeData[k][i]=(*sample++)/65535.0;
-                (in[k]+i)->i = 0;
-
-                if(ui->radioBtn_rect->isChecked()) {
-                  (in[k]+i)->r = timeData[k][i];//(*sample)/65535.0;
-                    // do nothing, just assingn
-                }
-                else if (ui->radioBtn_hann->isChecked()) {
-                    timeData[k][i] *= hann[i];
-                    (in[k]+i)->r = timeData[k][i];//(*sample)/65535.0;
-                }
-
-                { // filtracja
-                  if( ui->checkBox_fill1->isChecked() ) {
-                      (in[k]+i)->r = 1;
-                  }
-
-                  if( ui->checkBox_bandStop->isChecked() ) {
-                    (in[k]+i)->r = fBandStop.filter( (in[k]+i)->r );
-                  }
-
-                  if( ui->checkBox_highPass->isChecked() ) {
-                    (in[k]+i)->r = fHiPass.filter( (in[k]+i)->r );
-                  }
-                }
-//qDebug() <<"2"   ;
-//                float freq =200; test[i].r = sin(2 * M_PI * freq * i / DSIZE2), test[i].i = 0;  test[i].i = 0; test[i].r = kiss_fft_scalar (*sample)/65535.0;
-//                if(ui->pwmValue1->value())
-//                    (in[k]+i)->r *=  ( hamming[i] + ui->pwmValue1->value()/100 );    // TO DO Hamming window
-            }
-        }
+        apply_filters();
 
         if( ui->actionSave->isChecked() || coutDownToZero )
             save_to_file( 0 );
@@ -1061,29 +1007,6 @@ void MainWindow::set_simulation(const Simulation_Type &newSimul)
 
 void MainWindow::on_toolButton_clicked()
 {
-  QString fName = "";
-
-  ui->progressBar->setRange(0, ui->spinBox_nDataPerFile->value());
-  ui->progressBar->setValue(0);
-
-    wav_out->close();  
-    if ( ui->lineEdit_path->text().isEmpty() )
-        fName = ui->lineEdit_fileN->text();
-    else
-    {
-      QDir dir;// We create the directory if needed
-      if (!dir.exists(ui->lineEdit_path->text()))
-          dir.mkpath(ui->lineEdit_path->text()); // You can check the success if needed
-
-        fName = ui->lineEdit_path->text()+ "/" +ui->lineEdit_fileN->text();
-    }
-    QFileInfo fi( get_unique_filename(fName) );
-    ui->lineEdit_fileN->setText( fi.completeBaseName()+ "." +fi.completeSuffix() );
-
-    wav_out->open( fName, format );
-    coutDownToZero =  ui->spinBox_nDataPerFile->value();
-    qDebug() << "is open wav" << wav_out->isOpen() << wav_out->fileName();
-    ui->progressBar->setValue(100);
 }
 
 // -----------------------------------------------------------------------------
@@ -1134,10 +1057,10 @@ void MainWindow::on_pushButto_kat_clicked(){
 
 void MainWindow::on_pushButton_openFile_clicked()
 {
+  wav_out->close();
   QString path = QDir::currentPath()+ "/" +ui->lineEdit_path->text()+ "/" +ui->lineEdit_fileN->text() ;
   showFileInFolder(path);
 }
-
 
 void MainWindow::set_butterworth_BandStop_fq(int cutoff_frequency){
   fBandStop.setup( DSIZE, cutoff_frequency, ui->spinBox_BandStop_width->value());
@@ -1164,4 +1087,105 @@ void MainWindow::on_radioButton_clicked(){
 }
 void MainWindow::on_radioButton_2_clicked(){
   ui->lineEdit_path->setText( SAMPLE_DIR "/thumb");
+}
+void MainWindow::apply_filters()
+{ // filtracja
+  uint16_t* sample = reinterpret_cast<uint16_t*>(readdata.data());
+  if (simulation == SIMULATION_WAV)
+  {
+      static size_t krok;
+      sample = reinterpret_cast<uint16_t*>(buff.data());
+      krok += DSIZE;
+      sample += krok;
+        qDebug() <<"krok:" <<  krok<< krok+NCH*DSIZE2;
+      ui->statusBar->showMessage(QString::number(krok));
+
+      if( krok >= buff.size()-DSIZE)
+      {
+          qDebug() <<"exit at krok:" <<  krok  ;
+        ui->actionRun->setChecked(false);
+        buff.clear();
+        buff.resize(0);
+        krok = 0;
+        simulation=SIMULATION_STOP;
+        return;
+      }
+  }
+
+  for(int i=0; i<DSIZE2; i++)
+  {
+    for(int k=0; k<NCH; k++)
+    {
+      timeData[k][i]=(*sample++)/65535.0;
+
+//      float freq =200; test[i].r = sin(2 * M_PI * freq * i / DSIZE2), test[i].i = 0;  test[i].i = 0; test[i].r = kiss_fft_scalar (*sample)/65535.0;
+//      if(ui->pwmValue1->value())
+//          (in[k]+i)->r *= ( hamming[i] + ui->pwmValue1->value()/100 );    // TO DO Hamming window
+
+      if(ui->radioBtn_rect->isChecked()) {
+        // do nothing, just assingn
+      }
+      else if (ui->radioBtn_hann->isChecked()) {
+        timeData[k][i] *= static_cast<double>(hann[i]);       //(*sample)/65535.0;
+      }
+      else if (ui->radioBtn_hamm->isChecked()) {
+        timeData[k][i] *= static_cast<double>(hamming[i]);       //(*sample)/65535.0;
+      }
+
+      // filtracja
+      if( ui->checkBox_bandStop->isChecked() ) {
+        timeData[k][i] = fBandStop.filter( timeData[k][i] );
+      }
+
+      if( ui->checkBox_highPass->isChecked() ) {
+        timeData[k][i] = fHiPass.filter( timeData[k][i] );
+      }
+
+      (in[k]+i)->r = static_cast<float>(timeData[k][i]);
+      (in[k]+i)->i = 0;
+
+      if( ui->checkBox_fill1->isChecked() ) {
+        (in[k]+i)->r = 1;
+      }
+    }
+  }
+}
+
+void MainWindow::on_toolButton_return_clicked()
+{
+    ui->toolButton_enter->animateClick();
+}
+
+void MainWindow::on_toolButton_enter_clicked()
+{
+  QString fName = "";
+
+  ui->progressBar->setRange(0, ui->spinBox_nDataPerFile->value());
+  ui->progressBar->setValue(0);
+
+    wav_out->close();
+    if ( ui->lineEdit_path->text().isEmpty() )
+        fName = ui->lineEdit_fileN->text();
+    else
+    {
+      QDir dir;// We create the directory if needed
+      if (!dir.exists(ui->lineEdit_path->text()))
+          dir.mkpath(ui->lineEdit_path->text()); // You can check the success if needed
+
+        fName = ui->lineEdit_path->text()+ "/" +ui->lineEdit_fileN->text();
+    }
+    QFileInfo fi( get_unique_filename(fName) );
+    ui->lineEdit_fileN->setText( fi.completeBaseName()+ "." +fi.completeSuffix() );
+
+    wav_out->open( fName, format );
+    coutDownToZero =  ui->spinBox_nDataPerFile->value();
+    qDebug() << "is open wav" << wav_out->isOpen() << wav_out->fileName();
+    ui->progressBar->setValue(100);
+}
+// ----------------------------------------------------------------------------------------
+void MainWindow::set_lineEdit_qnique_filename(QString path)
+{
+  QString uniqName = get_unique_filename(path+ "/" + ui->lineEdit_fileN->text() );
+  QFileInfo fi(uniqName);
+  ui->lineEdit_fileN->setText( fi.fileName() );
 }

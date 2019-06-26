@@ -86,6 +86,10 @@ private slots:
 
     void on_radioButton_2_clicked();
 
+    void on_toolButton_return_clicked();
+
+    void on_toolButton_enter_clicked();
+
 private:
     Ui::MainWindow *ui;
     void paintEvent(QPaintEvent *event);
@@ -104,6 +108,7 @@ private:
     void alloc_files();
     Simulation_Type find_source_file(QString filename_or_prefered_extension = "" );    
     QString get_unique_filename(QString filename, bool allow_empty = true);
+    void apply_filters();
 
 //Q_SIGNALS:
 signals:
@@ -113,6 +118,7 @@ public slots:
     void set_butterworth_BandStop_fq(int cutoff_frequency);
     void set_butterworth_BandStop_width(int width);
     void set_butterworth_HiPass(int cutoff_frequency);
+    void set_lineEdit_qnique_filename(QString path);
 
 private:
     Thread thread;
