@@ -15,10 +15,13 @@
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QCheckBox>
 #include <QtWidgets/QDockWidget>
+#include <QtWidgets/QFormLayout>
+#include <QtWidgets/QFrame>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QGroupBox>
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QLabel>
+#include <QtWidgets/QLineEdit>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenu>
 #include <QtWidgets/QMenuBar>
@@ -30,7 +33,6 @@
 #include <QtWidgets/QSpinBox>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QTabWidget>
-#include <QtWidgets/QTextEdit>
 #include <QtWidgets/QToolBar>
 #include <QtWidgets/QToolButton>
 #include <QtWidgets/QVBoxLayout>
@@ -94,12 +96,23 @@ public:
     QRadioButton *radio_saveAllDir;
     QRadioButton *radio_handOpen;
     QRadioButton *radio_handClose;
+    QRadioButton *radioButton;
+    QRadioButton *radioButton_2;
     QSpacerItem *verticalSpacer_2;
+    QLineEdit *lineEdit_path;
+    QLineEdit *lineEdit_fileN;
+    QFormLayout *formLayout_2;
     QPushButton *pushButto_kat;
-    QTextEdit *tEdit_out;
+    QPushButton *pushButton_openFile;
+    QSpacerItem *verticalSpacer_5;
+    QFrame *line_2;
     QProgressBar *progressBar;
-    QToolButton *toolButton;
+    QFormLayout *formLayout;
+    QLabel *label_Nsample;
     QSpinBox *spinBox_save;
+    QFrame *line_5;
+    QFrame *line;
+    QToolButton *toolButton;
     QSpacerItem *verticalSpacer;
 
     void setupUi(QMainWindow *MainWindow)
@@ -480,6 +493,16 @@ public:
 
         verticalLayout_5->addWidget(radio_handClose);
 
+        radioButton = new QRadioButton(groupBox_4);
+        radioButton->setObjectName(QString::fromUtf8("radioButton"));
+
+        verticalLayout_5->addWidget(radioButton);
+
+        radioButton_2 = new QRadioButton(groupBox_4);
+        radioButton_2->setObjectName(QString::fromUtf8("radioButton_2"));
+
+        verticalLayout_5->addWidget(radioButton_2);
+
 
         verticalLayout->addWidget(groupBox_4);
 
@@ -487,38 +510,67 @@ public:
 
         verticalLayout->addItem(verticalSpacer_2);
 
+        lineEdit_path = new QLineEdit(tab_save);
+        lineEdit_path->setObjectName(QString::fromUtf8("lineEdit_path"));
+        lineEdit_path->setInputMethodHints(Qt::ImhNone);
+
+        verticalLayout->addWidget(lineEdit_path);
+
+        lineEdit_fileN = new QLineEdit(tab_save);
+        lineEdit_fileN->setObjectName(QString::fromUtf8("lineEdit_fileN"));
+        lineEdit_fileN->setAutoFillBackground(false);
+
+        verticalLayout->addWidget(lineEdit_fileN);
+
+        formLayout_2 = new QFormLayout();
+        formLayout_2->setSpacing(6);
+        formLayout_2->setObjectName(QString::fromUtf8("formLayout_2"));
+        formLayout_2->setContentsMargins(-1, 0, -1, -1);
         pushButto_kat = new QPushButton(tab_save);
         pushButto_kat->setObjectName(QString::fromUtf8("pushButto_kat"));
+        sizePolicy4.setHeightForWidth(pushButto_kat->sizePolicy().hasHeightForWidth());
+        pushButto_kat->setSizePolicy(sizePolicy4);
 
-        verticalLayout->addWidget(pushButto_kat);
+        formLayout_2->setWidget(0, QFormLayout::LabelRole, pushButto_kat);
 
-        tEdit_out = new QTextEdit(tab_save);
-        tEdit_out->setObjectName(QString::fromUtf8("tEdit_out"));
-        tEdit_out->setEnabled(true);
-        tEdit_out->setMaximumSize(QSize(16777215, 20));
-        tEdit_out->setBaseSize(QSize(0, 10));
-        tEdit_out->setAutoFillBackground(true);
-        tEdit_out->setInputMethodHints(Qt::ImhNone);
-        tEdit_out->setTabChangesFocus(false);
-        tEdit_out->setLineWrapMode(QTextEdit::WidgetWidth);
+        pushButton_openFile = new QPushButton(tab_save);
+        pushButton_openFile->setObjectName(QString::fromUtf8("pushButton_openFile"));
+        QSizePolicy sizePolicy7(QSizePolicy::Ignored, QSizePolicy::Fixed);
+        sizePolicy7.setHorizontalStretch(0);
+        sizePolicy7.setVerticalStretch(0);
+        sizePolicy7.setHeightForWidth(pushButton_openFile->sizePolicy().hasHeightForWidth());
+        pushButton_openFile->setSizePolicy(sizePolicy7);
 
-        verticalLayout->addWidget(tEdit_out);
+        formLayout_2->setWidget(0, QFormLayout::FieldRole, pushButton_openFile);
+
+
+        verticalLayout->addLayout(formLayout_2);
+
+        verticalSpacer_5 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+
+        verticalLayout->addItem(verticalSpacer_5);
+
+        line_2 = new QFrame(tab_save);
+        line_2->setObjectName(QString::fromUtf8("line_2"));
+        line_2->setFrameShape(QFrame::HLine);
+        line_2->setFrameShadow(QFrame::Sunken);
+
+        verticalLayout->addWidget(line_2);
 
         progressBar = new QProgressBar(tab_save);
         progressBar->setObjectName(QString::fromUtf8("progressBar"));
-        progressBar->setValue(24);
+        progressBar->setValue(1);
 
         verticalLayout->addWidget(progressBar);
 
-        toolButton = new QToolButton(tab_save);
-        toolButton->setObjectName(QString::fromUtf8("toolButton"));
-        toolButton->setCursor(QCursor(Qt::PointingHandCursor));
-        QIcon icon6;
-        icon6.addFile(QString::fromUtf8("../../gettyimages-137225933-170667a.png"), QSize(), QIcon::Normal, QIcon::Off);
-        toolButton->setIcon(icon6);
-        toolButton->setIconSize(QSize(32, 32));
+        formLayout = new QFormLayout();
+        formLayout->setSpacing(6);
+        formLayout->setObjectName(QString::fromUtf8("formLayout"));
+        formLayout->setContentsMargins(-1, 0, -1, -1);
+        label_Nsample = new QLabel(tab_save);
+        label_Nsample->setObjectName(QString::fromUtf8("label_Nsample"));
 
-        verticalLayout->addWidget(toolButton);
+        formLayout->setWidget(0, QFormLayout::LabelRole, label_Nsample);
 
         spinBox_save = new QSpinBox(tab_save);
         spinBox_save->setObjectName(QString::fromUtf8("spinBox_save"));
@@ -526,7 +578,37 @@ public:
         spinBox_save->setMaximum(1000);
         spinBox_save->setValue(10);
 
-        verticalLayout->addWidget(spinBox_save);
+        formLayout->setWidget(0, QFormLayout::FieldRole, spinBox_save);
+
+
+        verticalLayout->addLayout(formLayout);
+
+        line_5 = new QFrame(tab_save);
+        line_5->setObjectName(QString::fromUtf8("line_5"));
+        line_5->setFrameShape(QFrame::HLine);
+        line_5->setFrameShadow(QFrame::Sunken);
+
+        verticalLayout->addWidget(line_5);
+
+        line = new QFrame(tab_save);
+        line->setObjectName(QString::fromUtf8("line"));
+        line->setFrameShape(QFrame::VLine);
+        line->setFrameShadow(QFrame::Sunken);
+
+        verticalLayout->addWidget(line);
+
+        toolButton = new QToolButton(tab_save);
+        toolButton->setObjectName(QString::fromUtf8("toolButton"));
+        toolButton->setCursor(QCursor(Qt::PointingHandCursor));
+        toolButton->setAutoFillBackground(false);
+        QIcon icon6;
+        icon6.addFile(QString::fromUtf8("../../gettyimages-137225933-170667a.png"), QSize(), QIcon::Normal, QIcon::Off);
+        toolButton->setIcon(icon6);
+        toolButton->setIconSize(QSize(32, 32));
+        toolButton->setAutoExclusive(false);
+        toolButton->setAutoRaise(false);
+
+        verticalLayout->addWidget(toolButton);
 
         verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
@@ -541,7 +623,6 @@ public:
 #ifndef QT_NO_SHORTCUT
         pwmLabel2->setBuddy(pwmLabel2);
 #endif // QT_NO_SHORTCUT
-        QWidget::setTabOrder(tabWidget, selectInput1);
         QWidget::setTabOrder(selectInput1, selectInput2);
         QWidget::setTabOrder(selectInput2, selectInput3);
         QWidget::setTabOrder(selectInput3, radioBtn_rect);
@@ -554,11 +635,8 @@ public:
         QWidget::setTabOrder(pwmValue3, radio_saveAllDir);
         QWidget::setTabOrder(radio_saveAllDir, radio_handOpen);
         QWidget::setTabOrder(radio_handOpen, radio_handClose);
-        QWidget::setTabOrder(radio_handClose, pushButto_kat);
-        QWidget::setTabOrder(pushButto_kat, tEdit_out);
-        QWidget::setTabOrder(tEdit_out, toolButton);
-        QWidget::setTabOrder(toolButton, spinBox_save);
-        QWidget::setTabOrder(spinBox_save, checkBox_highPass);
+        QWidget::setTabOrder(radio_handClose, toolButton);
+        QWidget::setTabOrder(toolButton, checkBox_highPass);
         QWidget::setTabOrder(checkBox_highPass, spinBox_HiPass);
 
         menuBar->addAction(menuUstwienia->menuAction());
@@ -673,21 +751,52 @@ public:
         groupBox_4->setTitle(QApplication::translate("MainWindow", "Zapisz do ", nullptr));
         radio_saveAllDir->setText(QApplication::translate("MainWindow", "Mieszane", nullptr));
 #ifndef QT_NO_SHORTCUT
-        radio_saveAllDir->setShortcut(QApplication::translate("MainWindow", "Ctrl+7", nullptr));
+        radio_saveAllDir->setShortcut(QString());
 #endif // QT_NO_SHORTCUT
         radio_handOpen->setText(QApplication::translate("MainWindow", "D\305\202o\305\204 rozlu\305\272niona", nullptr));
 #ifndef QT_NO_SHORTCUT
-        radio_handOpen->setShortcut(QApplication::translate("MainWindow", "Ctrl+8", nullptr));
+        radio_handOpen->setShortcut(QApplication::translate("MainWindow", "Ctrl+2", nullptr));
 #endif // QT_NO_SHORTCUT
         radio_handClose->setText(QApplication::translate("MainWindow", "D\305\202o\305\204 zaci\305\233ni\304\231ta", nullptr));
 #ifndef QT_NO_SHORTCUT
-        radio_handClose->setShortcut(QApplication::translate("MainWindow", "Ctrl+9", nullptr));
+        radio_handClose->setShortcut(QApplication::translate("MainWindow", "Ctrl+3", nullptr));
 #endif // QT_NO_SHORTCUT
+        radioButton->setText(QApplication::translate("MainWindow", "Palec wskazuj\304\205cy", nullptr));
+#ifndef QT_NO_SHORTCUT
+        radioButton->setShortcut(QApplication::translate("MainWindow", "Ctrl+4", nullptr));
+#endif // QT_NO_SHORTCUT
+        radioButton_2->setText(QApplication::translate("MainWindow", "Kciuk", nullptr));
+#ifndef QT_NO_SHORTCUT
+        radioButton_2->setShortcut(QApplication::translate("MainWindow", "Ctrl+5", nullptr));
+#endif // QT_NO_SHORTCUT
+        lineEdit_path->setText(QApplication::translate("MainWindow", "../sample", nullptr));
+        lineEdit_path->setPlaceholderText(QApplication::translate("MainWindow", "\305\232cie\305\274ka katalogu", nullptr));
+#ifndef QT_NO_TOOLTIP
+        lineEdit_fileN->setToolTip(QApplication::translate("MainWindow", "43", nullptr));
+#endif // QT_NO_TOOLTIP
+#ifndef QT_NO_STATUSTIP
+        lineEdit_fileN->setStatusTip(QApplication::translate("MainWindow", "23", nullptr));
+#endif // QT_NO_STATUSTIP
+#ifndef QT_NO_WHATSTHIS
+        lineEdit_fileN->setWhatsThis(QApplication::translate("MainWindow", "21", nullptr));
+#endif // QT_NO_WHATSTHIS
+#ifndef QT_NO_ACCESSIBILITY
+        lineEdit_fileN->setAccessibleName(QApplication::translate("MainWindow", "22", nullptr));
+#endif // QT_NO_ACCESSIBILITY
+        lineEdit_fileN->setPlaceholderText(QApplication::translate("MainWindow", "Nazwa pliku", nullptr));
         pushButto_kat->setText(QApplication::translate("MainWindow", "Otw\303\263rz katalog", nullptr));
 #ifndef QT_NO_SHORTCUT
         pushButto_kat->setShortcut(QApplication::translate("MainWindow", "Ctrl+0", nullptr));
 #endif // QT_NO_SHORTCUT
-        toolButton->setText(QApplication::translate("MainWindow", "...", nullptr));
+        pushButton_openFile->setText(QApplication::translate("MainWindow", "Plik", nullptr));
+#ifndef QT_NO_SHORTCUT
+        pushButton_openFile->setShortcut(QApplication::translate("MainWindow", "Ctrl+,", nullptr));
+#endif // QT_NO_SHORTCUT
+        label_Nsample->setText(QApplication::translate("MainWindow", "N data per file", nullptr));
+        toolButton->setText(QApplication::translate("MainWindow", "Enter", nullptr));
+#ifndef QT_NO_SHORTCUT
+        toolButton->setShortcut(QApplication::translate("MainWindow", "Enter", nullptr));
+#endif // QT_NO_SHORTCUT
         tabWidget->setTabText(tabWidget->indexOf(tab_save), QApplication::translate("MainWindow", "Zapis ", nullptr));
     } // retranslateUi
 

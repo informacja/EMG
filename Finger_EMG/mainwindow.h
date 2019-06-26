@@ -73,6 +73,18 @@ private slots:
 
     void on_pushButto_kat_clicked();
 
+    void on_radio_saveAllDir_clicked();
+
+    void on_radio_handOpen_clicked();
+
+    void on_radio_handClose_clicked();
+
+    void on_pushButton_openFile_clicked();
+
+    void on_radioButton_clicked();
+
+    void on_radioButton_2_clicked();
+
 private:
     Ui::MainWindow *ui;
     void paintEvent(QPaintEvent *event);
@@ -123,8 +135,8 @@ private:
     Iir::Butterworth::HighPass<ORDER> fHiPass;
     Iir::Butterworth::BandStop<ORDER> fBandStop;
 
-    QFile   file_out,
-            file_csv;                                           // read and write
+//    QFile   file_out,
+    QFile file_csv;                                             // read and write
     QTextStream stream;                                         // for csv read and write;
     Simulation_Type simulation;
     FPS fps;

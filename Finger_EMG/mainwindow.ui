@@ -594,7 +594,7 @@ color: rgb(255, 255, 255);</string>
                <string>Mieszane</string>
               </property>
               <property name="shortcut">
-               <string>Ctrl+7</string>
+               <string/>
               </property>
              </widget>
             </item>
@@ -604,7 +604,7 @@ color: rgb(255, 255, 255);</string>
                <string>Dłoń rozluźniona</string>
               </property>
               <property name="shortcut">
-               <string>Ctrl+8</string>
+               <string>Ctrl+2</string>
               </property>
              </widget>
             </item>
@@ -614,7 +614,27 @@ color: rgb(255, 255, 255);</string>
                <string>Dłoń zaciśnięta</string>
               </property>
               <property name="shortcut">
-               <string>Ctrl+9</string>
+               <string>Ctrl+3</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QRadioButton" name="radioButton">
+              <property name="text">
+               <string>Palec wskazujący</string>
+              </property>
+              <property name="shortcut">
+               <string>Ctrl+4</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QRadioButton" name="radioButton_2">
+              <property name="text">
+               <string>Kciuk</string>
+              </property>
+              <property name="shortcut">
+               <string>Ctrl+5</string>
               </property>
              </widget>
             </item>
@@ -635,50 +655,144 @@ color: rgb(255, 255, 255);</string>
           </spacer>
          </item>
          <item>
-          <widget class="QPushButton" name="pushButto_kat">
-           <property name="text">
-            <string>Otwórz katalog</string>
+          <widget class="QLineEdit" name="lineEdit_path">
+           <property name="inputMethodHints">
+            <set>Qt::ImhNone</set>
            </property>
-           <property name="shortcut">
-            <string>Ctrl+0</string>
+           <property name="text">
+            <string>../sample</string>
+           </property>
+           <property name="placeholderText">
+            <string>Ścieżka katalogu</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QTextEdit" name="tEdit_out">
-           <property name="enabled">
-            <bool>true</bool>
+          <widget class="QLineEdit" name="lineEdit_fileN">
+           <property name="toolTip">
+            <string>43</string>
            </property>
-           <property name="maximumSize">
-            <size>
-             <width>16777215</width>
-             <height>20</height>
-            </size>
+           <property name="statusTip">
+            <string>23</string>
            </property>
-           <property name="baseSize">
-            <size>
-             <width>0</width>
-             <height>10</height>
-            </size>
+           <property name="whatsThis">
+            <string>21</string>
+           </property>
+           <property name="accessibleName">
+            <string>22</string>
            </property>
            <property name="autoFillBackground">
-            <bool>true</bool>
-           </property>
-           <property name="inputMethodHints">
-            <set>Qt::ImhNone</set>
-           </property>
-           <property name="tabChangesFocus">
             <bool>false</bool>
            </property>
-           <property name="lineWrapMode">
-            <enum>QTextEdit::WidgetWidth</enum>
+           <property name="placeholderText">
+            <string>Nazwa pliku</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <layout class="QFormLayout" name="formLayout_2">
+           <property name="topMargin">
+            <number>0</number>
+           </property>
+           <item row="0" column="0">
+            <widget class="QPushButton" name="pushButto_kat">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>Otwórz katalog</string>
+             </property>
+             <property name="shortcut">
+              <string>Ctrl+0</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QPushButton" name="pushButton_openFile">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Ignored" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>Plik</string>
+             </property>
+             <property name="shortcut">
+              <string>Ctrl+,</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <spacer name="verticalSpacer_5">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>40</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="Line" name="line_2">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
            </property>
           </widget>
          </item>
          <item>
           <widget class="QProgressBar" name="progressBar">
            <property name="value">
-            <number>24</number>
+            <number>1</number>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <layout class="QFormLayout" name="formLayout">
+           <property name="topMargin">
+            <number>0</number>
+           </property>
+           <item row="0" column="0">
+            <widget class="QLabel" name="label_Nsample">
+             <property name="text">
+              <string>N data per file</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QSpinBox" name="spinBox_save">
+             <property name="minimum">
+              <number>1</number>
+             </property>
+             <property name="maximum">
+              <number>1000</number>
+             </property>
+             <property name="value">
+              <number>10</number>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <widget class="Line" name="line_5">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="Line" name="line">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
            </property>
           </widget>
          </item>
@@ -687,8 +801,11 @@ color: rgb(255, 255, 255);</string>
            <property name="cursor">
             <cursorShape>PointingHandCursor</cursorShape>
            </property>
+           <property name="autoFillBackground">
+            <bool>false</bool>
+           </property>
            <property name="text">
-            <string>...</string>
+            <string>Enter</string>
            </property>
            <property name="icon">
             <iconset>
@@ -700,18 +817,14 @@ color: rgb(255, 255, 255);</string>
              <height>32</height>
             </size>
            </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QSpinBox" name="spinBox_save">
-           <property name="minimum">
-            <number>1</number>
+           <property name="shortcut">
+            <string>Enter</string>
            </property>
-           <property name="maximum">
-            <number>1000</number>
+           <property name="autoExclusive">
+            <bool>false</bool>
            </property>
-           <property name="value">
-            <number>10</number>
+           <property name="autoRaise">
+            <bool>false</bool>
            </property>
           </widget>
          </item>
@@ -899,7 +1012,6 @@ color: rgb(255, 255, 255);</string>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <tabstops>
-  <tabstop>tabWidget</tabstop>
   <tabstop>selectInput1</tabstop>
   <tabstop>selectInput2</tabstop>
   <tabstop>selectInput3</tabstop>
@@ -913,10 +1025,7 @@ color: rgb(255, 255, 255);</string>
   <tabstop>radio_saveAllDir</tabstop>
   <tabstop>radio_handOpen</tabstop>
   <tabstop>radio_handClose</tabstop>
-  <tabstop>pushButto_kat</tabstop>
-  <tabstop>tEdit_out</tabstop>
   <tabstop>toolButton</tabstop>
-  <tabstop>spinBox_save</tabstop>
   <tabstop>checkBox_highPass</tabstop>
   <tabstop>spinBox_HiPass</tabstop>
  </tabstops>

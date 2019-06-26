@@ -76,6 +76,8 @@
 #include "audio/wavefilewriter.h"
 #include <QDesktopServices>
 #include <QRegularExpression>
+#include <QDir>
+#include <QProcess>
 
 enum Simulation_Type {
         // data from NXP board

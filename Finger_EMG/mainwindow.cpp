@@ -113,7 +113,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // Output WAVE settings
     format.setCodec("audio/pcm");
-    format.setSampleRate(DSIZE2*2);                           // Hz sample per second
+    format.setSampleRate(DSIZE2);                           // Hz sample per second
     format.setChannelCount(1);                              // NCH
     format.setSampleSize(sizeof(timeData[0][0])*2);         // sizeof(double)*2
     format.setByteOrder(QAudioFormat::LittleEndian);
@@ -191,7 +191,7 @@ MainWindow::MainWindow(QWidget *parent) :
     stream.setDevice( (QIODevice*) &file_csv );
 
 //    ui->textEdit->setVisible(ui->actionSave->isChecked());
-    ui->tEdit_out->setText( wav_out->fileName() );
+    ui->lineEdit_fileN->setText( wav_out->fileName() );
 
 //#ifdef QT_DEBUG
 //    ui->selectInput2->setChecked(false);
@@ -682,16 +682,12 @@ void MainWindow::save_to_file( bool add_seconds)
 //        file_out.write(reinterpret_cast<char*>(timeData[k].data()), static_cast<uint>(timeData[k].size())*sizeof(double));
         wav_out->write(reinterpret_cast<char*>(timeData[k].data()), static_cast<uint>(timeData[k].size())*sizeof(double));
 
-        qInfo() <<"zapisano kanał "<<  k << ": " << timeData[k].size();
+        qInfo() <<"zapisano kanał "<<  k << "size(): " << timeData[k].size();
         for (int i = 0; i < timeData[0].size(); i++)
         {
             stream <<  timeData[k][i] << ",";    // out.csv
         }
-//        qInfo() << file.fileName();
         stream << endl;
-
-        // save WAV
-
    }
 }
 
@@ -726,7 +722,7 @@ void MainWindow::on_textEdit_textChanged()
 
 void MainWindow::on_actionSave_triggered()
 {
-     ui->tEdit_out->setVisible(ui->actionSave->isChecked());
+     ui->lineEdit_fileN->setVisible(ui->actionSave->isChecked());
 //     if(ui->actionSave->isChecked() == true)
 //     {
 //         if(file_out.isOpen())
@@ -1058,27 +1054,29 @@ void MainWindow::set_simulation(const Simulation_Type &newSimul)
 
 void MainWindow::on_toolButton_clicked()
 {
-
+  QString fName = "";
 
   ui->progressBar->setRange(0, ui->spinBox_save->value());
   ui->progressBar->setValue(0);
 
-    wav_out->close();
-    ui->tEdit_out->setText( get_unique_filename(ui->tEdit_out->toPlainText()) );
-    wav_out->open( ui->tEdit_out->toPlainText(), format );
+    wav_out->close();  
+    if ( ui->lineEdit_path->text().isEmpty() )
+        fName = ui->lineEdit_fileN->text();
+    else
+    {
+      QDir dir;// We create the directory if needed
+      if (!dir.exists(ui->lineEdit_path->text()))
+          dir.mkpath(ui->lineEdit_path->text()); // You can check the success if needed
+
+        fName = ui->lineEdit_path->text()+ "/" +ui->lineEdit_fileN->text();
+    }
+    QFileInfo fi( get_unique_filename(fName) );
+    ui->lineEdit_fileN->setText( fi.completeBaseName()+ "." +fi.completeSuffix() );
+
+    wav_out->open( fName, format );
     coutDownToZero =  ui->spinBox_save->value();
     qDebug() << "is open wav" << wav_out->isOpen() << wav_out->fileName();
-      ui->progressBar->setValue(100);
-
-
-//    file_out.open();
-/// save
-//    for (int i = 0; i <= 100; i++)
-//    {
-
-////      QThread::msleep(1);
-//    }
-
+    ui->progressBar->setValue(100);
 }
 
 // -----------------------------------------------------------------------------
@@ -1098,15 +1096,41 @@ QString MainWindow::get_unique_filename(QString filename, bool allow_empty)
         break;
     i++;
     QRegularExpression re("(\\d*)");
-    filename = fi.completeBaseName().replace(re, "") + QVariant(i).toString() + "." + fi.completeSuffix();
+    filename = "";
+    if ( !fi.path().isEmpty() && fi.path() != ".")
+        filename = fi.path() + "/";
+    filename += fi.completeBaseName().replace(re, "") + QVariant(i).toString() + "." + fi.completeSuffix();
     fi.setFile(filename);
   }
   return filename;
 }
+// ------------------------------------------------------------------------------
+void showFileInFolder(const QString &path){
+    #ifdef _WIN32    //Code for Windows
+        QProcess::startDetached("explorer.exe", {"/select,", QDir::toNativeSeparators(path)});
+    #elif defined(__APPLE__)    //Code for Mac
+        QProcess::execute("/usr/bin/osascript", {"-e", "tell application \"Finder\" to reveal POSIX file \"" + path + "\""});
+        QProcess::execute("/usr/bin/osascript", {"-e", "tell application \"Finder\" to activate"});
+    #endif
+}
 
 void MainWindow::on_pushButto_kat_clicked(){
-  QDesktopServices::openUrl( QUrl::fromLocalFile( QDir::currentPath() ));
+
+  if( ui->lineEdit_path->text().isEmpty() )
+    QDesktopServices::openUrl( QUrl::fromLocalFile( QDir::currentPath() ));
+  else {
+    QString path = QDir::currentPath()+ "/" +ui->lineEdit_path->text() ;
+    if( !QDesktopServices::openUrl( QUrl::fromLocalFile( path )) )
+        ui->statusBar->showMessage("Nie mogę otworzyć sieżki " + path );
+  }
 }
+
+void MainWindow::on_pushButton_openFile_clicked()
+{
+  QString path = QDir::currentPath()+ "/" +ui->lineEdit_path->text()+ "/" +ui->lineEdit_fileN->text() ;
+  showFileInFolder(path);
+}
+
 
 void MainWindow::set_butterworth_BandStop_fq(int cutoff_frequency){
   fBandStop.setup( DSIZE, cutoff_frequency, ui->spinBox_BandStop_width->value());
@@ -1117,4 +1141,29 @@ void MainWindow::set_butterworth_BandStop_width(int width){
 }
 void MainWindow::set_butterworth_HiPass(int cutoff_frequency){
   fHiPass.setup( DSIZE, cutoff_frequency);
+}
+
+void MainWindow::on_radio_saveAllDir_clicked()
+{
+  ui->lineEdit_path->setText("../sample/mix");
+}
+
+void MainWindow::on_radio_handOpen_clicked()
+{
+    ui->lineEdit_path->setText("../sample/hand/open");
+}
+
+void MainWindow::on_radio_handClose_clicked()
+{
+    ui->lineEdit_path->setText("../sample/hand/closed");
+}
+
+void MainWindow::on_radioButton_clicked()
+{
+  ui->lineEdit_path->setText("../sample/first_finger");
+}
+
+void MainWindow::on_radioButton_2_clicked()
+{
+  ui->lineEdit_path->setText("../sample/thumb");
 }
