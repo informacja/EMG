@@ -5,7 +5,7 @@
 
 >Easy readable readme
 ## Info
- Open tab "Config" and just press <kbh> Enter </kbh>, progress bar should fill in.
+ Open tab "Save" and just press <kbh> Enter </kbh>, progress bar should fill in.
 
 ## ButterWorth
 ## Bez filtracji
