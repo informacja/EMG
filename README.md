@@ -4,7 +4,7 @@
 > 200 sample per cat
 
 >Easy readable readme
-## Info
+## Info how to save sample
  Open tab "Save" and just press <kbh> Enter </kbh>, progress bar should fill in.
 
 ## ButterWorth
