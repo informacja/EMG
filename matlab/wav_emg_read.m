@@ -5,18 +5,52 @@ filename = 'sample/50hz.wav';
 filename = 'sample/noise.wav';
 filename = 'sample/hand.wav';
 
-[Y, FS]=audioread(filename,'double');
+filename = 'sample/a.wav';
+filename = 'sample/b.wav';
+filename = 'sample/c.wav'; % 4*bps
+% filename = 'sample/d.wav'; % hand
+
+shift = [1, 2048*2]
+
 info = audioinfo(filename)
-% 
-[data, fs] = audioread(filename);
+
+[data, fs] = audioread(filename, shift);
+
 d(info.SampleRate) = data(info.SampleRate);
-for i = 1:info.SampleRate
-    d(i) = data(i);
-end
+
 % d
- data_fft = fft(data) % data
- plot(abs(data_fft(:,1)))
+% wyswietlanie kilku klatek
+%      data_fft = fft(data); % data
+%  size(data_fft)
+%    plot(abs(data_fft(:,1)));
+%   return;
+for i = 1:info.Duration
+    
+shift = [ info.SampleRate*(i-1)+1, info.SampleRate*i]
+
+ if shift(1) == 0
+     shift(1) = 1;
+ end
+
+%     for i = 1:info.SampleRate
+%         d(i) = data(i+shift(1));
+%         
+        d = data( shift(1) : shift(2))';
+        size(d)
+%     end
+    
+ data_fft = fft(d)/info.SampleRate;% data
+ data_fft = data_fft';
+ plot(abs(data_fft(:,1)),'r');
+
+    pause(0.111);         
+%     fprintf('Pr�bka nr: %d', i); input('');
+end
+%  data_fft = fft(data) ;% data
+%  plot(abs(data_fft(:,1)));
  return;
+ 
+ 
 [y,fs] = audioread(filename);
 
  whos y
