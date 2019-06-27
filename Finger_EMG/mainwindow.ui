@@ -149,7 +149,7 @@ color: rgb(255, 255, 255);</string>
         <enum>QTabWidget::Triangular</enum>
        </property>
        <property name="currentIndex">
-        <number>1</number>
+        <number>0</number>
        </property>
        <property name="usesScrollButtons">
         <bool>true</bool>
@@ -235,7 +235,7 @@ color: rgb(255, 255, 255);</string>
           </widget>
          </item>
          <item>
-          <widget class="QGroupBox" name="groupBox_3">
+          <widget class="QGroupBox" name="groupBox_window">
            <property name="sizePolicy">
             <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -298,7 +298,7 @@ color: rgb(255, 255, 255);</string>
           </widget>
          </item>
          <item alignment="Qt::AlignHCenter">
-          <widget class="QGroupBox" name="groupBox_5">
+          <widget class="QGroupBox" name="groupBox_bw_filtr">
            <property name="sizePolicy">
             <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -854,7 +854,7 @@ color: rgb(255, 255, 255);</string>
           </widget>
          </item>
          <item>
-          <layout class="QGridLayout" name="gridLayout_2" rowstretch="0,0,0" columnstretch="0,0" columnminimumwidth="0,0">
+          <layout class="QGridLayout" name="gridLayout_2" rowstretch="0" columnstretch="0,0" columnminimumwidth="0,0">
            <property name="sizeConstraint">
             <enum>QLayout::SetDefaultConstraint</enum>
            </property>
@@ -1163,12 +1163,12 @@ color: rgb(255, 255, 255);</string>
    <slot>setNum(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>54</x>
-     <y>492</y>
+     <x>60</x>
+     <y>701</y>
     </hint>
     <hint type="destinationlabel">
-     <x>54</x>
-     <y>446</y>
+     <x>60</x>
+     <y>544</y>
     </hint>
    </hints>
   </connection>
@@ -1179,12 +1179,12 @@ color: rgb(255, 255, 255);</string>
    <slot>setNum(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>85</x>
-     <y>492</y>
+     <x>97</x>
+     <y>701</y>
     </hint>
     <hint type="destinationlabel">
-     <x>85</x>
-     <y>446</y>
+     <x>97</x>
+     <y>544</y>
     </hint>
    </hints>
   </connection>
@@ -1195,12 +1195,12 @@ color: rgb(255, 255, 255);</string>
    <slot>setNum(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>116</x>
-     <y>492</y>
+     <x>134</x>
+     <y>701</y>
     </hint>
     <hint type="destinationlabel">
-     <x>116</x>
-     <y>446</y>
+     <x>134</x>
+     <y>544</y>
     </hint>
    </hints>
   </connection>

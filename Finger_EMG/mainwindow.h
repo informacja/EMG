@@ -23,6 +23,7 @@
 #define B_SIZE DSIZE                          // minimalny rozmiar wczytywaniej paczki danych z pliku
 #define SQUARE(a) (a*a)
 #define INI_FILES "Ini_Files"
+#define ALLOW_USE_FILTERS
 
 namespace Ui {
     class MainWindow;
@@ -97,7 +98,7 @@ private:
     void alloc_memory_sub_constructor();
     void pointers_set_null();
     inline void auto_actionRun_serial_port(int count_up_to = 100);
-    qint64 load_data(bool sav_add_seconds = false);
+    qint64 load_data_from_file(bool sav_add_seconds = false);
     void dragEnterEvent(QDragEnterEvent *e);
     void dropEvent(QDropEvent *e);
     void save_to_file( bool wait_mseconds_0 = 0);
@@ -109,7 +110,7 @@ private:
     void alloc_files();
     Simulation_Type find_source_file(QString filename_or_prefered_extension = "" );    
     QString get_unique_filename(QString filename, bool allow_empty = true);
-    void apply_filters();
+    void load_data_from_serialport();
 
 //Q_SIGNALS:
 signals:
