@@ -74,6 +74,10 @@
 #include <QtWidgets/QWidget>
 #include "audio/wavfilereader.h"
 #include "audio/wavefilewriter.h"
+#include <QDesktopServices>
+#include <QRegularExpression>
+#include <QDir>
+#include <QProcess>
 
 enum Simulation_Type {
         // data from NXP board
@@ -85,6 +89,7 @@ enum Simulation_Type {
         // fatal error
     SIMULATION_STOP = 0xFF
 };
+
 
 
 #endif // PRE_HEADERS_H

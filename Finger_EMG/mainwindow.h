@@ -4,17 +4,22 @@
 #include "pre_headers.h"
 
 #include "kissfft-131/kiss_fft.h"
+#include "iir/Iir.h"
+
 #define NCH 3
 #define TEMP_NCH 3
 #define DSIZE    (NCH*2048)
 #define DSIZE2   (DSIZE/2/NCH)
+#define D2SIZE   (DSIZE*2)
 #define BUF_LEN   10e6
 #define NBARS     32                          // do dzielenia DSIZE2
+#define ORDER     (1)
 
-#define FPS FPS
+//#define FPS FPS
 #define DATA_DIR "./data/"
 #define FILE_NAME  "out"
 #define EXT ".wav"
+#define SAMPLE_DIR "../matlab/sample"
 #define B_SIZE DSIZE                          // minimalny rozmiar wczytywaniej paczki danych z pliku
 #define SQUARE(a) (a*a)
 #define INI_FILES "Ini_Files"
@@ -66,6 +71,26 @@ private slots:
     void on_actionKatalog_triggered();
     void on_textEdit_cursorPositionChanged();
 
+    void on_toolButton_clicked();
+
+    void on_pushButto_kat_clicked();
+
+    void on_radio_saveAllDir_clicked();
+
+    void on_radio_handOpen_clicked();
+
+    void on_radio_handClose_clicked();
+
+    void on_pushButton_openFile_clicked();
+
+    void on_radioButton_clicked();
+
+    void on_radioButton_2_clicked();
+
+    void on_toolButton_return_clicked();
+
+    void on_toolButton_enter_clicked();
+
 private:
     Ui::MainWindow *ui;
     void paintEvent(QPaintEvent *event);
@@ -82,12 +107,19 @@ private:
     qint64 simulation_read_data_from_file();
     void draw_bars_Hz_gap(int window_length, int);
     void alloc_files();
-    Simulation_Type find_source_file(QString filename_or_prefered_extension = "" );
+    Simulation_Type find_source_file(QString filename_or_prefered_extension = "" );    
+    QString get_unique_filename(QString filename, bool allow_empty = true);
+    void apply_filters();
 
+//Q_SIGNALS:
 signals:
-    void simulation_changed();
+    void simulation_changed(Simulation_Type);
 public slots:
     void set_simulation(const Simulation_Type &newSimul);
+    void set_butterworth_BandStop_fq(int cutoff_frequency);
+    void set_butterworth_BandStop_width(int width);
+    void set_butterworth_HiPass(int cutoff_frequency);
+    void set_lineEdit_qnique_filename(QString path);
 
 private:
     Thread thread;
@@ -108,17 +140,19 @@ private:
     kiss_fft_cpx test[DSIZE2];
 
     kiss_fft_scalar *hamming, *hann;                                   // okno, tak naprawdę typ to float :D
+    Iir::Butterworth::HighPass<ORDER> fHiPass;
+    Iir::Butterworth::BandStop<ORDER> fBandStop;
 
-    QFile   file_out,
-            file_csv;                                           // read and write
+//    QFile   file_out,
+    QFile file_csv;                                             // read and write
     QTextStream stream;                                         // for csv read and write;
     Simulation_Type simulation;
     FPS fps;
     WavFilerReader *wav_in;                                     // input or output
     WaveFileWriter *wav_out;
     QAudioFormat format;
+    int coutDownToZero;
 };
-
 
 //class Counter : public QObject
 //{

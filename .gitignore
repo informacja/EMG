@@ -1,16 +1,11 @@
 *.user
+=======
 /debug
 /release
-*.o
-*.csv
-*.Debug
 Finger_EMG/Makefile.Release
-*.Release
-
 *.user
 Finger_EMG/debug/*
 Finger_EMG/release/*
-
 *.o
 *.Release
 *.Debug
