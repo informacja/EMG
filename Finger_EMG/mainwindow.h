@@ -10,6 +10,7 @@
 #define TEMP_NCH 3
 #define DSIZE    (NCH*2048)
 #define DSIZE2   (DSIZE/2/NCH)
+#define D2SIZE   (DSIZE*2)
 #define BUF_LEN   10e6
 #define NBARS     32                          // do dzielenia DSIZE2
 #define ORDER     (1)

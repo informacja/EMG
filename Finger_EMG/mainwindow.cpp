@@ -102,6 +102,7 @@ MainWindow::MainWindow(QWidget *parent) :
 //    const int order = 4; // 4th order (=2 biquads)
 //    Iir::Butterworth::LowPass<order> f;
     const double samplingrate = DSIZE; // Hz
+//    const double samplingrate = D2SIZE; // Hz
     const double cutoff_frequency = 50; // Hz
     fHiPass.setup(samplingrate, cutoff_frequency);
     fBandStop.setup(samplingrate, cutoff_frequency, 10);
