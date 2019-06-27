@@ -78,11 +78,11 @@ MainWindow::MainWindow(QWidget *parent) :
     chart.gridNumX=10;
     chart.gridNumY=10;
     chart.minValueX= 1;
-    chart.maxValueX= DSIZE2;
+    chart.maxValueX= WSIZE;
     chart.minValueY= 0;
     chart.maxValueY= 1;
     chart.chartMode=LinearChart;
-    chart.dataSize=DSIZE2;
+    chart.dataSize=WSIZE;
     chart.backgroundColor = QColor::Invalid;
 
     alloc_memory_sub_constructor();
@@ -101,14 +101,14 @@ MainWindow::MainWindow(QWidget *parent) :
 //    const int order = 4; // 4th order (=2 biquads)
 //    Iir::Butterworth::LowPass<order> f;
 //    const double samplingrate = DSIZE; // Hz
-    const double samplingrate = DSIZE2; // Hz
+    const double samplingrate = WSIZE; // Hz
     const double cutoff_frequency = 50; // Hz
     fHiPass.setup(samplingrate, cutoff_frequency);
     fBandStop.setup(samplingrate, cutoff_frequency, 10);
 
     setAcceptDrops(true);
-    ui->spinBox_HiPass->setMaximum(DSIZE2);
-    ui->spinBox_BandStop->setMaximum(DSIZE2);
+    ui->spinBox_HiPass->setMaximum(WSIZE);
+    ui->spinBox_BandStop->setMaximum(WSIZE);
     ui->spinBox_BandStop->setValue(static_cast<int>(cutoff_frequency));
 
 
@@ -120,8 +120,6 @@ MainWindow::MainWindow(QWidget *parent) :
     format.setByteOrder(QAudioFormat::LittleEndian);
     format.setSampleType(QAudioFormat::SampleType::Float); // nie ma double co zrobić?
 
-
-//    int i = 0;
 
 //    file_out.setFileName( get_unique_filename(FILE_NAME EXT) ); // depracated to uninitlalize
     file_csv.setFileName( FILE_NAME ".csv");
@@ -432,17 +430,17 @@ void MainWindow::externalThread_tick()
     {
       kiss_fft( cfg, in[k], out[k] );
 
-      for (int i = 1; i < DSIZE2/2; i++)
+      for (int i = 1; i < WSIZE; i++) // fft gives redundant spectrum, use only half of window
       {
         if ( i >= DSIZE2 ) // na wypadek zwiękaszania pętli np. razy 2
         {
 //          break;
         }
-        double normBinMag = sqrt(SQUARE((out[k]+i)->r) + SQUARE((out[k]+i)->i))/5.12 ; // do konca nie wiem czemu tu musze mnozyc przec 8
+        double normBinMag = sqrt(SQUARE((out[k]+i)->r) + SQUARE((out[k]+i)->i))/51.2 ; // do konca nie wiem czemu tu musze mnozyc przec 8
         //                   normBinMag = sqrt(SQUARE(test[i].r) + SQUARE(test[i].i))  ; // do konca nie wiem czemu tu musze mnozyc przec 8
         double mag = normBinMag;
 
-        int scalar = 2;
+        int scalar = 1;
         i *= scalar;       // przedział zmiennej i: od 0 do 512 mnożony razy dwa
 
         spectrum[k][i] = mag;            // TODO nie mieści się na wykresie//                  spectrum[k][i] = (out[0]+i)->r * hamming[i];
@@ -491,7 +489,7 @@ void MainWindow::externalThread_tick()
       }
     }
 
-    int d = DSIZE2/NBARS;
+    int d = WSIZE/NBARS;
 
             if( meanData.size() != NBARS )
               meanData.resize(NBARS);

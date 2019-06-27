@@ -20,3 +20,5 @@ Finger_EMG/out.csv
 Finger_EMG/release/qrc_resources.cpp
 Finger_EMG/users*
 *.asv
+*Thumbs.db
+docs/Thumbs.db

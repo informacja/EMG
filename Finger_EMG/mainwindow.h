@@ -9,17 +9,18 @@
 #define NCH 3
 #define TEMP_NCH 3
 #define DSIZE    (NCH*2048)
-#define DSIZE2   (DSIZE/2/NCH)                // ilość próbek uint16_t
+#define DSIZE2   (DSIZE/2/NCH)                // number of samples per chanel (uint16_t)
+#define WSIZE    (DSIZE2/2)                   // window length
 #define BUF_LEN   10e6
-#define NBARS     32                          // do dzielenia DSIZE2
+#define NBARS     32                          // to divide  WSIZE
 #define ORDER     (1)
 
-//#define FPS FPS
+#define FPS FPS
 #define DATA_DIR "./data/"
 #define FILE_NAME  "out"
 #define EXT ".wav"
 #define SAMPLE_DIR "../matlab/sample"
-#define B_SIZE DSIZE                          // minimalny rozmiar wczytywaniej paczki danych z pliku
+//#define B_SIZE DSIZE                          // minimalny rozmiar wczytywaniej paczki danych z pliku
 #define SQUARE(a) (a*a)
 #define INI_FILES "Ini_Files"
 #define ALLOW_USE_FILTERS
