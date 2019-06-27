@@ -1,7 +1,11 @@
 *.user
+=======
+/debug
+/release
+Finger_EMG/Makefile.Release
+*.user
 Finger_EMG/debug/*
 Finger_EMG/release/*
-
 *.o
 *.Release
 *.Debug
