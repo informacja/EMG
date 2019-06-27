@@ -116,7 +116,7 @@ MainWindow::MainWindow(QWidget *parent) :
     format.setCodec("audio/pcm");
     format.setSampleRate(DSIZE2);                         // Hz sample per second
     format.setChannelCount(1);                              // NCH TODO:
-    format.setSampleSize(sizeof(timeData[0][0])*4);           // sizeof(double) => 8 ( I multiplayng by 4 to get valid 32 bits)
+    format.setSampleSize(sizeof(timeData[0][0])*2);           // sizeof(double) => 8 ( I multiplayng by 4 to get valid 32 bits)
     format.setByteOrder(QAudioFormat::LittleEndian);
     format.setSampleType(QAudioFormat::SampleType::Float); // nie ma double co zrobić?
 
