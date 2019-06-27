@@ -10,44 +10,37 @@ filename = 'sample/b.wav';
 filename = 'sample/c.wav'; % 4*bps
 % filename = 'sample/d.wav'; % hand
 
-shift = [1, 2048*2]
+filename = 'sample/out9.wav'; % 4*bps
 
 info = audioinfo(filename)
+[data, fs] = audioread(filename);
 
-[data, fs] = audioread(filename, shift);
-
-d(info.SampleRate) = data(info.SampleRate);
-
-% d
-% wyswietlanie kilku klatek
-%      data_fft = fft(data); % data
-%  size(data_fft)
-%    plot(abs(data_fft(:,1)));
-%   return;
 for i = 1:info.Duration
     
-shift = [ info.SampleRate*(i-1)+1, info.SampleRate*i]
-
- if shift(1) == 0
-     shift(1) = 1;
- end
-
-%     for i = 1:info.SampleRate
-%         d(i) = data(i+shift(1));
-%         
-        d = data( shift(1) : shift(2))';
-        size(d)
-%     end
+ shift = [ info.SampleRate*(i-1)+1, info.SampleRate*i];
+ d = data( shift(1) : shift(2))';
     
- data_fft = fft(d)/info.SampleRate;% data
- data_fft = data_fft';
+ data_fft = fft(d)'/info.SampleRate;                                       % values from 0 to 1 
+  figure(2)
  plot(abs(data_fft(:,1)),'r');
+  figure(1)
+    ydft = fft(d);
+    % I'll assume y has even length
+    ydft = ydft(1:length(d)/2+1);
+    % create a frequency vector
+    freq = 0:fs/length(d):fs/2;
+    % plot magnitude
+    subplot(211);
+    plot(freq,abs(ydft));
+    % plot phase
+    subplot(212);
+    plot(freq,unwrap(angle(ydft))); 
+    xlabel('Hz');
 
-    pause(0.111);         
-%     fprintf('Pr�bka nr: %d', i); input('');
+ pause(0.111);         
+%  fprintf('Okno (klatka) nr: %d/%d', i, info.Duration); input('');
 end
-%  data_fft = fft(data) ;% data
-%  plot(abs(data_fft(:,1)));
+
  return;
  
  

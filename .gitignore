@@ -15,3 +15,4 @@ Finger_EMG/Makefile
 Finger_EMG/out.csv
 Finger_EMG/release/qrc_resources.cpp
 Finger_EMG/users*
+*.asv

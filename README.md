@@ -1,3 +1,8 @@
+
+# Matlab wave fft
+
+<img src="docs/fft.gif">
+
 # ToDo
 > Matalab read file
 
@@ -5,9 +10,9 @@
 
 >Easy readable readme
 ## Info how to save sample
- Open tab "Save" and just press <kbh> Enter </kbh>, progress bar should fill in.
-
-## ButterWorth
+ Open tab "Save" and just press <kbhit> Enter </kbhit>, progress bar should fill in.
+ 
+# ButterWorth
 ## Bez filtracji
 <img src="docs/no.png">
 
