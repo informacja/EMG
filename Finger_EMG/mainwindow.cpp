@@ -121,7 +121,7 @@ MainWindow::MainWindow(QWidget *parent) :
     format.setSampleType(QAudioFormat::SampleType::Float); // nie ma double co zrobić?
 
 
-    int i = 0;
+//    int i = 0;
 
 //    file_out.setFileName( get_unique_filename(FILE_NAME EXT) ); // depracated to uninitlalize
     file_csv.setFileName( FILE_NAME ".csv");

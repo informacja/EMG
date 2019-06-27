@@ -4,16 +4,16 @@ function [x] = wav_emg(filename)
 % to do get current file path from csv log file (last file)
 
 filename = 'sample/50hz.wav';
-filename = 'sample/noise.wav';
-filename = 'sample/hand.wav';
+ filename = 'sample/noise.wav';
+ filename = 'sample/hand.wav';
 
-filename = 'sample/noise4.wav';
-filename = 'sample/hand4.wav';
-filename = 'sample/silence4.wav';
-
-filename = 'sample/noise2.wav';
-filename = 'sample/hand2.wav';
-filename = 'sample/silence2.wav';
+ filename = 'sample/noise4.wav';
+ filename = 'sample/hand4.wav';
+%  filename = 'sample/silence4.wav';
+% 
+% filename = 'sample/noise2.wav';
+% filename = 'sample/hand2.wav';
+% filename = 'sample/silence2.wav';
 
  % filename = 'sample/a.wav';
 % filename = 'sample/b.wav';
@@ -21,6 +21,8 @@ filename = 'sample/silence2.wav';
 % filename = 'sample/d.wav'; % hand
 
 info = audioinfo(filename)
+info.SampleRate = info.SampleRate*4;
+
 [data, fs] = audioread(filename);
  
 for i = 1:info.Duration
@@ -35,10 +37,11 @@ for i = 1:info.Duration
  w2 = data_fft(length(data_fft)/2:length(data_fft));
 %  subplot(211);
  plot(abs(w1(:,1)),'r');     xlabel('w1 [Hz]');
-     axis([0 info.SampleRate/2 -0.01 0.3])
+ ylim([-0.01 0.3])
+%      axis([0 info.SampleRate/2 -0.01 0.3])
 %   subplot(212); 
   plot(abs(w2(:,1)),'r');    xlabel('w2 [Hz]');
-     axis([0 info.SampleRate/2 -0.01 0.3])
+%      axis([0 info.SampleRate/2 -0.01 0.3])
      title(filename);
   figure(1)
     ydft = fft(d);
