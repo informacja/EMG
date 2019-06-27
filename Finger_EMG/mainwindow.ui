@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>896</width>
-    <height>754</height>
+    <width>775</width>
+    <height>494</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -40,7 +40,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>896</width>
+     <width>775</width>
      <height>20</height>
     </rect>
    </property>
@@ -98,6 +98,15 @@
   <widget class="QStatusBar" name="statusBar">
    <property name="autoFillBackground">
     <bool>true</bool>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">font: 75 8pt &quot;MS Shell Dlg 2&quot;;</string>
+   </property>
+   <property name="inputMethodHints">
+    <set>Qt::ImhNone</set>
+   </property>
+   <property name="sizeGripEnabled">
+    <bool>false</bool>
    </property>
   </widget>
   <widget class="QDockWidget" name="dockWidget">

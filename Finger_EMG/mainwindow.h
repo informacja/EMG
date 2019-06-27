@@ -9,8 +9,7 @@
 #define NCH 3
 #define TEMP_NCH 3
 #define DSIZE    (NCH*2048)
-#define DSIZE2   (DSIZE/2/NCH)
-#define D2SIZE   (DSIZE*2)
+#define DSIZE2   (DSIZE/2/NCH)                // ilość próbek uint16_t
 #define BUF_LEN   10e6
 #define NBARS     32                          // do dzielenia DSIZE2
 #define ORDER     (1)
@@ -24,6 +23,7 @@
 #define SQUARE(a) (a*a)
 #define INI_FILES "Ini_Files"
 #define ALLOW_USE_FILTERS
+#define DISABLE_FILTERS_ON_STARTUP
 
 namespace Ui {
     class MainWindow;
@@ -64,32 +64,19 @@ public:
 private slots:
     void externalThread_tick();
     void sendCommand();
-    void on_textEdit_textChanged();
     void on_actionSave_triggered();
     void on_actionOpen_triggered();
     void on_actionOtw_rz_triggered(bool checked);
     void on_actionZapisz_domy_lne_triggered();
     void on_actionKatalog_triggered();
-    void on_textEdit_cursorPositionChanged();
-
-    void on_toolButton_clicked();
-
     void on_pushButto_kat_clicked();
-
     void on_radio_saveAllDir_clicked();
-
     void on_radio_handOpen_clicked();
-
     void on_radio_handClose_clicked();
-
     void on_pushButton_openFile_clicked();
-
     void on_radioButton_clicked();
-
     void on_radioButton_2_clicked();
-
     void on_toolButton_return_clicked();
-
     void on_toolButton_enter_clicked();
 
 private:
@@ -115,6 +102,7 @@ private:
 //Q_SIGNALS:
 signals:
     void simulation_changed(Simulation_Type);
+
 public slots:
     void set_simulation(const Simulation_Type &newSimul);
     void set_butterworth_BandStop_fq(int cutoff_frequency);
@@ -144,7 +132,6 @@ private:
     Iir::Butterworth::HighPass<ORDER> fHiPass;
     Iir::Butterworth::BandStop<ORDER> fBandStop;
 
-//    QFile   file_out,
     QFile file_csv;                                             // read and write
     QTextStream stream;                                         // for csv read and write;
     Simulation_Type simulation;
@@ -154,17 +141,5 @@ private:
     QAudioFormat format;
     int coutDownToZero;
 };
-
-//class Counter : public QObject
-//{
-//    Q_OBJECT
-//    int m_value;
-////public:
-////    int value() const { return m_value; }
-//public slots:
-//    void setValue(int value);
-//signals:
-//    void valueChanged(int newValue);
-//};
 
 #endif // MAINWINDOW_H
