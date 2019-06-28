@@ -1,7 +1,7 @@
 # Finger_EMG 
 Aplikacja do zapisywania sygnałów napięcia mięśni <br> 
 Specyfikacja:
-* LPC1347 
+* LPC1347 32-bit ARM Cortex-M3 mikrokontroler
 * DFRobot Gravity - analogowy czujnik EMG
 
 ### Widmo charakterystyczne EMG (0-512Hz)  
