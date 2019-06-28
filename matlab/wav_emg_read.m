@@ -21,7 +21,7 @@ filename = 'sample/50hz.wav';
 % filename = 'sample/d.wav'; % hand
  
 filename = 'rectangle/nothing.wav';
-filename = 'sample/out14.wav';
+filename = 'sample/out18.wav';
 info = audioinfo(filename)
 % info.SampleRate = info.SampleRate*4;
 

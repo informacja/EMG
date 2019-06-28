@@ -114,13 +114,13 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // Output WAVE settings
     format.setCodec("audio/pcm");
-    format.setSampleRate(DSIZE2*8);                         // Hz sample per second
+    format.setSampleRate(DSIZE2*sizeof(timeData[0][0]));                         // Hz sample per second
     format.setChannelCount(1);                              // NCH TODO:
-//    format.setSampleSize(sizeof(timeData[0][0])*2);           // sizeof(double) => 8 ( I multiplayng by 4 to get valid 32 bits)
+    format.setSampleSize(sizeof(timeData[0][0])*8);           // sizeof(double) => 8 ( I multiplayng by 4 to get valid 32 bits)
 //    format.setSampleSize(sizeof(uint16_t));
 //    format.setSampleSize(32);imeData[k].size())*sizeof(double)
-        format.setSampleSize( 16 );
-        qDebug() << "rozm" << sizeof(double);
+//        format.setSampleSize( 16 );
+        qDebug() << "rozm" << sizeof( timeData[0][0])*8 ;
     format.setByteOrder(QAudioFormat::LittleEndian);
     format.setSampleType(QAudioFormat::SampleType::Float); // nie ma double co zrobić?
 
@@ -573,7 +573,7 @@ void MainWindow::paintEvent(QPaintEvent *event)
 //            chart.drawLinearData(painter, (QVector<double>*)meanData);
 //            chart.drawLinearData(painter, timeData[0]);
               chart.plotColor=Qt::red;
-              chart.drawLinearData(painter, timeData[0]);
+//              chart.drawLinearData(painter, timeData[0]);
 
 //              chart.plotColor=Qt::yellow;
 //              chart.drawLinearData(painter, spectrum[0]);
@@ -581,13 +581,13 @@ void MainWindow::paintEvent(QPaintEvent *event)
         if(ui->selectInput2->isChecked())
         {
             chart.plotColor=Qt::green;
-            chart.drawLinearData(painter, timeData[1]);
+//            chart.drawLinearData(painter, timeData[1]);
         }
 
         if(ui->selectInput3->isChecked())
         {
             chart.plotColor=Qt::yellow;
-            chart.drawLinearData(painter, timeData[2]);
+//            chart.drawLinearData(painter, timeData[2]);
         }
     }
     if( ui->actionSpektrum->isChecked())

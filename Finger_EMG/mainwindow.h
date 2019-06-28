@@ -118,7 +118,7 @@ private:
     QByteArray senddata;
     QByteArray readdata, buff;
     QVector<double> timeDataCh1, timeDataCh2, timeDataCh3;
-    QVector<QVector<double> > timeData;
+    QVector<QVector<float> > timeData;
     QVector<double> meanData;
     QVector<QVector<double> > spectrum;                                         // resized to NCH in constructor
     Chart chart;
