@@ -19,12 +19,12 @@
 #define DATA_DIR "./data/"
 #define FILE_NAME  "out"
 #define EXT ".wav"
-#define SAMPLE_DIR "../matlab/sample"
+#define SAMPLE_DIR "../matlab/rect"
 //#define B_SIZE DSIZE                          // minimalny rozmiar wczytywaniej paczki danych z pliku
 #define SQUARE(a) (a*a)
 #define INI_FILES "Ini_Files"
 #define ALLOW_USE_FILTERS
-//#define DISABLE_FILTERS_ON_STARTUP
+//#define DISABLE_FILTERS _ON_STARTUP
 
 namespace Ui {
     class MainWindow;
@@ -79,7 +79,6 @@ private slots:
     void on_radioButton_2_clicked();
     void on_toolButton_return_clicked();
     void on_toolButton_enter_clicked();
-
     void on_pushButton_clicked();
 
 private:

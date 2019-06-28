@@ -2,6 +2,12 @@
 # Matlab wave fft
 <img src="docs/works.gif">
 
+## ToDo List
+ > hann -> highPass 20Hz
+ 
+ >
+ ### Current 512Hz window length
+<img src="docs/now.png">
 <img src="docs/hann.png">
 <img src="docs/fft.png">
 

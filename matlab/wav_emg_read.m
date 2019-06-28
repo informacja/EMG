@@ -27,6 +27,7 @@ filename = 'sample/out21.wav'; % 2048
 
 filename = 'sample/out28.wav'; % 2048
 
+filename = 'rect/out2.wav';
 
 info = audioinfo(filename)
 % info.SampleRate = info.SampleRate*4;
@@ -49,8 +50,9 @@ for i = 1:info.Duration
 %       axis([0 info.SampleRate/2 -0.01 0.3])
 %   subplot(212); 
 %    plot(abs(w2(:,1)),'r');    xlabel('w2 [Hz]');
-   axis([0 info.SampleRate/2 -0.01 0.1])
+   axis([0 info.SampleRate/2 -0.00 0.1])
    title(filename);
+   
   figure(1)
     ydft = fft(d);
     % I'll assume y has even length
