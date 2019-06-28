@@ -21,11 +21,17 @@ filename = 'sample/50hz.wav';
 % filename = 'sample/d.wav'; % hand
  
 filename = 'rectangle/nothing.wav';
+
 filename = 'sample/out18.wav';
+filename = 'sample/out21.wav'; % 2048
+
+filename = 'sample/out24.wav'; % 2048
+
+
 info = audioinfo(filename)
 % info.SampleRate = info.SampleRate*4;
 
-[data, fs] = audioread(filename);
+[data, fs] = audioread(filename,'double');
  
 for i = 1:info.Duration
     

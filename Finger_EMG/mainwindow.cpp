@@ -114,13 +114,10 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // Output WAVE settings
     format.setCodec("audio/pcm");
-    format.setSampleRate(DSIZE2*sizeof(timeData[0][0]));                         // Hz sample per second
+    format.setSampleRate(DSIZE2);                         // Hz sample per second
     format.setChannelCount(1);                              // NCH TODO:
     format.setSampleSize(sizeof(timeData[0][0])*8);           // sizeof(double) => 8 ( I multiplayng by 4 to get valid 32 bits)
-//    format.setSampleSize(sizeof(uint16_t));
-//    format.setSampleSize(32);imeData[k].size())*sizeof(double)
-//        format.setSampleSize( 16 );
-        qDebug() << "rozm" << sizeof( timeData[0][0])*8 ;
+//    qDebug() << "SampleSize" << sizeof( timeData[0][0])*8 ;
     format.setByteOrder(QAudioFormat::LittleEndian);
     format.setSampleType(QAudioFormat::SampleType::Float); // nie ma double co zrobić?
 
@@ -657,7 +654,7 @@ void MainWindow::save_to_file( bool add_seconds)
       }
 
 //        file_out.write(reinterpret_cast<char*>(timeData[k].data()), static_cast<uint>(timeData[k].size())*sizeof(double));
-        wav_out->write(reinterpret_cast<char*>(timeData[k].data()), static_cast<uint>(timeData[k].size())*sizeof(double));
+        wav_out->write(reinterpret_cast<char*>(timeData[k].data()), static_cast<uint>(timeData[k].size())*sizeof(timeData[0][0]));
 
         qInfo() <<"zapisano kanał "<<  k << "size(): " << timeData[k].size()*sizeof (timeData[0][0]);
         for (int i = 0; i < timeData[0].size(); i++)
