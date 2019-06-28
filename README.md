@@ -1,5 +1,6 @@
 
 # Matlab wave fft
+<img src="docs/works.gif">
 
 <img src="docs/hann.png">
 <img src="docs/fft.png">
