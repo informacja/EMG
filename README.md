@@ -1,30 +1,38 @@
-
-# Matlab wave fft
-<img src="docs/works.gif">
-
 ## ToDo List
  > hann -> highPass 20Hz
  
  > neural networks vs KNN (najbliższy sąsiad)
- ### Current 512Hz window length
-<img src="docs/now.png">
-<img src="docs/hann.png">
-<img src="docs/fft.png">
-
-<img src="docs/256.png">
-<img src="docs/1024.png">
-
-<img src="docs/fft.gif">
-
-# ToDo
+ 
 > Matlab read file
 
 > 200 sample per cat
 
 >Easy readable readme
-## Info how to save sample
- Open tab "Save" and just press <kbhit> Enter </kbhit>, progress bar should fill in.
  
+### Widmo charakterystyczne EMG (0-512Hz)  
+<img src="docs/now.png">
+
+# Matlab wave fft
+<img src="docs/works.gif">
+
+### Hann window (red)
+<img src="docs/hann.png">
+
+#### FS 256
+<img src="docs/256.png">
+#### FS 1024
+<img src="docs/1024.png">
+
+# Instrukcja obsługi aplikacji Finger_EMG.exe
+### Nawigacja 
+	>Zalecaną metodą obsługi jest używanie skrótów klawiaturowych 
+		>> <kbhit>Ctrl</kbhit> + <kbhit>Tab</kbhit> zmiana karty 
+		>> Wszystkie ustawienia przłączalne (toggle) można ustawiać  <kbhit>Ctrl</kbhit> + <kbhit>numer</kbhit> 
+		>> Aby rozpocząć nagrywanie, upewniamy się, że aktualna zakładka to .zapis. naciskamy <kbhit>Enter</kbhit> 
+		* Polecam
+## Zapis 
+Open tab "Save" and just press <kbhit> Enter </kbhit>, progress bar should fill in.
+
 # ButterWorth
 ## Bez filtracji
 <img src="docs/no.png">
@@ -40,6 +48,7 @@
 ## High Pass
 <img src="docs/highPass.gif">
 
-### Asymptota szumu 
+### Asymptota szumu (zielony)
+Widmo jest symetryczne, oś symetrii jest prawą krawędzią 
 <img src="docs/noise.png">
 
