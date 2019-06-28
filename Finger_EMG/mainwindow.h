@@ -15,7 +15,7 @@
 #define NBARS     32                          // to divide  WSIZE
 #define ORDER     (1)
 
-#define FPS FPS
+//#define FPS FPS
 #define DATA_DIR "./data/"
 #define FILE_NAME  "out"
 #define EXT ".wav"
@@ -24,7 +24,7 @@
 #define SQUARE(a) (a*a)
 #define INI_FILES "Ini_Files"
 #define ALLOW_USE_FILTERS
-#define DISABLE_FILTERS_ON_STARTUP
+//#define DISABLE_FILTERS_ON_STARTUP
 
 namespace Ui {
     class MainWindow;

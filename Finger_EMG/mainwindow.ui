@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>775</width>
-    <height>494</height>
+    <width>797</width>
+    <height>485</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -40,7 +40,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>775</width>
+     <width>797</width>
      <height>20</height>
     </rect>
    </property>
@@ -469,7 +469,7 @@ color: rgb(255, 255, 255);</string>
                <number>512</number>
               </property>
               <property name="value">
-               <number>25</number>
+               <number>15</number>
               </property>
              </widget>
             </item>
@@ -768,7 +768,7 @@ color: rgb(255, 255, 255);</string>
             </sizepolicy>
            </property>
            <property name="text">
-            <string>Zamknij i otwórz plik</string>
+            <string>Zamknij i pokaż plik</string>
            </property>
            <property name="shortcut">
             <string>Ctrl+,</string>
@@ -960,13 +960,6 @@ color: rgb(255, 255, 255);</string>
             </widget>
            </item>
           </layout>
-         </item>
-         <item>
-          <widget class="QPushButton" name="pushButton">
-           <property name="text">
-            <string>Save only pactets</string>
-           </property>
-          </widget>
          </item>
          <item>
           <spacer name="verticalSpacer">

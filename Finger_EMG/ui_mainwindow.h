@@ -117,7 +117,6 @@ public:
     QGridLayout *gridLayout_2;
     QToolButton *toolButton_return;
     QToolButton *toolButton_enter;
-    QPushButton *pushButton;
     QSpacerItem *verticalSpacer;
 
     void setupUi(QMainWindow *MainWindow)
@@ -125,7 +124,7 @@ public:
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QString::fromUtf8("MainWindow"));
         MainWindow->setWindowModality(Qt::NonModal);
-        MainWindow->resize(775, 494);
+        MainWindow->resize(797, 485);
         MainWindow->setMinimumSize(QSize(400, 300));
         MainWindow->setAcceptDrops(true);
         MainWindow->setIconSize(QSize(24, 24));
@@ -198,7 +197,7 @@ public:
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QString::fromUtf8("menuBar"));
         menuBar->setEnabled(true);
-        menuBar->setGeometry(QRect(0, 0, 775, 20));
+        menuBar->setGeometry(QRect(0, 0, 797, 20));
 #ifndef QT_NO_TOOLTIP
         menuBar->setToolTip(QString::fromUtf8("sdf"));
 #endif // QT_NO_TOOLTIP
@@ -398,7 +397,7 @@ public:
         spinBox_HiPass->setToolTipDuration(3);
         spinBox_HiPass->setMinimum(1);
         spinBox_HiPass->setMaximum(512);
-        spinBox_HiPass->setValue(25);
+        spinBox_HiPass->setValue(15);
 
         verticalLayout_6->addWidget(spinBox_HiPass, 0, Qt::AlignHCenter);
 
@@ -666,11 +665,6 @@ public:
 
         verticalLayout->addLayout(gridLayout_2);
 
-        pushButton = new QPushButton(tab_save);
-        pushButton->setObjectName(QString::fromUtf8("pushButton"));
-
-        verticalLayout->addWidget(pushButton);
-
         verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
         verticalLayout->addItem(verticalSpacer);
@@ -860,7 +854,7 @@ public:
 #ifndef QT_NO_SHORTCUT
         pushButto_kat->setShortcut(QApplication::translate("MainWindow", "Ctrl+0", nullptr));
 #endif // QT_NO_SHORTCUT
-        pushButton_openFile->setText(QApplication::translate("MainWindow", "Zamknij i otw\303\263rz plik", nullptr));
+        pushButton_openFile->setText(QApplication::translate("MainWindow", "Zamknij i poka\305\274 plik", nullptr));
 #ifndef QT_NO_SHORTCUT
         pushButton_openFile->setShortcut(QApplication::translate("MainWindow", "Ctrl+,", nullptr));
 #endif // QT_NO_SHORTCUT
@@ -874,7 +868,6 @@ public:
 #ifndef QT_NO_SHORTCUT
         toolButton_enter->setShortcut(QApplication::translate("MainWindow", "Enter", nullptr));
 #endif // QT_NO_SHORTCUT
-        pushButton->setText(QApplication::translate("MainWindow", "Save only pactets", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(tab_save), QApplication::translate("MainWindow", "Zapis ", nullptr));
     } // retranslateUi
 

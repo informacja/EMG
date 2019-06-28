@@ -1,10 +1,16 @@
 
 # Matlab wave fft
 
+<img src="docs/hann.png">
+<img src="docs/fft.png">
+
+<img src="docs/256.png">
+<img src="docs/1024.png">
+
 <img src="docs/fft.gif">
 
 # ToDo
-> Matalab read file
+> Matlab read file
 
 > 200 sample per cat
 

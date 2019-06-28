@@ -114,12 +114,13 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // Output WAVE settings
     format.setCodec("audio/pcm");
-    format.setSampleRate(DSIZE2*2);                         // Hz sample per second
+    format.setSampleRate(DSIZE2*8);                         // Hz sample per second
     format.setChannelCount(1);                              // NCH TODO:
 //    format.setSampleSize(sizeof(timeData[0][0])*2);           // sizeof(double) => 8 ( I multiplayng by 4 to get valid 32 bits)
 //    format.setSampleSize(sizeof(uint16_t));
 //    format.setSampleSize(32);imeData[k].size())*sizeof(double)
-        format.setSampleSize( timeData[0].size()*sizeof(double) );
+        format.setSampleSize( 16 );
+        qDebug() << "rozm" << sizeof(double);
     format.setByteOrder(QAudioFormat::LittleEndian);
     format.setSampleType(QAudioFormat::SampleType::Float); // nie ma double co zrobić?
 
@@ -406,27 +407,27 @@ void MainWindow::externalThread_tick()
     ui->actionRun->setChecked(false);
   }
 
-  int size = (DSIZE * ui->spinBox_nDataPerFile->text().toInt());
-  if(wait_for_data)
-   if( serial.size() >= size)
-   {
-     timeData.resize(size);
-     uint16_t* sample = reinterpret_cast<uint16_t*>(readdata.data());
-     for (int i = 0; i < size; i++)
-     {
-       timeData[0][i]=(*sample++)/65535.0;
-     }
-     // convert
-    wav_out->write(reinterpret_cast<char*>(timeData[0].data()), static_cast<uint>(timeData[0].size())*sizeof(double));
-    wait_for_data = false;
-    ui->progressBar->setValue(100);
-    serial.readAll();
-   }
-   else {
-      ui->progressBar->setValue(serial.size()/size);
-   }
+//  int size = (DSIZE * ui->spinBox_nDataPerFile->text().toInt());
+//  if(wait_for_data)
+//   if( serial.size() >= size)
+//   {
+//     timeData.resize(size);
+//      readdata = serial.readAll();
+//     uint16_t* sample = reinterpret_cast<uint16_t*>(readdata.data());
+//     for (int i = 0; i < size; i++)
+//     {
+//       timeData[0][i]=(*sample++)/65535.0;
+//     }
+//     // convert
+//    wav_out->write(reinterpret_cast<char*>(timeData[0].data()), static_cast<uint>(timeData[0].size())*sizeof(double));
+//    wait_for_data = false;
+//    ui->progressBar->setValue(100);
 
-   return   ;
+//   }
+//   else {
+//      ui->progressBar->setValue(serial.size()/size);
+//   }
+
 
   if(ui->actionRun->isChecked())
     //    if( buff.size() > 0)                                                        // serial port lub z pliku
@@ -440,7 +441,8 @@ void MainWindow::externalThread_tick()
       }
       else if( serial.size() >= DSIZE  )              // zapisz do pliku
       {
-          readdata = serial.readAll();
+        readdata = serial.read(DSIZE);
+//        readdata = serial.readAll();
 //          return readdata.size();
       }
       else
@@ -657,7 +659,7 @@ void MainWindow::save_to_file( bool add_seconds)
 //        file_out.write(reinterpret_cast<char*>(timeData[k].data()), static_cast<uint>(timeData[k].size())*sizeof(double));
         wav_out->write(reinterpret_cast<char*>(timeData[k].data()), static_cast<uint>(timeData[k].size())*sizeof(double));
 
-        qInfo() <<"zapisano kanał "<<  k << "size(): " << timeData[k].size();
+        qInfo() <<"zapisano kanał "<<  k << "size(): " << timeData[k].size()*sizeof (timeData[0][0]);
         for (int i = 0; i < timeData[0].size(); i++)
         {
             stream <<  timeData[k][i] << ",";    // out.csv
@@ -1075,7 +1077,7 @@ void MainWindow::on_pushButton_openFile_clicked()
 }
 
 void MainWindow::set_butterworth_BandStop_fq(int cutoff_frequency){
-  fBandStop.setup( DSIZE, cutoff_frequency, ui->spinBox_BandStop_width->value());
+  fBandStop.setup( DSIZE, cutoff_frequency, ui->spinBox_BandStop_width->value()*2);
 }
 
 void MainWindow::set_butterworth_BandStop_width(int width){
@@ -1194,6 +1196,7 @@ void MainWindow::on_toolButton_enter_clicked()
     QFileInfo fi( get_unique_filename(fName) );
     ui->lineEdit_fileN->setText( fi.completeBaseName()+ "." +fi.completeSuffix() );
 
+    fName = ui->lineEdit_path->text()+ "/" +ui->lineEdit_fileN->text();
     wav_out->open( fName, format );
     coutDownToZero =  ui->spinBox_nDataPerFile->value();
     qDebug() << "is open wav" << wav_out->isOpen() << wav_out->fileName();
