@@ -68,12 +68,12 @@ public:
     QCheckBox *selectInput1;
     QCheckBox *selectInput2;
     QCheckBox *selectInput3;
-    QGroupBox *groupBox_3;
+    QGroupBox *groupBox_window;
     QVBoxLayout *verticalLayout_3;
     QRadioButton *radioBtn_rect;
     QRadioButton *radioBtn_hann;
     QRadioButton *radioBtn_hamm;
-    QGroupBox *groupBox_5;
+    QGroupBox *groupBox_bw_filtr;
     QVBoxLayout *verticalLayout_6;
     QCheckBox *checkBox_bandStop;
     QSpinBox *spinBox_BandStop;
@@ -124,7 +124,7 @@ public:
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QString::fromUtf8("MainWindow"));
         MainWindow->setWindowModality(Qt::NonModal);
-        MainWindow->resize(896, 754);
+        MainWindow->resize(797, 485);
         MainWindow->setMinimumSize(QSize(400, 300));
         MainWindow->setAcceptDrops(true);
         MainWindow->setIconSize(QSize(24, 24));
@@ -197,7 +197,7 @@ public:
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QString::fromUtf8("menuBar"));
         menuBar->setEnabled(true);
-        menuBar->setGeometry(QRect(0, 0, 896, 20));
+        menuBar->setGeometry(QRect(0, 0, 797, 20));
 #ifndef QT_NO_TOOLTIP
         menuBar->setToolTip(QString::fromUtf8("sdf"));
 #endif // QT_NO_TOOLTIP
@@ -223,6 +223,9 @@ public:
         statusBar = new QStatusBar(MainWindow);
         statusBar->setObjectName(QString::fromUtf8("statusBar"));
         statusBar->setAutoFillBackground(true);
+        statusBar->setStyleSheet(QString::fromUtf8("font: 75 8pt \"MS Shell Dlg 2\";"));
+        statusBar->setInputMethodHints(Qt::ImhNone);
+        statusBar->setSizeGripEnabled(false);
         MainWindow->setStatusBar(statusBar);
         dockWidget = new QDockWidget(MainWindow);
         dockWidget->setObjectName(QString::fromUtf8("dockWidget"));
@@ -291,52 +294,52 @@ public:
 
         verticalLayout_2->addWidget(groupBox);
 
-        groupBox_3 = new QGroupBox(tab_config);
-        groupBox_3->setObjectName(QString::fromUtf8("groupBox_3"));
+        groupBox_window = new QGroupBox(tab_config);
+        groupBox_window->setObjectName(QString::fromUtf8("groupBox_window"));
         QSizePolicy sizePolicy1(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
         sizePolicy1.setHorizontalStretch(0);
         sizePolicy1.setVerticalStretch(50);
-        sizePolicy1.setHeightForWidth(groupBox_3->sizePolicy().hasHeightForWidth());
-        groupBox_3->setSizePolicy(sizePolicy1);
-        groupBox_3->setMinimumSize(QSize(0, 40));
-        verticalLayout_3 = new QVBoxLayout(groupBox_3);
+        sizePolicy1.setHeightForWidth(groupBox_window->sizePolicy().hasHeightForWidth());
+        groupBox_window->setSizePolicy(sizePolicy1);
+        groupBox_window->setMinimumSize(QSize(0, 40));
+        verticalLayout_3 = new QVBoxLayout(groupBox_window);
         verticalLayout_3->setSpacing(6);
         verticalLayout_3->setContentsMargins(11, 11, 11, 11);
         verticalLayout_3->setObjectName(QString::fromUtf8("verticalLayout_3"));
         verticalLayout_3->setSizeConstraint(QLayout::SetMinimumSize);
-        radioBtn_rect = new QRadioButton(groupBox_3);
+        radioBtn_rect = new QRadioButton(groupBox_window);
         radioBtn_rect->setObjectName(QString::fromUtf8("radioBtn_rect"));
         radioBtn_rect->setChecked(false);
 
         verticalLayout_3->addWidget(radioBtn_rect);
 
-        radioBtn_hann = new QRadioButton(groupBox_3);
+        radioBtn_hann = new QRadioButton(groupBox_window);
         radioBtn_hann->setObjectName(QString::fromUtf8("radioBtn_hann"));
         radioBtn_hann->setChecked(true);
         radioBtn_hann->setAutoRepeat(false);
 
         verticalLayout_3->addWidget(radioBtn_hann);
 
-        radioBtn_hamm = new QRadioButton(groupBox_3);
+        radioBtn_hamm = new QRadioButton(groupBox_window);
         radioBtn_hamm->setObjectName(QString::fromUtf8("radioBtn_hamm"));
 
         verticalLayout_3->addWidget(radioBtn_hamm);
 
 
-        verticalLayout_2->addWidget(groupBox_3);
+        verticalLayout_2->addWidget(groupBox_window);
 
-        groupBox_5 = new QGroupBox(tab_config);
-        groupBox_5->setObjectName(QString::fromUtf8("groupBox_5"));
+        groupBox_bw_filtr = new QGroupBox(tab_config);
+        groupBox_bw_filtr->setObjectName(QString::fromUtf8("groupBox_bw_filtr"));
         QSizePolicy sizePolicy2(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
         sizePolicy2.setHorizontalStretch(0);
         sizePolicy2.setVerticalStretch(0);
-        sizePolicy2.setHeightForWidth(groupBox_5->sizePolicy().hasHeightForWidth());
-        groupBox_5->setSizePolicy(sizePolicy2);
-        verticalLayout_6 = new QVBoxLayout(groupBox_5);
+        sizePolicy2.setHeightForWidth(groupBox_bw_filtr->sizePolicy().hasHeightForWidth());
+        groupBox_bw_filtr->setSizePolicy(sizePolicy2);
+        verticalLayout_6 = new QVBoxLayout(groupBox_bw_filtr);
         verticalLayout_6->setSpacing(6);
         verticalLayout_6->setContentsMargins(11, 11, 11, 11);
         verticalLayout_6->setObjectName(QString::fromUtf8("verticalLayout_6"));
-        checkBox_bandStop = new QCheckBox(groupBox_5);
+        checkBox_bandStop = new QCheckBox(groupBox_bw_filtr);
         checkBox_bandStop->setObjectName(QString::fromUtf8("checkBox_bandStop"));
         QSizePolicy sizePolicy3(QSizePolicy::Preferred, QSizePolicy::Preferred);
         sizePolicy3.setHorizontalStretch(0);
@@ -347,7 +350,7 @@ public:
 
         verticalLayout_6->addWidget(checkBox_bandStop);
 
-        spinBox_BandStop = new QSpinBox(groupBox_5);
+        spinBox_BandStop = new QSpinBox(groupBox_bw_filtr);
         spinBox_BandStop->setObjectName(QString::fromUtf8("spinBox_BandStop"));
         QSizePolicy sizePolicy4(QSizePolicy::Maximum, QSizePolicy::Fixed);
         sizePolicy4.setHorizontalStretch(0);
@@ -371,7 +374,7 @@ public:
 
         verticalLayout_6->addWidget(spinBox_BandStop, 0, Qt::AlignHCenter);
 
-        spinBox_BandStop_width = new QSpinBox(groupBox_5);
+        spinBox_BandStop_width = new QSpinBox(groupBox_bw_filtr);
         spinBox_BandStop_width->setObjectName(QString::fromUtf8("spinBox_BandStop_width"));
         sizePolicy4.setHeightForWidth(spinBox_BandStop_width->sizePolicy().hasHeightForWidth());
         spinBox_BandStop_width->setSizePolicy(sizePolicy4);
@@ -381,31 +384,31 @@ public:
 
         verticalLayout_6->addWidget(spinBox_BandStop_width, 0, Qt::AlignHCenter);
 
-        checkBox_highPass = new QCheckBox(groupBox_5);
+        checkBox_highPass = new QCheckBox(groupBox_bw_filtr);
         checkBox_highPass->setObjectName(QString::fromUtf8("checkBox_highPass"));
         checkBox_highPass->setChecked(true);
 
         verticalLayout_6->addWidget(checkBox_highPass);
 
-        spinBox_HiPass = new QSpinBox(groupBox_5);
+        spinBox_HiPass = new QSpinBox(groupBox_bw_filtr);
         spinBox_HiPass->setObjectName(QString::fromUtf8("spinBox_HiPass"));
         sizePolicy4.setHeightForWidth(spinBox_HiPass->sizePolicy().hasHeightForWidth());
         spinBox_HiPass->setSizePolicy(sizePolicy4);
         spinBox_HiPass->setToolTipDuration(3);
         spinBox_HiPass->setMinimum(1);
         spinBox_HiPass->setMaximum(512);
-        spinBox_HiPass->setValue(25);
+        spinBox_HiPass->setValue(15);
 
         verticalLayout_6->addWidget(spinBox_HiPass, 0, Qt::AlignHCenter);
 
-        checkBox_fill1 = new QCheckBox(groupBox_5);
+        checkBox_fill1 = new QCheckBox(groupBox_bw_filtr);
         checkBox_fill1->setObjectName(QString::fromUtf8("checkBox_fill1"));
         checkBox_fill1->setAutoExclusive(false);
 
         verticalLayout_6->addWidget(checkBox_fill1, 0, Qt::AlignHCenter|Qt::AlignVCenter);
 
 
-        verticalLayout_2->addWidget(groupBox_5, 0, Qt::AlignHCenter);
+        verticalLayout_2->addWidget(groupBox_bw_filtr, 0, Qt::AlignHCenter);
 
         groupBox_2 = new QGroupBox(tab_config);
         groupBox_2->setObjectName(QString::fromUtf8("groupBox_2"));
@@ -770,7 +773,7 @@ public:
 #ifndef QT_NO_SHORTCUT
         selectInput3->setShortcut(QApplication::translate("MainWindow", "Ctrl+3", nullptr));
 #endif // QT_NO_SHORTCUT
-        groupBox_3->setTitle(QApplication::translate("MainWindow", "Window", nullptr));
+        groupBox_window->setTitle(QApplication::translate("MainWindow", "Window", nullptr));
         radioBtn_rect->setText(QApplication::translate("MainWindow", "Rectangle", nullptr));
 #ifndef QT_NO_SHORTCUT
         radioBtn_rect->setShortcut(QApplication::translate("MainWindow", "Ctrl+4", nullptr));
@@ -783,7 +786,7 @@ public:
 #ifndef QT_NO_SHORTCUT
         radioBtn_hamm->setShortcut(QApplication::translate("MainWindow", "Ctrl+6", nullptr));
 #endif // QT_NO_SHORTCUT
-        groupBox_5->setTitle(QApplication::translate("MainWindow", "Butterworth filtr", nullptr));
+        groupBox_bw_filtr->setTitle(QApplication::translate("MainWindow", "Butterworth filtr", nullptr));
         checkBox_bandStop->setText(QApplication::translate("MainWindow", "Band Stop", nullptr));
 #ifndef QT_NO_SHORTCUT
         checkBox_bandStop->setShortcut(QApplication::translate("MainWindow", "Ctrl+7", nullptr));
@@ -851,7 +854,7 @@ public:
 #ifndef QT_NO_SHORTCUT
         pushButto_kat->setShortcut(QApplication::translate("MainWindow", "Ctrl+0", nullptr));
 #endif // QT_NO_SHORTCUT
-        pushButton_openFile->setText(QApplication::translate("MainWindow", "Plik", nullptr));
+        pushButton_openFile->setText(QApplication::translate("MainWindow", "Zamknij i poka\305\274 plik", nullptr));
 #ifndef QT_NO_SHORTCUT
         pushButton_openFile->setShortcut(QApplication::translate("MainWindow", "Ctrl+,", nullptr));
 #endif // QT_NO_SHORTCUT

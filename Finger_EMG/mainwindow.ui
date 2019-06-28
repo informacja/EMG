@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>896</width>
-    <height>754</height>
+    <width>797</width>
+    <height>485</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -40,7 +40,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>896</width>
+     <width>797</width>
      <height>20</height>
     </rect>
    </property>
@@ -98,6 +98,15 @@
   <widget class="QStatusBar" name="statusBar">
    <property name="autoFillBackground">
     <bool>true</bool>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">font: 75 8pt &quot;MS Shell Dlg 2&quot;;</string>
+   </property>
+   <property name="inputMethodHints">
+    <set>Qt::ImhNone</set>
+   </property>
+   <property name="sizeGripEnabled">
+    <bool>false</bool>
    </property>
   </widget>
   <widget class="QDockWidget" name="dockWidget">
@@ -235,7 +244,7 @@ color: rgb(255, 255, 255);</string>
           </widget>
          </item>
          <item>
-          <widget class="QGroupBox" name="groupBox_3">
+          <widget class="QGroupBox" name="groupBox_window">
            <property name="sizePolicy">
             <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -298,7 +307,7 @@ color: rgb(255, 255, 255);</string>
           </widget>
          </item>
          <item alignment="Qt::AlignHCenter">
-          <widget class="QGroupBox" name="groupBox_5">
+          <widget class="QGroupBox" name="groupBox_bw_filtr">
            <property name="sizePolicy">
             <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -460,7 +469,7 @@ color: rgb(255, 255, 255);</string>
                <number>512</number>
               </property>
               <property name="value">
-               <number>25</number>
+               <number>15</number>
               </property>
              </widget>
             </item>
@@ -759,7 +768,7 @@ color: rgb(255, 255, 255);</string>
             </sizepolicy>
            </property>
            <property name="text">
-            <string>Plik</string>
+            <string>Zamknij i pokaż plik</string>
            </property>
            <property name="shortcut">
             <string>Ctrl+,</string>
@@ -854,7 +863,7 @@ color: rgb(255, 255, 255);</string>
           </widget>
          </item>
          <item>
-          <layout class="QGridLayout" name="gridLayout_2" rowstretch="0,0,0" columnstretch="0,0" columnminimumwidth="0,0">
+          <layout class="QGridLayout" name="gridLayout_2" rowstretch="0" columnstretch="0,0" columnminimumwidth="0,0">
            <property name="sizeConstraint">
             <enum>QLayout::SetDefaultConstraint</enum>
            </property>
@@ -1163,12 +1172,12 @@ color: rgb(255, 255, 255);</string>
    <slot>setNum(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>54</x>
-     <y>492</y>
+     <x>60</x>
+     <y>701</y>
     </hint>
     <hint type="destinationlabel">
-     <x>54</x>
-     <y>446</y>
+     <x>60</x>
+     <y>544</y>
     </hint>
    </hints>
   </connection>
@@ -1179,12 +1188,12 @@ color: rgb(255, 255, 255);</string>
    <slot>setNum(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>85</x>
-     <y>492</y>
+     <x>97</x>
+     <y>701</y>
     </hint>
     <hint type="destinationlabel">
-     <x>85</x>
-     <y>446</y>
+     <x>97</x>
+     <y>544</y>
     </hint>
    </hints>
   </connection>
@@ -1195,12 +1204,12 @@ color: rgb(255, 255, 255);</string>
    <slot>setNum(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>116</x>
-     <y>492</y>
+     <x>134</x>
+     <y>701</y>
     </hint>
     <hint type="destinationlabel">
-     <x>116</x>
-     <y>446</y>
+     <x>134</x>
+     <y>544</y>
     </hint>
    </hints>
   </connection>

@@ -11,12 +11,11 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
-
-    QTime myTimer; myTimer.start();
+   QTime myTimer; myTimer.start();
 
     ui->setupUi(this);
 
-    qDebug() << "setupUi:" << myTimer.elapsed() << "ms"; myTimer.start();
+   qDebug() << "setupUi:" << myTimer.elapsed() << "ms"; myTimer.start();
 
     connect(&thread, SIGNAL(tick()), this, SLOT(externalThread_tick()));
     connect(ui->actionRun,  SIGNAL(triggered()), this, SLOT(sendCommand()));
@@ -40,7 +39,7 @@ MainWindow::MainWindow(QWidget *parent) :
 //    connect(this->simulation, SIGNAL(simulation_changed(Simulation_Type)), this->simulation, SLOT(simulationSet(const Simulation_Type& )));
 //    connect(slider, SIGNAL(valueChanged(int)), SLOT(onSliderValueChanged(int)));
 
-                timeDataCh1.resize(DSIZE2);
+//                timeDataCh1.resize(DSIZE2);
     //            timeDataCh2.resize(DSIZE2);
     //            timeDataCh3.resize(DSIZE2);
     //            timeDataCh1.fill(0);
@@ -79,11 +78,11 @@ MainWindow::MainWindow(QWidget *parent) :
     chart.gridNumX=10;
     chart.gridNumY=10;
     chart.minValueX= 1;
-    chart.maxValueX= DSIZE2;
+    chart.maxValueX= WSIZE;
     chart.minValueY= 0;
     chart.maxValueY= 1;
     chart.chartMode=LinearChart;
-    chart.dataSize=DSIZE2;
+    chart.dataSize=WSIZE;
     chart.backgroundColor = QColor::Invalid;
 
     alloc_memory_sub_constructor();
@@ -101,15 +100,15 @@ MainWindow::MainWindow(QWidget *parent) :
 
 //    const int order = 4; // 4th order (=2 biquads)
 //    Iir::Butterworth::LowPass<order> f;
-    const double samplingrate = DSIZE; // Hz
-//    const double samplingrate = D2SIZE; // Hz
+//    const double samplingrate = DSIZE; // Hz
+    const double samplingrate = DSIZE2; // Hz
     const double cutoff_frequency = 50; // Hz
     fHiPass.setup(samplingrate, cutoff_frequency);
     fBandStop.setup(samplingrate, cutoff_frequency, 10);
 
     setAcceptDrops(true);
-    ui->spinBox_HiPass->setMaximum(DSIZE2);
-    ui->spinBox_BandStop->setMaximum(DSIZE2);
+    ui->spinBox_HiPass->setMaximum(WSIZE);
+    ui->spinBox_BandStop->setMaximum(WSIZE);
     ui->spinBox_BandStop->setValue(static_cast<int>(cutoff_frequency));
 
 
@@ -117,12 +116,10 @@ MainWindow::MainWindow(QWidget *parent) :
     format.setCodec("audio/pcm");
     format.setSampleRate(DSIZE2);                         // Hz sample per second
     format.setChannelCount(1);                              // NCH TODO:
-    format.setSampleSize(sizeof(timeData[0][0])*2);           // sizeof(double) => 8 ( I multiplayng by 4 to get valid 32 bits)
+    format.setSampleSize(sizeof(timeData[0][0])*8);           // sizeof(double) => 8 ( I multiplayng by 4 to get valid 32 bits)
+//    qDebug() << "SampleSize" << sizeof( timeData[0][0])*8 ;
     format.setByteOrder(QAudioFormat::LittleEndian);
     format.setSampleType(QAudioFormat::SampleType::Float); // nie ma double co zrobić?
-
-
-//    int i = 0;
 
 //    file_out.setFileName( get_unique_filename(FILE_NAME EXT) ); // depracated to uninitlalize
     file_csv.setFileName( FILE_NAME ".csv");
@@ -136,8 +133,6 @@ MainWindow::MainWindow(QWidget *parent) :
       szukaj pliku wejścia w katalogu
 
     */
-
-
 //    jeśli realtime
 //       otwieraj wszystkie pliki zapisuj do domyślnego
 //    else czytaj z jednego źródła
@@ -196,6 +191,18 @@ MainWindow::MainWindow(QWidget *parent) :
 //    ui->textEdit->setVisible(ui->actionSave->isChecked());
     ui->lineEdit_fileN->setText( wav_out->fileName() );
     ui->lineEdit_path->setText( SAMPLE_DIR );
+
+#ifndef ALLOW_USE_FILTERS
+    ui->groupBox_window->setDisabled(1);
+    ui->groupBox_bw_filtr->setDisabled(1);
+#endif
+
+#ifdef DISABLE_FILTERS_ON_STARTUP
+    ui->radioBtn_rect->setChecked(true);
+    ui->checkBox_bandStop->setChecked(false);
+    ui->checkBox_highPass->setChecked(false);
+    ui->actionLine->setEnabled(true);
+#endif
 
 //#ifdef QT_DEBUG
 //    ui->selectInput2->setChecked(false);
@@ -299,6 +306,7 @@ void MainWindow::pointers_set_null()
 {
     wav_out = nullptr;
     wav_in  = nullptr;
+    wait_for_data = false;
 }
 void MainWindow::alloc_files()
 {
@@ -351,6 +359,7 @@ MainWindow::~MainWindow()
  * rysowanie widma 2 pola
  * RMS -
  * Github kody publikacja - does't allowed
+ * flitracja na 50Hz obecnie trzeba podać 100 dla 50
     zapis i odczyt
     lista plikow
     wczytywanie wav- zwracanie rozmiaru zamiast bool
@@ -388,119 +397,147 @@ double rms(double* x, int n)
 
 void MainWindow::externalThread_tick()
 {
-    if( simulation != SIMULATION_STOP ) {
-        auto_actionRun_serial_port(3);                                             // automatyczny start rysowania po ekranie
-    } else {
-        ui->statusBar->showMessage("Przenieś i upuść na program plik typu (WAV, CSV) drag&drop SIMULATION_STOP",1000);
-        ui->actionRun->setChecked(false);
-    }
+  if( simulation != SIMULATION_STOP ) {
+    auto_actionRun_serial_port(3);                                             // automatyczny start rysowania po ekranie
+  } else {
+    ui->statusBar->showMessage("Przenieś i upuść na program plik typu (WAV, CSV) drag&drop SIMULATION_STOP",1000);
+    ui->actionRun->setChecked(false);
+  }
+
+//  int size = (DSIZE * ui->spinBox_nDataPerFile->text().toInt());
+//  if(wait_for_data)
+//   if( serial.size() >= size)
+//   {
+//     timeData.resize(size);
+//      readdata = serial.readAll();
+//     uint16_t* sample = reinterpret_cast<uint16_t*>(readdata.data());
+//     for (int i = 0; i < size; i++)
+//     {
+//       timeData[0][i]=(*sample++)/65535.0;
+//     }
+//     // convert
+//    wav_out->write(reinterpret_cast<char*>(timeData[0].data()), static_cast<uint>(timeData[0].size())*sizeof(double));
+//    wait_for_data = false;
+//    ui->progressBar->setValue(100);
+
+//   }
+//   else {
+//      ui->progressBar->setValue(serial.size()/size);
+//   }
+
 
   if(ui->actionRun->isChecked())
-//    if( buff.size() > 0)                                                        // serial port lub z pliku
+    //    if( buff.size() > 0)                                                        // serial port lub z pliku
+  {
+    //    qDebug() << "simulation:  " <<simulation;
+    if(buff.size() == 0)
     {
-//    qDebug() << "simulation:  " <<simulation;
-
-      if(buff.size() == 0)
+      if(simulation)                                  // czytaj dane z pliku
       {
-        if (!load_data()){
-//           qDebug() << "load data";
-          return;
-        }
+          simulation_read_data_from_file();
       }
-
-
-        apply_filters();
-
-        if( ui->actionSave->isChecked() || coutDownToZero )
-            save_to_file( 0 );
-
-        for (int k = 0; k < NCH; k++)
-        {
-            kiss_fft( cfg, in[k], out[k] );
-           // kiss_fft( cfg, test, out[k] );
-
-            for (int i = 1; i < DSIZE2/2; i++)
-            {
-//                if ( i >= DSIZE2 ) // na wypadek zwiękaszania pętli np. razy 2
-//                {
-//                    break;
-//                }
-                  double normBinMag = sqrt(SQUARE((out[k]+i)->r) + SQUARE((out[k]+i)->i))/51.2 ; // do konca nie wiem czemu tu musze mnozyc przec 8
-//                   normBinMag = sqrt(SQUARE(test[i].r) + SQUARE(test[i].i))  ; // do konca nie wiem czemu tu musze mnozyc przec 8
-                  double mag = normBinMag;
-
-                  i *= 2;       // przedział zmiennej i: od 0 do 512 mnożony razy dwa
-
-                  spectrum[k][i] = mag;            // TODO nie mieści się na wykresie//                  spectrum[k][i] = (out[0]+i)->r * hamming[i];
-                  spectrum[k][i-1] = mag;            // TODO nie mieści się na wykresie//                  spectrum[k][i] = (out[0]+i)->r * hamming[i];
-
-                  int a = 10;
-                  if( a < i && i < DSIZE-a) // Hz
-                  {
-                    timeData[1][i] = rms(&spectrum[0][i-a],a*2);
-                    timeData[1][i-1] = timeData[1][i];
-                  }
-                  else
-                  {
-                    timeData[1][i] = 0;
-                    timeData[1][i-1] = 0;
-                  }
-
-//                   a = 20;
-                  int n = DSIZE2 / a; // Hz (okno)
-
-                  if( meanData.size() != n )
-                    meanData.resize(n);
-
-                  for(int j=0; j<n; j++) // słupki wypełniena
-//                  if ( n > 0 && i % n == 0 )
-                  {
-              //            meanData[j] = std::accumulate( timeData[j].begin(), timeData[j].end(), 0.0)/timeData[j].size();
-                      //                      meanData[i/n] = i/n;
-                    meanData[j] = (double) j/n;
-                  }
-
-                  i /= 2;
-//                  fprintf((FILE*) &file, "bin: %4d,   freq: %*.1f [Hz],   mag: %2.4f,   ampl.: %*f [dB]\n",
-//                         (int)i*100, 12,44100*(double)i*100/(DSIZE2), normBinMag, 11, amplitude);
-
-//                  char buffer [100];
-//                  int n=sprintf (buffer, "bin: %4d,   freq: %*.1f [Hz],   mag: %2.4f,   ampl.: %*f [dB] %d %d",
-//                                 (int)i, 12,1024*(double)i/(DSIZE2), normBinMag, 11, amplitude);
-//                  if( i %100 == 0 )
-//                    {
-//                      qInfo() << buffer;
-//                    if( i %500 == 0)
-//                         qInfo() << endl;
-//                    }
-//                   qInfo() << amplitude << (out[k]+i)->r << (out[k]+i)->i;
-             }
-        }
-
-        int d = DSIZE2/NBARS;
-
-        if( meanData.size() != NBARS )
-          meanData.resize(NBARS);
-
-        ui->statusBar->showMessage( "Rozmiar d: " + QString::number(DSIZE2));
-
-        for (int i = 0; i < NBARS; i++) {
-//            meanData[i]=(double)i/d;
-//             if( a < i && i < DSIZE2-a) // Hz
-             meanData[i] = rms(&spectrum[0][(d)*i],d);
-//            meanData[i]=rms(&spectrum[0][d*q],0);
-        }
-
-        update();
-
-        if(ui->actionRun->isChecked())
-          if (simulation == SIMUL_REALTIME)
-            sendCommand();
-
-        readdata.resize(0); // don't move, clear readdata only if was displayed
-
-//        if(simulation)
+      else if( serial.size() >= DSIZE  )              // zapisz do pliku
+      {
+        readdata = serial.read(DSIZE);
+//        readdata = serial.readAll();
+//          return readdata.size();
+      }
+      else
+          return ;
     }
+
+    load_data_from_serialport();
+
+    if( ui->actionSave->isChecked() || coutDownToZero )
+      save_to_file( 0 );
+
+    for (int k = 0; k < NCH; k++)
+    {
+      kiss_fft( cfg, in[k], out[k] );
+
+      for (int i = 1; i < WSIZE; i++) // fft gives redundant spectrum, use only half of window
+      {
+        if ( i >= DSIZE2 ) // na wypadek zwiękaszania pętli np. razy 2
+        {
+//          break;
+        }
+        double normBinMag = sqrt(SQUARE((out[k]+i)->r) + SQUARE((out[k]+i)->i))/51.2 ; // do konca nie wiem czemu tu musze mnozyc przec 8
+        //                   normBinMag = sqrt(SQUARE(test[i].r) + SQUARE(test[i].i))  ; // do konca nie wiem czemu tu musze mnozyc przec 8
+        double mag = normBinMag;
+
+        int scalar = 1;
+        i *= scalar;       // przedział zmiennej i: od 0 do 512 mnożony razy dwa
+
+        spectrum[k][i] = mag;            // TODO nie mieści się na wykresie//                  spectrum[k][i] = (out[0]+i)->r * hamming[i];
+        //                  spectrum[k][i-1] = mag;            // TODO nie mieści się na wykresie//                  spectrum[k][i] = (out[0]+i)->r * hamming[i];
+
+        int a = 10;
+        if( a < i && i < DSIZE-a) // Hz
+        {
+          timeData[1][i] = rms(&spectrum[0][i-a],a*2);
+          timeData[1][i-1] = timeData[1][i];
+        }
+        else
+        {
+          timeData[1][i] = 0;
+          timeData[1][i-1] = 0;
+        }
+
+        //                   a = 20;
+        int n = DSIZE2 / a; // Hz (okno)
+
+        if( meanData.size() != n )
+          meanData.resize(n);
+
+        for(int j=0; j<n; j++) // słupki wypełniena
+          //                  if ( n > 0 && i % n == 0 )
+        {
+          //            meanData[j] = std::accumulate( timeData[j].begin(), timeData[j].end(), 0.0)/timeData[j].size();
+          //                      meanData[i/n] = i/n;
+          meanData[j] = (double) j/n;
+        }
+
+        i /= scalar;
+        //                  fprintf((FILE*) &file, "bin: %4d,   freq: %*.1f [Hz],   mag: %2.4f,   ampl.: %*f [dB]\n",
+        //                         (int)i*100, 12,44100*(double)i*100/(DSIZE2), normBinMag, 11, amplitude);
+
+        //                  char buffer [100];
+        //                  int n=sprintf (buffer, "bin: %4d,   freq: %*.1f [Hz],   mag: %2.4f,   ampl.: %*f [dB] %d %d",
+        //                                 (int)i, 12,1024*(double)i/(DSIZE2), normBinMag, 11, amplitude);
+        //                  if( i %100 == 0 )
+        //                    {
+        //                      qInfo() << buffer;
+        //                    if( i %500 == 0)
+        //                         qInfo() << endl;
+        //                    }
+        //                   qInfo() << amplitude << (out[k]+i)->r << (out[k]+i)->i;
+      }
+    }
+
+    int d = WSIZE/NBARS;
+
+            if( meanData.size() != NBARS )
+              meanData.resize(NBARS);
+
+    //        ui->statusBar->showMessage( "Rozmiar d: " + QString::number(DSIZE2));
+
+            for (int i = 0; i < NBARS; i++) {
+    //            meanData[i]=(double)i/d;
+    //             if( a < i && i < DSIZE2-a) // Hz
+                 meanData[i] = rms(&spectrum[0][(d)*i],d);
+    //            meanData[i]=rms(&spectrum[0][d*q],0);
+            }
+
+    update();
+
+    if(ui->actionRun->isChecked())
+      if (simulation == SIMUL_REALTIME)
+        sendCommand();
+
+    readdata.resize(0); // don't move, clear readdata only if was displayed
+
+    //        if(simulation)
+  }
 }
 
 // -----------------------------------------------------------------------------
@@ -533,7 +570,7 @@ void MainWindow::paintEvent(QPaintEvent *event)
 //            chart.drawLinearData(painter, (QVector<double>*)meanData);
 //            chart.drawLinearData(painter, timeData[0]);
               chart.plotColor=Qt::red;
-              chart.drawLinearData(painter, timeData[0]);
+//              chart.drawLinearData(painter, timeData[0]);
 
 //              chart.plotColor=Qt::yellow;
 //              chart.drawLinearData(painter, spectrum[0]);
@@ -541,13 +578,13 @@ void MainWindow::paintEvent(QPaintEvent *event)
         if(ui->selectInput2->isChecked())
         {
             chart.plotColor=Qt::green;
-            chart.drawLinearData(painter, timeData[1]);
+//            chart.drawLinearData(painter, timeData[1]);
         }
 
         if(ui->selectInput3->isChecked())
         {
             chart.plotColor=Qt::yellow;
-            chart.drawLinearData(painter, timeData[2]);
+//            chart.drawLinearData(painter, timeData[2]);
         }
     }
     if( ui->actionSpektrum->isChecked())
@@ -594,23 +631,6 @@ inline void MainWindow::auto_actionRun_serial_port(int count_up_to)
 
 // -----------------------------------------------------------------------------
 
-qint64 MainWindow::load_data(bool add_seconds)
-{
-    if(simulation)                                  // czytaj dane z pliku
-    {
-       return simulation_read_data_from_file();
-    }
-    else if( serial.size() >= DSIZE  )              // zapisz do pliku
-    {
-        readdata = serial.readAll();
-        return readdata.size();
-    }
-    else
-        return 0;
-}
-
-// -----------------------------------------------------------------------------
-
 void MainWindow::save_to_file( bool add_seconds)
 {
 
@@ -634,9 +654,9 @@ void MainWindow::save_to_file( bool add_seconds)
       }
 
 //        file_out.write(reinterpret_cast<char*>(timeData[k].data()), static_cast<uint>(timeData[k].size())*sizeof(double));
-        wav_out->write(reinterpret_cast<char*>(timeData[k].data()), static_cast<uint>(timeData[k].size())*sizeof(double));
+        wav_out->write(reinterpret_cast<char*>(timeData[k].data()), static_cast<uint>(timeData[k].size())*sizeof(timeData[0][0]));
 
-        qInfo() <<"zapisano kanał "<<  k << "size(): " << timeData[k].size();
+        qInfo() <<"zapisano kanał "<<  k << "size(): " << timeData[k].size()*sizeof (timeData[0][0]);
         for (int i = 0; i < timeData[0].size(); i++)
         {
             stream <<  timeData[k][i] << ",";    // out.csv
@@ -668,11 +688,6 @@ void MainWindow::dropEvent(QDropEvent *e)
 }
 
 // -----------------------------------------------------------------------------
-
-void MainWindow::on_textEdit_textChanged()
-{
-    ui->actionSave->setChecked(false);
-}
 
 void MainWindow::on_actionSave_triggered()
 {
@@ -944,10 +959,7 @@ void MainWindow::on_actionKatalog_triggered()
     system( (const char*) b.data() ); // todo
 }
 
-void MainWindow::on_textEdit_cursorPositionChanged()
-{
 
-}
 
 void MainWindow::draw_bars_Hz_gap(int window_length, int  rms)
 {
@@ -1006,9 +1018,7 @@ void MainWindow::set_simulation(const Simulation_Type &newSimul)
 //    }
 //}
 
-void MainWindow::on_toolButton_clicked()
-{
-}
+
 
 // -----------------------------------------------------------------------------
 
@@ -1064,7 +1074,7 @@ void MainWindow::on_pushButton_openFile_clicked()
 }
 
 void MainWindow::set_butterworth_BandStop_fq(int cutoff_frequency){
-  fBandStop.setup( DSIZE, cutoff_frequency, ui->spinBox_BandStop_width->value());
+  fBandStop.setup( DSIZE, cutoff_frequency, ui->spinBox_BandStop_width->value()*2);
 }
 
 void MainWindow::set_butterworth_BandStop_width(int width){
@@ -1089,8 +1099,9 @@ void MainWindow::on_radioButton_clicked(){
 void MainWindow::on_radioButton_2_clicked(){
   ui->lineEdit_path->setText( SAMPLE_DIR "/thumb");
 }
-void MainWindow::apply_filters()
-{ // filtracja
+
+inline __fastcall void MainWindow::load_data_from_serialport()
+{
   uint16_t* sample = reinterpret_cast<uint16_t*>(readdata.data());
   if (simulation == SIMULATION_WAV)
   {
@@ -1112,8 +1123,8 @@ void MainWindow::apply_filters()
         return;
       }
   }
-
-  for(int i=0; i<DSIZE2; i++)
+//qDebug() <<"SIZE D"<< timeData[1].size();
+  for(int i=0; i<DSIZE2; i++) // czy tu nie powninno byćH D2SIZE
   {
     for(int k=0; k<NCH; k++)
     {
@@ -1123,6 +1134,8 @@ void MainWindow::apply_filters()
 //      if(ui->pwmValue1->value())
 //          (in[k]+i)->r *= ( hamming[i] + ui->pwmValue1->value()/100 );    // TO DO Hamming window
 
+#ifdef ALLOW_USE_FILTERS
+   // filtracja
       if(ui->radioBtn_rect->isChecked()) {
         // do nothing, just assingn
       }
@@ -1133,7 +1146,6 @@ void MainWindow::apply_filters()
         timeData[k][i] *= static_cast<double>(hamming[i]);       //(*sample)/65535.0;
       }
 
-      // filtracja
       if( ui->checkBox_bandStop->isChecked() ) {
         timeData[k][i] = fBandStop.filter( timeData[k][i] );
       }
@@ -1141,13 +1153,16 @@ void MainWindow::apply_filters()
       if( ui->checkBox_highPass->isChecked() ) {
         timeData[k][i] = fHiPass.filter( timeData[k][i] );
       }
+#endif // APPLY_FILTERS
 
       (in[k]+i)->r = static_cast<float>(timeData[k][i]);
       (in[k]+i)->i = 0;
 
+#ifdef ALLOW_USE_FILTERS
       if( ui->checkBox_fill1->isChecked() ) {
         (in[k]+i)->r = 1;
       }
+#endif // APPLY_FILTERS
     }
   }
 }
@@ -1178,6 +1193,7 @@ void MainWindow::on_toolButton_enter_clicked()
     QFileInfo fi( get_unique_filename(fName) );
     ui->lineEdit_fileN->setText( fi.completeBaseName()+ "." +fi.completeSuffix() );
 
+    fName = ui->lineEdit_path->text()+ "/" +ui->lineEdit_fileN->text();
     wav_out->open( fName, format );
     coutDownToZero =  ui->spinBox_nDataPerFile->value();
     qDebug() << "is open wav" << wav_out->isOpen() << wav_out->fileName();
@@ -1189,4 +1205,11 @@ void MainWindow::set_lineEdit_qnique_filename(QString path)
   QString uniqName = get_unique_filename(path+ "/" + ui->lineEdit_fileN->text() );
   QFileInfo fi(uniqName);
   ui->lineEdit_fileN->setText( fi.fileName() );
+}
+
+
+void MainWindow::on_pushButton_clicked()
+{
+    wait_for_data = true;
+    serial.readAll();
 }

@@ -9,20 +9,22 @@
 #define NCH 3
 #define TEMP_NCH 3
 #define DSIZE    (NCH*2048)
-#define DSIZE2   (DSIZE/2/NCH)
-#define D2SIZE   (DSIZE*2)
+#define DSIZE2   (DSIZE/2/NCH)                // number of samples per chanel (uint16_t)
+#define WSIZE    (DSIZE2/2)                   // window length
 #define BUF_LEN   10e6
-#define NBARS     32                          // do dzielenia DSIZE2
+#define NBARS     32                          // to divide  WSIZE
 #define ORDER     (1)
 
 //#define FPS FPS
 #define DATA_DIR "./data/"
 #define FILE_NAME  "out"
 #define EXT ".wav"
-#define SAMPLE_DIR "../matlab/sample"
-#define B_SIZE DSIZE                          // minimalny rozmiar wczytywaniej paczki danych z pliku
+#define SAMPLE_DIR "../matlab/rect"
+//#define B_SIZE DSIZE                          // minimalny rozmiar wczytywaniej paczki danych z pliku
 #define SQUARE(a) (a*a)
 #define INI_FILES "Ini_Files"
+#define ALLOW_USE_FILTERS
+//#define DISABLE_FILTERS _ON_STARTUP
 
 namespace Ui {
     class MainWindow;
@@ -63,33 +65,21 @@ public:
 private slots:
     void externalThread_tick();
     void sendCommand();
-    void on_textEdit_textChanged();
     void on_actionSave_triggered();
     void on_actionOpen_triggered();
     void on_actionOtw_rz_triggered(bool checked);
     void on_actionZapisz_domy_lne_triggered();
     void on_actionKatalog_triggered();
-    void on_textEdit_cursorPositionChanged();
-
-    void on_toolButton_clicked();
-
     void on_pushButto_kat_clicked();
-
     void on_radio_saveAllDir_clicked();
-
     void on_radio_handOpen_clicked();
-
     void on_radio_handClose_clicked();
-
     void on_pushButton_openFile_clicked();
-
     void on_radioButton_clicked();
-
     void on_radioButton_2_clicked();
-
     void on_toolButton_return_clicked();
-
     void on_toolButton_enter_clicked();
+    void on_pushButton_clicked();
 
 private:
     Ui::MainWindow *ui;
@@ -97,7 +87,6 @@ private:
     void alloc_memory_sub_constructor();
     void pointers_set_null();
     inline void auto_actionRun_serial_port(int count_up_to = 100);
-    qint64 load_data(bool sav_add_seconds = false);
     void dragEnterEvent(QDragEnterEvent *e);
     void dropEvent(QDropEvent *e);
     void save_to_file( bool wait_mseconds_0 = 0);
@@ -109,11 +98,12 @@ private:
     void alloc_files();
     Simulation_Type find_source_file(QString filename_or_prefered_extension = "" );    
     QString get_unique_filename(QString filename, bool allow_empty = true);
-    void apply_filters();
+    void load_data_from_serialport();
 
 //Q_SIGNALS:
 signals:
     void simulation_changed(Simulation_Type);
+
 public slots:
     void set_simulation(const Simulation_Type &newSimul);
     void set_butterworth_BandStop_fq(int cutoff_frequency);
@@ -127,7 +117,7 @@ private:
     QByteArray senddata;
     QByteArray readdata, buff;
     QVector<double> timeDataCh1, timeDataCh2, timeDataCh3;
-    QVector<QVector<double> > timeData;
+    QVector<QVector<float> > timeData;
     QVector<double> meanData;
     QVector<QVector<double> > spectrum;                                         // resized to NCH in constructor
     Chart chart;
@@ -143,7 +133,6 @@ private:
     Iir::Butterworth::HighPass<ORDER> fHiPass;
     Iir::Butterworth::BandStop<ORDER> fBandStop;
 
-//    QFile   file_out,
     QFile file_csv;                                             // read and write
     QTextStream stream;                                         // for csv read and write;
     Simulation_Type simulation;
@@ -152,18 +141,7 @@ private:
     WaveFileWriter *wav_out;
     QAudioFormat format;
     int coutDownToZero;
+    bool wait_for_data = true;
 };
-
-//class Counter : public QObject
-//{
-//    Q_OBJECT
-//    int m_value;
-////public:
-////    int value() const { return m_value; }
-//public slots:
-//    void setValue(int value);
-//signals:
-//    void valueChanged(int newValue);
-//};
 
 #endif // MAINWINDOW_H

@@ -1,17 +1,39 @@
+# Finger_EMG 
+Aplikacja przetwarzająca sygnał elektromiograficzny napięcia mięśni <br> 
+
+##### Specyfikacja:
+	 LPC1347 32-bit ARM Cortex-M3 mikrokontroler
+	 DFRobot Gravity - analogowy czujnik EMG
+
+### Widmo charakterystyczne EMG, zaciśnięta dłoń (0-512Hz)  
+<img src="docs/now.png">
 
 # Matlab wave fft
+<img src="docs/works.gif">
 
-<img src="docs/fft.gif">
+### Hann window (red)
+<img src="docs/hann.png">
 
-# ToDo
-> Matalab read file
+#### FS 256
+<img src="docs/256.png">
 
-> 200 sample per cat
+#### FS 1024
+<img src="docs/1024.png">
 
->Easy readable readme
-## Info how to save sample
- Open tab "Save" and just press <kbhit> Enter </kbhit>, progress bar should fill in.
- 
+# Instrukcja obsługi aplikacji 
+### Nawigacja 
+
+>Zalecaną metodą obsługi jest używanie skrótów klawiaturowych
+	
+> <kbhit>Ctrl</kbhit> + <kbhit>Tab</kbhit> zmiana karty 
+		
+> Wszystkie ustawienia przłączalne (toggle) można ustawiać  <kbhit>Ctrl</kbhit> + <kbhit>numer</kbhit> 
+		
+> Aby rozpocząć nagrywanie, upewniamy się, że aktualna zakładka to **zapis** naciskamy <kbhit>Enter</kbhit> pasek postępu zacznie się wypełniać
+		
+### Zapis 
+> Open tab "Save" and just press <kbhit> Enter </kbhit>, progress bar should fill in.
+
 # ButterWorth
 ## Bez filtracji
 <img src="docs/no.png">
@@ -27,6 +49,7 @@
 ## High Pass
 <img src="docs/highPass.gif">
 
-### Asymptota szumu 
+### Asymptota szumu (zielony)
+Widmo jest symetryczne, tu widzimy lewą połowę widma, oś symetrii jest na krawędzi obrazu
 <img src="docs/noise.png">
 

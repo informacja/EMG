@@ -19,11 +19,20 @@ filename = 'sample/50hz.wav';
 % filename = 'sample/b.wav';
 % filename = 'sample/c.wav'; % 4*bps
 % filename = 'sample/d.wav'; % hand
+ 
+filename = 'rectangle/nothing.wav';
+
+filename = 'sample/out18.wav';
+filename = 'sample/out21.wav'; % 2048
+
+filename = 'sample/out28.wav'; % 2048
+
+filename = 'rect/out2.wav';
 
 info = audioinfo(filename)
-info.SampleRate = info.SampleRate*4;
+% info.SampleRate = info.SampleRate*4;
 
-[data, fs] = audioread(filename);
+[data, fs] = audioread(filename,'double');
  
 for i = 1:info.Duration
     
@@ -31,18 +40,19 @@ for i = 1:info.Duration
  d = data( shift(1) : shift(2))';
     
  data_fft = fft(d)'/info.SampleRate;                                       % values from 0 to 1 
-%   plot(abs(data_fft(:,1)),'r');
+%    plot(abs(data_fft(:,1)),'r');
   figure(2)
  w1 = data_fft(1:length(data_fft)/2);
  w2 = data_fft(length(data_fft)/2:length(data_fft));
-%  subplot(211);
- plot(abs(w1(:,1)),'r');     xlabel('w1 [Hz]');
- ylim([-0.01 0.3])
-%      axis([0 info.SampleRate/2 -0.01 0.3])
+%   subplot(211);
+  plot(abs(w1(:,1)),'r');     xlabel('w1 [Hz]');
+%   ylim([-0.01 0.3])
+%       axis([0 info.SampleRate/2 -0.01 0.3])
 %   subplot(212); 
-  plot(abs(w2(:,1)),'r');    xlabel('w2 [Hz]');
-%      axis([0 info.SampleRate/2 -0.01 0.3])
-     title(filename);
+%    plot(abs(w2(:,1)),'r');    xlabel('w2 [Hz]');
+   axis([0 info.SampleRate/2 -0.00 0.1])
+   title(filename);
+   
   figure(1)
     ydft = fft(d);
     % I'll assume y has even length
