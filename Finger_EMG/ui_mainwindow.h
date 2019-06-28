@@ -117,6 +117,7 @@ public:
     QGridLayout *gridLayout_2;
     QToolButton *toolButton_return;
     QToolButton *toolButton_enter;
+    QPushButton *pushButton;
     QSpacerItem *verticalSpacer;
 
     void setupUi(QMainWindow *MainWindow)
@@ -665,6 +666,11 @@ public:
 
         verticalLayout->addLayout(gridLayout_2);
 
+        pushButton = new QPushButton(tab_save);
+        pushButton->setObjectName(QString::fromUtf8("pushButton"));
+
+        verticalLayout->addWidget(pushButton);
+
         verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
         verticalLayout->addItem(verticalSpacer);
@@ -712,7 +718,7 @@ public:
         QObject::connect(pwmValue2, SIGNAL(valueChanged(int)), pwmLabel2, SLOT(setNum(int)));
         QObject::connect(pwmValue3, SIGNAL(valueChanged(int)), pwmLabel3, SLOT(setNum(int)));
 
-        tabWidget->setCurrentIndex(0);
+        tabWidget->setCurrentIndex(1);
 
 
         QMetaObject::connectSlotsByName(MainWindow);
@@ -854,7 +860,7 @@ public:
 #ifndef QT_NO_SHORTCUT
         pushButto_kat->setShortcut(QApplication::translate("MainWindow", "Ctrl+0", nullptr));
 #endif // QT_NO_SHORTCUT
-        pushButton_openFile->setText(QApplication::translate("MainWindow", "Plik", nullptr));
+        pushButton_openFile->setText(QApplication::translate("MainWindow", "Zamknij i otw\303\263rz plik", nullptr));
 #ifndef QT_NO_SHORTCUT
         pushButton_openFile->setShortcut(QApplication::translate("MainWindow", "Ctrl+,", nullptr));
 #endif // QT_NO_SHORTCUT
@@ -868,6 +874,7 @@ public:
 #ifndef QT_NO_SHORTCUT
         toolButton_enter->setShortcut(QApplication::translate("MainWindow", "Enter", nullptr));
 #endif // QT_NO_SHORTCUT
+        pushButton->setText(QApplication::translate("MainWindow", "Save only pactets", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(tab_save), QApplication::translate("MainWindow", "Zapis ", nullptr));
     } // retranslateUi
 

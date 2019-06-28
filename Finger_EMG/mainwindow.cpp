@@ -101,7 +101,7 @@ MainWindow::MainWindow(QWidget *parent) :
 //    const int order = 4; // 4th order (=2 biquads)
 //    Iir::Butterworth::LowPass<order> f;
 //    const double samplingrate = DSIZE; // Hz
-    const double samplingrate = WSIZE; // Hz
+    const double samplingrate = DSIZE2; // Hz
     const double cutoff_frequency = 50; // Hz
     fHiPass.setup(samplingrate, cutoff_frequency);
     fBandStop.setup(samplingrate, cutoff_frequency, 10);
@@ -114,12 +114,14 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // Output WAVE settings
     format.setCodec("audio/pcm");
-    format.setSampleRate(DSIZE2);                         // Hz sample per second
+    format.setSampleRate(DSIZE2*2);                         // Hz sample per second
     format.setChannelCount(1);                              // NCH TODO:
-    format.setSampleSize(sizeof(timeData[0][0])*2);           // sizeof(double) => 8 ( I multiplayng by 4 to get valid 32 bits)
+//    format.setSampleSize(sizeof(timeData[0][0])*2);           // sizeof(double) => 8 ( I multiplayng by 4 to get valid 32 bits)
+//    format.setSampleSize(sizeof(uint16_t));
+//    format.setSampleSize(32);imeData[k].size())*sizeof(double)
+        format.setSampleSize( timeData[0].size()*sizeof(double) );
     format.setByteOrder(QAudioFormat::LittleEndian);
     format.setSampleType(QAudioFormat::SampleType::Float); // nie ma double co zrobić?
-
 
 //    file_out.setFileName( get_unique_filename(FILE_NAME EXT) ); // depracated to uninitlalize
     file_csv.setFileName( FILE_NAME ".csv");
@@ -306,6 +308,7 @@ void MainWindow::pointers_set_null()
 {
     wav_out = nullptr;
     wav_in  = nullptr;
+    wait_for_data = false;
 }
 void MainWindow::alloc_files()
 {
@@ -358,6 +361,7 @@ MainWindow::~MainWindow()
  * rysowanie widma 2 pola
  * RMS -
  * Github kody publikacja - does't allowed
+ * flitracja na 50Hz obecnie trzeba podać 100 dla 50
     zapis i odczyt
     lista plikow
     wczytywanie wav- zwracanie rozmiaru zamiast bool
@@ -401,6 +405,28 @@ void MainWindow::externalThread_tick()
     ui->statusBar->showMessage("Przenieś i upuść na program plik typu (WAV, CSV) drag&drop SIMULATION_STOP",1000);
     ui->actionRun->setChecked(false);
   }
+
+  int size = (DSIZE * ui->spinBox_nDataPerFile->text().toInt());
+  if(wait_for_data)
+   if( serial.size() >= size)
+   {
+     timeData.resize(size);
+     uint16_t* sample = reinterpret_cast<uint16_t*>(readdata.data());
+     for (int i = 0; i < size; i++)
+     {
+       timeData[0][i]=(*sample++)/65535.0;
+     }
+     // convert
+    wav_out->write(reinterpret_cast<char*>(timeData[0].data()), static_cast<uint>(timeData[0].size())*sizeof(double));
+    wait_for_data = false;
+    ui->progressBar->setValue(100);
+    serial.readAll();
+   }
+   else {
+      ui->progressBar->setValue(serial.size()/size);
+   }
+
+   return   ;
 
   if(ui->actionRun->isChecked())
     //    if( buff.size() > 0)                                                        // serial port lub z pliku
@@ -602,13 +628,6 @@ inline void MainWindow::auto_actionRun_serial_port(int count_up_to)
          QThread::msleep(10);
      }
     }
-}
-
-// -----------------------------------------------------------------------------
-
-qint64 MainWindow::load_data_from_file(bool add_seconds)
-{
-
 }
 
 // -----------------------------------------------------------------------------
@@ -1186,4 +1205,11 @@ void MainWindow::set_lineEdit_qnique_filename(QString path)
   QString uniqName = get_unique_filename(path+ "/" + ui->lineEdit_fileN->text() );
   QFileInfo fi(uniqName);
   ui->lineEdit_fileN->setText( fi.fileName() );
+}
+
+
+void MainWindow::on_pushButton_clicked()
+{
+    wait_for_data = true;
+    serial.readAll();
 }

@@ -80,13 +80,14 @@ private slots:
     void on_toolButton_return_clicked();
     void on_toolButton_enter_clicked();
 
+    void on_pushButton_clicked();
+
 private:
     Ui::MainWindow *ui;
     void paintEvent(QPaintEvent *event);
     void alloc_memory_sub_constructor();
     void pointers_set_null();
     inline void auto_actionRun_serial_port(int count_up_to = 100);
-    qint64 load_data_from_file(bool sav_add_seconds = false);
     void dragEnterEvent(QDragEnterEvent *e);
     void dropEvent(QDropEvent *e);
     void save_to_file( bool wait_mseconds_0 = 0);
@@ -141,6 +142,7 @@ private:
     WaveFileWriter *wav_out;
     QAudioFormat format;
     int coutDownToZero;
+    bool wait_for_data = true;
 };
 
 #endif // MAINWINDOW_H

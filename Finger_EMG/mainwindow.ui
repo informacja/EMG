@@ -158,7 +158,7 @@ color: rgb(255, 255, 255);</string>
         <enum>QTabWidget::Triangular</enum>
        </property>
        <property name="currentIndex">
-        <number>0</number>
+        <number>1</number>
        </property>
        <property name="usesScrollButtons">
         <bool>true</bool>
@@ -768,7 +768,7 @@ color: rgb(255, 255, 255);</string>
             </sizepolicy>
            </property>
            <property name="text">
-            <string>Plik</string>
+            <string>Zamknij i otwórz plik</string>
            </property>
            <property name="shortcut">
             <string>Ctrl+,</string>
@@ -960,6 +960,13 @@ color: rgb(255, 255, 255);</string>
             </widget>
            </item>
           </layout>
+         </item>
+         <item>
+          <widget class="QPushButton" name="pushButton">
+           <property name="text">
+            <string>Save only pactets</string>
+           </property>
+          </widget>
          </item>
          <item>
           <spacer name="verticalSpacer">
