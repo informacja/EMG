@@ -1,14 +1,8 @@
-## ToDo List
- > hann -> highPass 20Hz
- 
- > neural networks vs KNN (najbliższy sąsiad)
- 
-> Matlab read file
+# Finger_EMG 
+Aplikacja do zapisywania sygnałów. 
+Specyfikacja:
+* LPC1347
 
-> 200 sample per cat
-
->Easy readable readme
- 
 ### Widmo charakterystyczne EMG (0-512Hz)  
 <img src="docs/now.png">
 
@@ -25,11 +19,15 @@
 
 # Instrukcja obsługi aplikacji Finger_EMG.exe
 ### Nawigacja 
-	>Zalecaną metodą obsługi jest używanie skrótów klawiaturowych 
+	>Zalecaną metodą obsługi jest używanie skrótów klawiaturowych
+	
 		>> <kbhit>Ctrl</kbhit> + <kbhit>Tab</kbhit> zmiana karty 
-		>> Wszystkie ustawienia przłączalne (toggle) można ustawiać  <kbhit>Ctrl</kbhit> + <kbhit>numer</kbhit> 
+		
+	>> Wszystkie ustawienia przłączalne (toggle) można ustawiać  <kbhit>Ctrl</kbhit> + <kbhit>numer</kbhit> 
+		
 		>> Aby rozpocząć nagrywanie, upewniamy się, że aktualna zakładka to .zapis. naciskamy <kbhit>Enter</kbhit> 
-		* Polecam
+		
+	* Polecam
 ## Zapis 
 Open tab "Save" and just press <kbhit> Enter </kbhit>, progress bar should fill in.
 
