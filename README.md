@@ -5,7 +5,7 @@
 ## ToDo List
  > hann -> highPass 20Hz
  
- >
+ > neural networks vs KNN (najbliższy sąsiad)
  ### Current 512Hz window length
 <img src="docs/now.png">
 <img src="docs/hann.png">
