@@ -1,10 +1,10 @@
 # Finger_EMG 
 Aplikacja przetwarzająca sygnał elektromiograficzny napięcia mięśni <br> 
->Specyfikacja:
-* LPC1347 32-bit ARM Cortex-M3 mikrokontroler
-* DFRobot Gravity - analogowy czujnik EMG
+> Specyfikacja:
+	>* LPC1347 32-bit ARM Cortex-M3 mikrokontroler
+	* DFRobot Gravity - analogowy czujnik EMG
 
-### Widmo charakterystyczne EMG (0-512Hz)  
+### Widmo charakterystyczne EMG, zaciśnięta dłoń (0-512Hz)  
 <img src="docs/now.png">
 
 # Matlab wave fft
@@ -15,6 +15,7 @@ Aplikacja przetwarzająca sygnał elektromiograficzny napięcia mięśni <br>
 
 #### FS 256
 <img src="docs/256.png">
+
 #### FS 1024
 <img src="docs/1024.png">
 
@@ -25,11 +26,10 @@ Aplikacja przetwarzająca sygnał elektromiograficzny napięcia mięśni <br>
 	
 > <kbhit>Ctrl</kbhit> + <kbhit>Tab</kbhit> zmiana karty 
 		
->> Wszystkie ustawienia przłączalne (toggle) można ustawiać  <kbhit>Ctrl</kbhit> + <kbhit>numer</kbhit> 
+> Wszystkie ustawienia przłączalne (toggle) można ustawiać  <kbhit>Ctrl</kbhit> + <kbhit>numer</kbhit> 
 		
-> Aby rozpocząć nagrywanie, upewniamy się, że aktualna zakładka to .zapis. naciskamy <kbhit>Enter</kbhit> 
+> Aby rozpocząć nagrywanie, upewniamy się, że aktualna zakładka to **zapis** naciskamy <kbhit>Enter</kbhit> pasek postępu zacznie się wypełniać
 		
-* Polecam
 ### Zapis 
 > Open tab "Save" and just press <kbhit> Enter </kbhit>, progress bar should fill in.
 
@@ -49,6 +49,6 @@ Aplikacja przetwarzająca sygnał elektromiograficzny napięcia mięśni <br>
 <img src="docs/highPass.gif">
 
 ### Asymptota szumu (zielony)
-Widmo jest symetryczne, oś symetrii jest prawą krawędzią 
+Widmo jest symetryczne, tu widzimy lewą połowę widma, oś symetrii jest prawą krawędzią obrazu
 <img src="docs/noise.png">
 
