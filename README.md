@@ -1,8 +1,9 @@
 # Finger_EMG 
 Aplikacja przetwarzająca sygnał elektromiograficzny napięcia mięśni <br> 
-> Specyfikacja:
-	>* LPC1347 32-bit ARM Cortex-M3 mikrokontroler
-	* DFRobot Gravity - analogowy czujnik EMG
+
+##### Specyfikacja:
+	> LPC1347 32-bit ARM Cortex-M3 mikrokontroler
+	> DFRobot Gravity - analogowy czujnik EMG
 
 ### Widmo charakterystyczne EMG, zaciśnięta dłoń (0-512Hz)  
 <img src="docs/now.png">
@@ -49,6 +50,6 @@ Aplikacja przetwarzająca sygnał elektromiograficzny napięcia mięśni <br>
 <img src="docs/highPass.gif">
 
 ### Asymptota szumu (zielony)
-Widmo jest symetryczne, tu widzimy lewą połowę widma, oś symetrii jest prawą krawędzią obrazu
+Widmo jest symetryczne, tu widzimy lewą połowę widma, oś symetrii jest na krawędzi obrazu
 <img src="docs/noise.png">
 
