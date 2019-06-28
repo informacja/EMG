@@ -1,7 +1,8 @@
 # Finger_EMG 
-Aplikacja do zapisywania sygnałów. 
+Aplikacja do zapisywania sygnałów napięcia mięśni <br> 
 Specyfikacja:
-* LPC1347
+* LPC1347 
+* DFRobot Gravity - analogowy czujnik EMG
 
 ### Widmo charakterystyczne EMG (0-512Hz)  
 <img src="docs/now.png">
@@ -17,19 +18,20 @@ Specyfikacja:
 #### FS 1024
 <img src="docs/1024.png">
 
-# Instrukcja obsługi aplikacji Finger_EMG.exe
+# Instrukcja obsługi aplikacji 
 ### Nawigacja 
-	>Zalecaną metodą obsługi jest używanie skrótów klawiaturowych
+
+>Zalecaną metodą obsługi jest używanie skrótów klawiaturowych
 	
-		>> <kbhit>Ctrl</kbhit> + <kbhit>Tab</kbhit> zmiana karty 
+> <kbhit>Ctrl</kbhit> + <kbhit>Tab</kbhit> zmiana karty 
 		
-	>> Wszystkie ustawienia przłączalne (toggle) można ustawiać  <kbhit>Ctrl</kbhit> + <kbhit>numer</kbhit> 
+>> Wszystkie ustawienia przłączalne (toggle) można ustawiać  <kbhit>Ctrl</kbhit> + <kbhit>numer</kbhit> 
 		
-		>> Aby rozpocząć nagrywanie, upewniamy się, że aktualna zakładka to .zapis. naciskamy <kbhit>Enter</kbhit> 
+> Aby rozpocząć nagrywanie, upewniamy się, że aktualna zakładka to .zapis. naciskamy <kbhit>Enter</kbhit> 
 		
-	* Polecam
-## Zapis 
-Open tab "Save" and just press <kbhit> Enter </kbhit>, progress bar should fill in.
+* Polecam
+### Zapis 
+> Open tab "Save" and just press <kbhit> Enter </kbhit>, progress bar should fill in.
 
 # ButterWorth
 ## Bez filtracji
