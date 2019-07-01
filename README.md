@@ -1,7 +1,7 @@
 # Finger_EMG 
 Aplikacja przetwarzająca sygnał elektromiograficzny napięcia mięśni <br> 
 
-##### Specyfikacja:
+##### Specyfikacja sprzętowa:
 	 LPC1347 32-bit ARM Cortex-M3 mikrokontroler
 	 DFRobot Gravity - analogowy czujnik EMG
 
