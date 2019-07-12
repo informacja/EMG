@@ -2,7 +2,10 @@
 function [x] = wav_emg(filename)
 
 % to do get current file path from csv log file (last file)
-
+Files=dir('*.*');
+for k=1:length(Files)
+   FileNames=Files(k).name
+end
 filename = 'sample/50hz.wav';
  filename = 'sample/noise.wav';
  filename = 'sample/hand.wav';
