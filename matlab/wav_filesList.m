@@ -1,10 +1,15 @@
-function [fileNames] = filesList(directory, filtr, returnStringArray_defaultReturn_cells)
+function [fileNames] = filesList(directory, filtr, optionalNum_retrunStringFromList)
 
-if nargin==0
-    directory = 'rect/';
-    filtr = '*.wav';
-    returnStringArray_defaultReturn_cells = 1;
+if ~exist('optionalNum_retrunStringFromList','var')
+ % third parameter does not exist, so default it to something
+  optionalNum_retrunStringFromList = -1; 
 end
+ 
+% if nargin==0
+%     directory = 'rect/';
+%     filtr = '*.wav';
+%     returnStringArray_defaultReturn_cells = 0;
+% end
 
 % function [fileNames] = filesList(varargin)
 %   varargin = [directory, filtr, returnStringArray_defaultReturn_cells]
@@ -28,17 +33,15 @@ Name = strcat(directory, filtr);
 Files = dir( Name );
 
 fileNames = cell(1,length(Files));
-stringNames = '';
+% stringNames = '';
 
 for k=1:length(Files)
-    fileNames{k} = Files(k).name;
-    stringNames = strvcat(stringNames,Files(k).name);
+    fileNames{k} = strcat(directory, Files(k).name);
+%     stringNames = strvcat(stringNames,Files(k).name);
 end
 
-if returnStringArray_defaultReturn_cells ~= 0
-%     return stringNames;
-    fileNames = [];
-    fileNames = stringNames;
+if optionalNum_retrunStringFromList > -1
+    fileNames = strcat(directory, string(fileNames( optionalNum_retrunStringFromList )) );
 end
 
 end

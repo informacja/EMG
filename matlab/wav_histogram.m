@@ -1,9 +1,6 @@
 % [Y, FS]=audioread(FILENAME, [START END], DATATYPE);
 function [x] = wav_histogram()
 
-wav_filesList()
-return;
-
  filename = 'sample/50hz.wav';
  filename = 'sample/noise.wav';
  filename = 'sample/hand.wav';
@@ -30,8 +27,25 @@ filename = 'sample/out28.wav'; % 2048
 
 filename = 'rect/out2.wav';
 
+directory = 'rect/';
+filename = wav_filesList( directory, '*.wav', 1)
+% filename = strcat(directory, string(filename(6)) ) % depracated
+
 info = audioinfo(filename)
 % info.SampleRate = info.SampleRate*4;
+
+return;
+N = 1024;
+n = 0:N-1;
+
+w0 = 2*pi/5;
+x = sin(w0*n)+10*sin(2*w0*n);
+
+s = spectrogram(x);
+
+spectrogram(x,'yaxis')
+
+
 
 [data, fs] = audioread(filename,'double');
  
