@@ -1,12 +1,10 @@
 % [Y, FS]=audioread(FILENAME, [START END], DATATYPE);
-function [x] = wav_emg(filename)
+function [x] = wav_histogram()
 
-% to do get current file path from csv log file (last file)
-Files=dir('*.*');
-for k=1:length(Files)
-   FileNames=Files(k).name
-end
-filename = 'sample/50hz.wav';
+wav_filesList()
+return;
+
+ filename = 'sample/50hz.wav';
  filename = 'sample/noise.wav';
  filename = 'sample/hand.wav';
 
