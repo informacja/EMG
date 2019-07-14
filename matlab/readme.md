@@ -1,4 +1,4 @@
-```{matlab}
+```Matlab
 function fi_filesList(directory, filter, optional_getElemFromList)
 ```
 <img src="docs/all_files.png">
