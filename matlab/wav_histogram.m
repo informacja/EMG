@@ -22,25 +22,20 @@ filename = 'rectangle/nothing.wav';
 
 filename = 'sample/out18.wav';
 filename = 'sample/out21.wav'; % 2048
-%% old style 
+%% old style
 filename = 'sample/out28.wav'; % 2048
 filename = 'rect/out2.wav';
 
 %% new feature; open all files
 
 directory = 'rect/';
-numOfElemnetFromList = 100;
+numOfElemnetFromList = 1;
 
-filename = fi_filesList(directory, '*.wav', numOfElemnetFromList)
-
-return;
-
-
+filename = fi_filesList( directory, '*.wav', numOfElemnetFromList)
 
 info = audioinfo(filename)
 
-
-
+return;
 
 N = 1024;
 n = 0:N-1;

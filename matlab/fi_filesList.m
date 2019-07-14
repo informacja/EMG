@@ -41,7 +41,11 @@ for k=1:length(Files)
 end
 
 if optionalNum_retrunStringFromList > -1
-    fileNames = strcat(directory, string(fileNames( optionalNum_retrunStringFromList )) );
+  if optionalNum_retrunStringFromList > length(fileNames)
+    fileNames = -1;
+    return;
+  end
+  fileNames = strcat(directory, string(fileNames( optionalNum_retrunStringFromList )) );
 end
 
 end
