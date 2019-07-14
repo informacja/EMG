@@ -1,5 +1,5 @@
 % [Y, FS]=audioread(FILENAME, [START END], DATATYPE);
-function [x] = wav_histogram()
+function [x] = fi_histogram()
 
  filename = 'sample/50hz.wav';
  filename = 'sample/noise.wav';
@@ -22,19 +22,25 @@ filename = 'rectangle/nothing.wav';
 
 filename = 'sample/out18.wav';
 filename = 'sample/out21.wav'; % 2048
-
+%% old style 
 filename = 'sample/out28.wav'; % 2048
-
 filename = 'rect/out2.wav';
 
-directory = 'rect/';
-filename = wav_filesList( directory, '*.wav', 1)
-% filename = strcat(directory, string(filename(6)) ) % depracated
+%% new feature; open all files
 
-info = audioinfo(filename)
-% info.SampleRate = info.SampleRate*4;
+directory = 'rect/';
+
+filename = fi_filesList( directory, '*.wav')
 
 return;
+
+
+
+info = audioinfo(filename)
+
+
+
+
 N = 1024;
 n = 0:N-1;
 

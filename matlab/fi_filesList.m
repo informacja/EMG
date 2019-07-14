@@ -1,4 +1,4 @@
-function [fileNames] = filesList(directory, filtr, optionalNum_retrunStringFromList)
+function [fileNames] = fi_filesList(directory, filtr, optionalNum_retrunStringFromList)
 
 if ~exist('optionalNum_retrunStringFromList','var')
  % third parameter does not exist, so default it to something
@@ -36,7 +36,7 @@ fileNames = cell(1,length(Files));
 % stringNames = '';
 
 for k=1:length(Files)
-    fileNames{k} = strcat(directory, Files(k).name);
+    fileNames{k} = strcat('', Files(k).name);
 %     stringNames = strvcat(stringNames,Files(k).name);
 end
 
