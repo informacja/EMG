@@ -209,6 +209,19 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->selectInput3->setChecked(false);
 //#endif //QT_DEBUG
 
+        
+            ui->selectInput1->setStyleSheet("border: 1px solid red;\
+                                     border-radius: 3px;\
+                                     padding: 2px 2px 2px 2px; \
+                                    ");
+    ui->selectInput2->setStyleSheet("border: 1px solid green;\
+                                     border-radius: 3px;\
+                                     padding: 2px 2px 2px 2px; \
+                                    ");
+    ui->selectInput3->setStyleSheet("border: 1px solid darkCyan;\
+                                     border-radius: 3px;\
+                                     padding: 2px 2px 2px 2px; \
+                                    ");
 //    QSplitter *splitter = new QSplitter(this);
 
 //    QFileSystemModel *model = new QFileSystemModel;
