@@ -1113,7 +1113,7 @@ void MainWindow::on_radioButton_2_clicked(){
   ui->lineEdit_path->setText( SAMPLE_DIR "/thumb");
 }
 
-inline __fastcall void MainWindow::load_data_from_serialport()
+inline void MainWindow::load_data_from_serialport()
 {
   uint16_t* sample = reinterpret_cast<uint16_t*>(readdata.data());
   if (simulation == SIMULATION_WAV)
