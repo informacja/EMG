@@ -22,3 +22,4 @@ Finger_EMG/users*
 *.asv
 *Thumbs.db
 docs/Thumbs.db
+build-DataTransfer-Desktop_Qt_5_13_1_MinGW_64_bit-Debug/*

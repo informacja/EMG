@@ -410,11 +410,11 @@ double rms(double* x, int n)
 
 void MainWindow::externalThread_tick()
 {
-  if( simulation != SIMULATION_STOP ) {
-    auto_actionRun_serial_port(3);                                             // automatyczny start rysowania po ekranie
-  } else {
-    ui->statusBar->showMessage("Przenieś i upuść na program plik typu (WAV, CSV) drag&drop SIMULATION_STOP",1000);
-    ui->actionRun->setChecked(false);
+  if( simulation == SIMULATION_STOP ) {
+          ui->statusBar->showMessage("Przenieś i upuść na program plik typu (WAV, CSV) drag&drop SIMULATION_STOP",1000);
+          ui->actionRun->setChecked(false);
+  } else    {
+//      auto_actionRun_serial_port(3);                                             // automatyczny start rysowania po ekranie
   }
 
 //  int size = (DSIZE * ui->spinBox_nDataPerFile->text().toInt());
@@ -596,7 +596,7 @@ void MainWindow::paintEvent(QPaintEvent *event)
 
         if(ui->selectInput3->isChecked())
         {
-            chart.plotColor=Qt::yellow;
+            chart.plotColor=Qt::darkMagenta;
 //            chart.drawLinearData(painter, timeData[2]);
         }
     }
