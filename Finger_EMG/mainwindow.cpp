@@ -180,6 +180,7 @@ MainWindow::MainWindow(QWidget *parent) :
         }
         case SIMULATION_BINARY: break;      /* deprecated */
         case SIMULATION_STOP:
+            set_simulation(GENERATE_SIGNAL);
             // szukaj plików do otwarcia
         break;
 //    default: break;
@@ -998,7 +999,8 @@ Simulation_Type MainWindow::find_source_file(QString filename)
 {
     if( QFileInfo(filename).isFile() ) {
         if( simulation_open_file(filename) == false) {
-            simulation = SIMULATION_STOP;
+            set_simulation(SIMULATION_STOP);
+//            simulation = ;
         }
         qDebug() << "Find source: " << filename << simulation;
         return simulation;
@@ -1019,7 +1021,7 @@ Simulation_Type MainWindow::find_source_file(QString filename)
 void MainWindow::set_simulation(const Simulation_Type &newSimul)
 {
 //    simulation = newSimul;
-        qDebug() << "Simulation tick";
+        qDebug() << "Simulation tick, new SimType: " << newSimul;
     emit simulation_changed(newSimul);
 }
 

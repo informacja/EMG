@@ -83,13 +83,13 @@ enum Simulation_Type {
         // data from NXP board
     SIMUL_REALTIME = 0,
         // from file
-    SIMULATION_BINARY,
-    SIMULATION_CSV,
+    SIMULATION_BINARY,              // depracated
+    SIMULATION_CSV,                 // depracated
     SIMULATION_WAV,
+        // auto idle animation, when no input data
+    GENERATE_SIGNAL = 0x10,
         // fatal error
     SIMULATION_STOP = 0xFF
 };
-
-
 
 #endif // PRE_HEADERS_H
