@@ -1,21 +1,21 @@
 function [m] = readCsvEMG(filename)
 
-% Do komentowania u¿ywamy skrótu Ctrl + R
+% Do komentowania uï¿½ywamy skrï¿½tu Ctrl + R
 
 
 % filename = 'zacisk_slaby.csv';          
-% filename = 'bezczynnosc.csv';           % bardzo ma³y pik przy 50 Hz (w pierwszym kwadracie wykresu)
-% filename = 'zacisk silny.csv';          % ma³a amplituda mo¿e byæ spowodowana s³abym przyleganiem do cia³a
-% filename = '50Hz.csv';                  % gdy nic nie jest podpiête do elektrody, widzimy harmoniczne
- filename = 'sample/peak.csv';                  % gdy nic nie jest podpiête do elektrody, widzimy harmoniczne
+% filename = 'bezczynnosc.csv';           % bardzo maï¿½y pik przy 50 Hz (w pierwszym kwadracie wykresu)
+% filename = 'zacisk silny.csv';          % maï¿½a amplituda moï¿½e byï¿½ spowodowana sï¿½abym przyleganiem do ciaï¿½a
+filename = '50Hz.csv';                  % gdy nic nie jest podpiï¿½te do elektrody, widzimy harmoniczne
+%  filename = 'sample/peak.csv';                  % gdy nic nie jest podpiï¿½te do elektrody, widzimy harmoniczne
 %% Wczytywanie danych
 M = csvread(filename);
 
-% n - zapisanych próbek (jedna na wiersz)
+% n - zapisanych prï¿½bek (jedna na wiersz)
 [n,length] = size(M);
 L = length-1; 
 
-% wartoœc Fs jest z internetu :) nie znam prawdziwej 
+% wartoï¿½c Fs jest z internetu :) nie znam prawdziwej 
 Fs = 0.00378;                                       % Sampling frequency
 T = 1/Fs; 
 t = (0:L-1)*T;                                      % Time vector
@@ -32,11 +32,11 @@ for i = 1:n
     
     plot(Fv, abs(FX(Iv))*2); figure(1); grid; 
     pause(.111);         
-%     fprintf('Próbka nr: %d', i); input('');
+%     fprintf('Prï¿½bka nr: %d', i); input('');
 end
 
-    title( sprintf('Fourier Transform Of Original Signal ‘X’ \t\t %s', filename))
-    xlabel('Frequency 0-1024 (Hz) ') % nie wiem jak poprwanie ustawiæ podpis osi 
+    title( sprintf('Fourier Transform Of Original Signal ï¿½Xï¿½ \t\t %s', filename))
+    xlabel('Frequency 0-1024 (Hz) ') % nie wiem jak poprwanie ustawiï¿½ podpis osi 
     ylabel('Amplitude')
 
 end

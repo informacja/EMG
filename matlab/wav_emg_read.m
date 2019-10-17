@@ -27,7 +27,7 @@ filename = 'sample/out21.wav'; % 2048
 
 filename = 'sample/out28.wav'; % 2048
 
-filename = 'rect/out2.wav';
+filename = 'rect/nothing_conected.wav';
 
 info = audioinfo(filename)
 % info.SampleRate = info.SampleRate*4;

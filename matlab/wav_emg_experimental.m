@@ -3,9 +3,8 @@ function [x] = wav_emg(filename)
 
 filename = 'sample/thumb/out4.wav';
  filename = 'sample/peak.wav';
- filename = 'sample/sizeof(1).wav'; 
  
- filename = 'sample/fsnormal.wav'; 
+ filename = 'sample/noise.wav'; 
 %  filename = 'sample/sizeof(4).wav';
 % filename = 'C:\Users\Puler\Documents\Test_Cordowa\plugins\cordova-plugin-dialogs\src\ios\CDVNotification.bundle\beep.wav';
 % filename = 'out.wav';
