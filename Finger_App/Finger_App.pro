@@ -8,7 +8,7 @@ QT += core gui multimedia
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets serialport
 
-TARGET = DataTransfer
+TARGET = Finger_App
 TEMPLATE = app
 
 # The following define makes your compiler emit warnings if you use

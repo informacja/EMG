@@ -99,8 +99,10 @@ private:
     Simulation_Type find_source_file(QString filename_or_prefered_extension = "" );    
     QString get_unique_filename(QString filename, bool allow_empty = true);
     void load_data_from_serialport();
-    void process_data();
-    void load_timeData_from_wav_file();
+    void process_signals();
+    void load_timeData_from_wav_file();    
+    void generate_3_signals(int speed, int gap, bool mirror );
+    void apply_filters();
 
 //Q_SIGNALS:
 signals:

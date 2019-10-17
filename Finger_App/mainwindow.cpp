@@ -19,8 +19,9 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(&thread, SIGNAL(tick()), this, SLOT(externalThread_tick()));
     connect(ui->actionRun,  SIGNAL(triggered()), this, SLOT(sendCommand()));
-    connect(ui->actionLine, SIGNAL(triggered()), this, SLOT(update()));
-    connect(ui->actionBar,  SIGNAL(triggered()), this, SLOT(update()));
+    connect(ui->actionSignal, SIGNAL(triggered()), this, SLOT(update()));
+    connect(ui->actionSpectrum, SIGNAL(triggered()), this, SLOT(update()));
+    connect(ui->actionRms,  SIGNAL(triggered()), this, SLOT(update()));
 //    connect(this, SIGNAL(simulation_changed()), this, SLOT( set_simulation(Simulation_Type) ));
 //    connect(ui->spinBox_hz, SIGNAL(valueChanged()), this, SLOT( ui->pwmValue1->setValue(ui->spinBox_hz->value()) ));
     connect(ui->spinBox_HiPass, SIGNAL(valueChanged(int)), this, SLOT( set_butterworth_HiPass(int) ));
@@ -200,7 +201,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 //#ifdef QT_DEBUG
 //    ui->selectInput2->setChecked(false);
-    ui->selectInput3->setChecked(false);
+//    ui->selectInput3->setChecked(false);
 //#endif //QT_DEBUG
 
         
@@ -488,46 +489,30 @@ void MainWindow::externalThread_tick()
             //            return;
         }
 
-        switch (simulation) {
-        case GENERATE_SIGNAL:
+        switch (simulation)
         {
-            static int ink;
-
-            ink += 5;
-            double freq = (0+ ink) %512*1;// 2*512 (efekt odbijania się od krawędzi)
-            for (int k = 0; k < NCH; k++)
-            {
-                for (int i = 0; i < WSIZE; i++)
-                {
-                    in[k][i].r = static_cast<float>(sin(((2 * M_PI + fi[k]) * freq * i )  / DSIZE2  ));
-//                  timeData[k][i] = in[k][i].r;   // nie ma sensu, a fps-y spadają
-                    in[k][i].i = 0;
-                }
-            }
-//            break; // celowo pominiety
-        }
-            qDebug() << WSIZE << DSIZE2;
-        case SIMUL_REALTIME:
-        {
-//            load_data_from_serialport();
-            //qDebug() << "works ";
-            //      get_data;
+            case GENERATE_SIGNAL:
+                generate_3_signals(1, 10, true);
+                apply_filters();
             break;
+            case SIMUL_REALTIME:
+            {
+                load_data_from_serialport();
+                //      get_data;
+                break;
+            }
+
+            case SIMULATION_WAV:
+            {
+                //      break;  // jeszcze nie zaimplementowano
+            }
+            case SIMULATION_STOP:
+            default:
+                qDebug() << "State: Simulation stop in externalThread_tick()";
+                return;
         }
 
-        case SIMULATION_WAV:
-        {
-            //      break;  // jeszcze nie zaimplementowano
-        }
-        case SIMULATION_STOP:
-        default:
-            //      QThread::sleep(100);
-
-            qDebug() << "stop ";
-            return;
-        }
-
-        process_data();
+        process_signals();
         //      present_data();
 
 
@@ -542,8 +527,8 @@ void MainWindow::externalThread_tick()
 
         readdata.resize(0); // don't move, clear readdata only if was displayed
 
-        if (simulation == GENERATE_SIGNAL)
-            repaint();    // 100% cpu
+//        if (simulation == GENERATE_SIGNAL)
+//            repaint();    // 100% cpu
 
         ///////////////////////// debug
         static int w;
@@ -574,7 +559,7 @@ void MainWindow::paintEvent(QPaintEvent *event)
 
     chart.drawLinearGrid(painter, centralWidget()->geometry());
 
-    if(ui->actionLine->isChecked())
+    if(ui->actionSignal->isChecked())
     {
         if(ui->selectInput1->isChecked())
         {
@@ -602,13 +587,13 @@ void MainWindow::paintEvent(QPaintEvent *event)
 //            chart.drawLinearData(painter, timeData[2]);
         }
     }
-    if( ui->actionSpektrum->isChecked())
+    if( ui->actionSpectrum->isChecked())
     {
         chart.plotColor=Qt::gray;
         chart.drawLinearData(painter, spectrum[0]);
     }
 
-    if(ui->actionBar->isChecked()) {
+    if(ui->actionRms->isChecked()) {
         chart.plotColor=Qt::cyan;
         chart.drawBarsData(painter, meanData);
     }
@@ -1160,7 +1145,7 @@ inline void MainWindow::load_data_from_serialport()
         timeData[k][i] *= static_cast<double>(hann[i]);       //(*sample)/65535.0;
       }
       else if (ui->radioBtn_hamm->isChecked()) {
-        timeData[k][i] *= static_cast<double>(hamming[i]);       //(*sample)/65535.0;
+        timeData[k][i] *= static_cast<float>(hamming[i]);       //(*sample)/65535.0;
       }
 
       if( ui->checkBox_bandStop->isChecked() ) {
@@ -1224,6 +1209,7 @@ void MainWindow::set_lineEdit_qnique_filename(QString path)
   ui->lineEdit_fileN->setText( fi.fileName() );
 }
 
+// ----------------------------------------------------------------------------------------
 
 void MainWindow::on_pushButton_clicked()
 {
@@ -1231,14 +1217,15 @@ void MainWindow::on_pushButton_clicked()
     serial.readAll();
 }
 
-inline void MainWindow::process_data()
+// ----------------------------------------------------------------------------------------
+
+inline void MainWindow::process_signals()
 {
     spectrum[0].fill(0);        // uzywany jako wynik wymnozenia widm 3-ch kanlow
 
     for (int k = 0; k < NCH; k++)
     {
         kiss_fft( cfg, in[k], out[k] );
-
 
         for (int i = 1; i < WSIZE; i++) // fft gives redundant spectrum, use only half of window  (WSIZE)
         {
@@ -1256,13 +1243,13 @@ inline void MainWindow::process_data()
 
             if (k == 0 )
             {
-                spectrum[0][i] = mag * ui->pwmValue1->value();            // TODO nie mieści się na wykresie//                  spectrum[k][i] = (out[0]+i)->r * hamming[i];
+                spectrum[0][i] = mag ;            // TODO nie mieści się na wykresie//                  spectrum[k][i] = (out[0]+i)->r * hamming[i];
             }
-            else if (k == 1){
-                spectrum[0][i] *= mag * ui->pwmValue2->value(); // razy wspoczynnik z sowaka
-            }else {
-                spectrum[0][i] *= mag * ui->pwmValue3->value(); // razy wspoczynnik z sowaka
-            }
+//            else if (k == 1){
+//                spectrum[0][i] *= mag * ui->pwmValue2->value(); // razy wspoczynnik z sowaka
+//            }else {
+//                spectrum[0][i] *= mag * ui->pwmValue3->value(); // razy wspoczynnik z sowaka
+//            }
             //                  spectrum[k][i-1] = mag;            // TODO nie mieści się na wykresie//                  spectrum[k][i] = (out[0]+i)->r * hamming[i];
 
 
@@ -1323,3 +1310,75 @@ inline void MainWindow::process_data()
         //            meanData[i]=rms(&spectrum[0][d*q],0);
     }
 }
+
+// ----------------------------------------------------------------------------------------
+
+void MainWindow::generate_3_signals(int speed, int gap, bool mirror )
+{
+    static int ink;
+    double freq;
+
+    ink += speed;
+    for (int k = 0; k < NCH; k++)
+    {
+        freq = ( ink + k * gap ) % 512 * ((mirror == false) ? 1 : 2);// 2*512 (efekt odbijania się od krawędzi)
+        for (int i = 0; i < WSIZE; i++)
+        {
+            if( ui->selectInput3->isChecked() && k == 0 )
+                in[k][i].r = static_cast<float>(((k+2.)/20)*sin(((2 * M_PI) * freq * i + fi[k]) / DSIZE2 ));
+            else
+                in[k][i].r = 0;
+
+            if( ui->selectInput2->isChecked() && k == 1 )
+                in[0][i].r += static_cast<float>(((k+2.)/20)*sin(((2 * M_PI) * freq * i + fi[k]) / DSIZE2 ));
+
+            if( ui->selectInput1->isChecked() && k == 2 )
+                in[0][i].r += static_cast<float>(((k+2.)/20)*sin(((2 * M_PI) * freq * i + fi[k]) / DSIZE2 ));
+
+//                  timeData[k][i] = in[k][i].r;   // nie ma sensu, a fps-y spadają
+            in[k][i].i = 0;
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------------------
+void MainWindow::apply_filters()
+{
+    for (int k = 0; k < NCH; k++) {
+        for (int i = 0; i < DSIZE2; ++i) {
+
+            if(ui->radioBtn_rect->isChecked()) {
+              // do nothing, just assingn
+            }
+            else if (ui->radioBtn_hann->isChecked()) {
+              in[k][i].r *= (hann[i]);       //(*sample)/65535.0;
+            }
+            else if (ui->radioBtn_hamm->isChecked()) {
+              in[k][i].r *= (hamming[i]);       //(*sample)/65535.0;
+            }
+
+            if( ui->checkBox_bandStop->isChecked() ) {
+              in[k][i].r = fBandStop.filter( in[k][i].r );
+            }
+
+            if( ui->checkBox_highPass->isChecked() ) {
+              in[k][i].r = fHiPass.filter( in[k][i].r );
+            }
+
+            if( ui->checkBox_fill1->isChecked() ) {
+              (in[k]+i)->r = 1;
+            }
+        }
+    }
+}
+// ----------------------------------------------------------------------------------------
+
+// ----------------------------------------------------------------------------------------
+
+// ----------------------------------------------------------------------------------------
+
+// ----------------------------------------------------------------------------------------
+
+// ----------------------------------------------------------------------------------------
+
+// ----------------------------------------------------------------------------------------

@@ -44,9 +44,9 @@ class Ui_MainWindow
 public:
     QAction *actionRun;
     QAction *actionTrigger;
-    QAction *actionLine;
-    QAction *actionBar;
-    QAction *actionSpektrum;
+    QAction *actionSpectrum;
+    QAction *actionRms;
+    QAction *actionSignal;
     QAction *actionSave;
     QAction *actionOpen;
     QAction *actionOtw_rz;
@@ -141,36 +141,37 @@ public:
         QIcon icon1;
         icon1.addFile(QString::fromUtf8(":/icons/trigger.png"), QSize(), QIcon::Normal, QIcon::Off);
         actionTrigger->setIcon(icon1);
-        actionLine = new QAction(MainWindow);
-        actionLine->setObjectName(QString::fromUtf8("actionLine"));
-        actionLine->setCheckable(true);
-        actionLine->setChecked(false);
-        actionLine->setEnabled(true);
+        actionSpectrum = new QAction(MainWindow);
+        actionSpectrum->setObjectName(QString::fromUtf8("actionSpectrum"));
+        actionSpectrum->setCheckable(true);
+        actionSpectrum->setChecked(true);
+        actionSpectrum->setEnabled(true);
         QIcon icon2;
         icon2.addFile(QString::fromUtf8(":/icons/lines.png"), QSize(), QIcon::Normal, QIcon::Off);
-        actionLine->setIcon(icon2);
-        actionLine->setIconVisibleInMenu(true);
-        actionBar = new QAction(MainWindow);
-        actionBar->setObjectName(QString::fromUtf8("actionBar"));
-        actionBar->setCheckable(true);
-        actionBar->setChecked(true);
+        actionSpectrum->setIcon(icon2);
+        actionSpectrum->setIconVisibleInMenu(true);
+        actionRms = new QAction(MainWindow);
+        actionRms->setObjectName(QString::fromUtf8("actionRms"));
+        actionRms->setCheckable(true);
+        actionRms->setChecked(true);
         QIcon icon3;
         icon3.addFile(QString::fromUtf8(":/icons/bars.png"), QSize(), QIcon::Normal, QIcon::Off);
-        actionBar->setIcon(icon3);
-        actionSpektrum = new QAction(MainWindow);
-        actionSpektrum->setObjectName(QString::fromUtf8("actionSpektrum"));
-        actionSpektrum->setCheckable(true);
-        actionSpektrum->setChecked(true);
+        actionRms->setIcon(icon3);
+        actionSignal = new QAction(MainWindow);
+        actionSignal->setObjectName(QString::fromUtf8("actionSignal"));
+        actionSignal->setCheckable(true);
+        actionSignal->setChecked(false);
         QIcon icon4;
         icon4.addFile(QString::fromUtf8(":/icons/heartbeat.png"), QSize(), QIcon::Normal, QIcon::Off);
-        actionSpektrum->setIcon(icon4);
-        actionSpektrum->setIconVisibleInMenu(true);
+        actionSignal->setIcon(icon4);
+        actionSignal->setIconVisibleInMenu(true);
         actionSave = new QAction(MainWindow);
         actionSave->setObjectName(QString::fromUtf8("actionSave"));
         actionSave->setCheckable(true);
         actionSave->setChecked(false);
         QIcon icon5;
         icon5.addFile(QString::fromUtf8(":/icons/save.png"), QSize(), QIcon::Normal, QIcon::Off);
+        icon5.addFile(QString::fromUtf8("icons/saveRed.png"), QSize(), QIcon::Normal, QIcon::On);
         actionSave->setIcon(icon5);
         actionOpen = new QAction(MainWindow);
         actionOpen->setObjectName(QString::fromUtf8("actionOpen"));
@@ -279,14 +280,14 @@ public:
 
         selectInput2 = new QCheckBox(groupBox);
         selectInput2->setObjectName(QString::fromUtf8("selectInput2"));
-        selectInput2->setChecked(false);
+        selectInput2->setChecked(true);
         selectInput2->setAutoExclusive(false);
 
         horizontalLayout_2->addWidget(selectInput2);
 
         selectInput3 = new QCheckBox(groupBox);
         selectInput3->setObjectName(QString::fromUtf8("selectInput3"));
-        selectInput3->setChecked(false);
+        selectInput3->setChecked(true);
         selectInput3->setAutoExclusive(false);
 
         horizontalLayout_2->addWidget(selectInput3);
@@ -705,9 +706,9 @@ public:
         mainToolBar->addAction(actionRun);
         mainToolBar->addAction(actionTrigger);
         mainToolBar->addSeparator();
-        mainToolBar->addAction(actionLine);
-        mainToolBar->addAction(actionSpektrum);
-        mainToolBar->addAction(actionBar);
+        mainToolBar->addAction(actionSignal);
+        mainToolBar->addAction(actionSpectrum);
+        mainToolBar->addAction(actionRms);
         mainToolBar->addSeparator();
         mainToolBar->addAction(actionSave);
         mainToolBar->addAction(actionOpen);
@@ -731,20 +732,23 @@ public:
         actionRun->setShortcut(QCoreApplication::translate("MainWindow", "Space", nullptr));
 #endif // QT_CONFIG(shortcut)
         actionTrigger->setText(QCoreApplication::translate("MainWindow", "Trigger", nullptr));
-        actionLine->setText(QCoreApplication::translate("MainWindow", "Line", nullptr));
+        actionSpectrum->setText(QCoreApplication::translate("MainWindow", "Spectrum", nullptr));
 #if QT_CONFIG(shortcut)
-        actionLine->setShortcut(QCoreApplication::translate("MainWindow", "1", nullptr));
+        actionSpectrum->setShortcut(QCoreApplication::translate("MainWindow", "2", nullptr));
 #endif // QT_CONFIG(shortcut)
-        actionBar->setText(QCoreApplication::translate("MainWindow", "Bar", nullptr));
-#if QT_CONFIG(shortcut)
-        actionBar->setShortcut(QCoreApplication::translate("MainWindow", "3", nullptr));
-#endif // QT_CONFIG(shortcut)
-        actionSpektrum->setText(QCoreApplication::translate("MainWindow", "Spektrum", nullptr));
+        actionRms->setText(QCoreApplication::translate("MainWindow", "Bar", nullptr));
 #if QT_CONFIG(tooltip)
-        actionSpektrum->setToolTip(QCoreApplication::translate("MainWindow", "Poka\305\274 spektrum", nullptr));
+        actionRms->setToolTip(QCoreApplication::translate("MainWindow", "S\305\202upki rms", nullptr));
 #endif // QT_CONFIG(tooltip)
 #if QT_CONFIG(shortcut)
-        actionSpektrum->setShortcut(QCoreApplication::translate("MainWindow", "2", nullptr));
+        actionRms->setShortcut(QCoreApplication::translate("MainWindow", "3", nullptr));
+#endif // QT_CONFIG(shortcut)
+        actionSignal->setText(QCoreApplication::translate("MainWindow", "Input signal", nullptr));
+#if QT_CONFIG(tooltip)
+        actionSignal->setToolTip(QCoreApplication::translate("MainWindow", "Sygna\305\202 z serial portu", nullptr));
+#endif // QT_CONFIG(tooltip)
+#if QT_CONFIG(shortcut)
+        actionSignal->setShortcut(QCoreApplication::translate("MainWindow", "1", nullptr));
 #endif // QT_CONFIG(shortcut)
         actionSave->setText(QCoreApplication::translate("MainWindow", "Zapisz do pliku", nullptr));
 #if QT_CONFIG(tooltip)
