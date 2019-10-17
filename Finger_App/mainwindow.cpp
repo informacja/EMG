@@ -1,6 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include <QTimer>
+//#include <QTimer>
 //#include "kissfft-131/kiss_fft.c"
 // samo .h nie bangla, uzasadnienie poniżej
 //Kissfft is not really something you need to make and install like other libraries. If you need complex ffts,
