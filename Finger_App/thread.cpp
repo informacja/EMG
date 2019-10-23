@@ -14,7 +14,7 @@ void Thread::run()
             emit this->tick();
         }
 
-        // TO DO: get cpu use and increase to 25% use
+        // TO DO: get cpu use and increase to 25% use -> timer
         this->msleep(30);
 
         // 40ms = 14% cpu

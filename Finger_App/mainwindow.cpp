@@ -392,6 +392,23 @@ MainWindow::~MainWindow()
 // Public slots
 //-----------------------------------------------------------------------------
 
+//Proces powstawania odprogramowania
+1.grafica desin
+2. okodowanie designu
+3 rediina
+ 4 integracja z sprz etaem, przyciski. kontrolki,
+5zrobienie sprz etu
+
+
+
+sniadanie
+rozmowa z grafikami
+z szefem
+robienie swojego
+
+
+
+
 // =============================================================================
 /* ToDo:
  *
@@ -556,18 +573,39 @@ void MainWindow::paintEvent(QPaintEvent *event)
 
     chart.drawLinearGrid(painter, centralWidget()->geometry());
 
+    QVector<double> buff;
+    double* ptrD = buff.data();
+    float*  ptrF = (float*)&in[0][0];
+    buff.resize(DSIZE2);
+
+    for (int i = 0; i < DSIZE2/4; i++)
+    {
+//       *ptrD++ = static_cast<double>(*(ptrF++));
+    }
+
+     chart.plotColor=Qt::red;
+//     chart.drawLinearData(painter, buff);
+
+
     if(ui->actionSignal->isChecked())
     {
+        timeData.resize(WSIZE);
         if(ui->selectInput1->isChecked())
         {
+
+            /// Pytania
+            // rysowanie sygnałów (float -> na double)  // w matlabe zakres,
+            // jak regulować FPS
+            // czy filtry reagują poprawnie
+            // Wiktor
+
 //            for(int i = 0; i < timeData[0].size(); i++)
 //                timeData[0][i] = (out[0]+i)->r * hamming[i];
             chart.plotColor=Qt::darkGray;
-
 //            chart.drawLinearData(painter, (QVector<double>*)meanData);
 //            chart.drawLinearData(painter, timeData[0]);
               chart.plotColor=Qt::red;
-//              chart.drawLinearData(painter, timeData[0]);
+//              chart.drawLinearData(painter, meanData[0][0]);
 
 //              chart.plotColor=Qt::yellow;
 //              chart.drawLinearData(painter, spectrum[0]);
@@ -575,7 +613,7 @@ void MainWindow::paintEvent(QPaintEvent *event)
         if(ui->selectInput2->isChecked())
         {
             chart.plotColor=Qt::green;
-//            chart.drawLinearData(painter, timeData[1]);
+            chart.drawLinearData(painter, spectrum[0]);
         }
 
         if(ui->selectInput3->isChecked())
