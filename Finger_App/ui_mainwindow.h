@@ -370,7 +370,7 @@ public:
         spinBox_BandStop->setMinimum(1);
         spinBox_BandStop->setMaximum(1024);
         spinBox_BandStop->setSingleStep(1);
-        spinBox_BandStop->setStepType(QAbstractSpinBox::DefaultStepType);
+//        spinBox_BandStop->setStepType(QAbstractSpinBox::DefaultStepType);
         spinBox_BandStop->setValue(50);
 
         verticalLayout_6->addWidget(spinBox_BandStop, 0, Qt::AlignHCenter);

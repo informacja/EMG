@@ -219,7 +219,7 @@ MainWindow::MainWindow(QWidget *parent) :
                                     ");
 
 
-
+    ui->radioBtn_hamm->hide();
 //    ui->tab_config->setMaximumWidth(10);
 
 //    QWidget *wid=new QWidget();
@@ -502,7 +502,7 @@ void MainWindow::externalThread_tick()
                 break;
             }
 
-            case SIMULATION_WAV:
+            case SIMULATION_WAV: // read file
             {
                 //      break;  // jeszcze nie zaimplementowano
             }
@@ -513,13 +513,11 @@ void MainWindow::externalThread_tick()
         }
 
         process_signals();
-        //      present_data();
-
 
         if( ui->actionSave->isChecked() || coutingDownToZero )
             save_to_file( 0 );
 
-        update();
+        update();//      present_data();
 
 //        if(ui->actionRun->isChecked())
         if (simulation == SIMUL_REALTIME)
@@ -528,12 +526,14 @@ void MainWindow::externalThread_tick()
         readdata.resize(0); // don't move, clear readdata only if was displayed
 
 //        if (simulation == GENERATE_SIGNAL)
-//            repaint();    // 100% cpu
+//            repaint();    // 100% cpu if emmit thread tick 1ms
 
         ///////////////////////// debug
+        ///
+#ifdef QT_DEBUG
         static int w;
-
         qDebug() << "externalThread_tick" << ++w;
+#endif
     }
 }
 
@@ -551,9 +551,6 @@ void MainWindow::sendCommand()
 
 void MainWindow::paintEvent(QPaintEvent *event)
 {
-    static int w;
-
-
 //    Q_UNUSED(event)
     QPainter painter(this);
 
@@ -601,7 +598,11 @@ void MainWindow::paintEvent(QPaintEvent *event)
 #ifdef FPS
     fps.paintEvent(event);
 #endif
-     qDebug() << "paintEvent" << ++w;
+
+#ifdef QT_DEBUG
+    static int w;
+    qDebug() << "paintEvent" << ++w;
+#endif
 //printf("FPS is %f\n", m_frameCount / (float(m_timer.elapsed()) / 1000.0f));
 //    QThread::msleep(1);
 }
@@ -647,12 +648,14 @@ void MainWindow::save_to_file( bool add_seconds)
 
   for (int k = 0; k < 1/*NCH*/; k++)
   {
-      if(add_seconds)
+//      if(add_seconds)
       {
 //          stream << "[" << QDateTime::currentMSecsSinceEpoch() << "]" << readdata << endl;
           // no csv
 //          file_out.write(( QString::toUtf8( QDateTime::currentMSecsSinceEpoch() ) ));
       }
+
+//      TODO: New bufor nagrania, i dwa wskaźniki od ostatniego zapisu do obecnego momentu
 
 //        file_out.write(reinterpret_cast<char*>(timeData[k].data()), static_cast<uint>(timeData[k].size())*sizeof(double));
         wav_out->write(reinterpret_cast<char*>(timeData[k].data()), static_cast<uint>(timeData[k].size())*sizeof(timeData[0][0]));
@@ -1335,7 +1338,7 @@ void MainWindow::generate_3_signals(int speed, int gap, bool mirror )
             if( ui->selectInput1->isChecked() && k == 2 )
                 in[0][i].r += static_cast<float>(((k+2.)/20)*sin(((2 * M_PI) * freq * i + fi[k]) / DSIZE2 ));
 
-//                  timeData[k][i] = in[k][i].r;   // nie ma sensu, a fps-y spadają
+                  timeData[k][i] = in[k][i].r;   // nie ma sensu, a fps-y spadają
             in[k][i].i = 0;
         }
     }

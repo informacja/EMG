@@ -295,6 +295,9 @@ color: rgb(255, 255, 255);</string>
             </item>
             <item>
              <widget class="QRadioButton" name="radioBtn_hamm">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
               <property name="text">
                <string>Hamming</string>
               </property>

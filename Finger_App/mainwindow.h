@@ -13,9 +13,9 @@
 #define WSIZE    (DSIZE2/2)                   // window length
 #define BUF_LEN   10e6
 #define NBARS     32                          // to divide  WSIZE
-#define ORDER     (1)
+#define ORDER     (2)
 
-#define FPS FPS
+//#define FPS FPS
 #define DATA_DIR "./data/"
 #define FILE_NAME  "out"
 #define EXT ".wav"
@@ -120,7 +120,6 @@ private:
     QSerialPort serial;
     QByteArray senddata;
     QByteArray readdata, buff;
-//    QVector<double> timeDataCh1, timeDataCh2, timeDataCh3;
     QVector<QVector<float> > timeData;
     QVector<double> meanData;
     QVector<QVector<double> > spectrum;                                         // resized to NCH in constructor
