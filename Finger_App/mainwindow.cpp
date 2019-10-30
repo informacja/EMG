@@ -393,18 +393,18 @@ MainWindow::~MainWindow()
 //-----------------------------------------------------------------------------
 
 //Proces powstawania odprogramowania
-1.grafica desin
-2. okodowanie designu
-3 rediina
- 4 integracja z sprz etaem, przyciski. kontrolki,
-5zrobienie sprz etu
+//1.grafica desin
+//2. okodowanie designu
+//3 rediina
+// 4 integracja z sprz etaem, przyciski. kontrolki,
+//5zrobienie sprz etu
 
 
 
-sniadanie
-rozmowa z grafikami
-z szefem
-robienie swojego
+//sniadanie
+//rozmowa z grafikami
+//z szefem
+//robienie swojego
 
 
 
@@ -459,7 +459,7 @@ void MainWindow::externalThread_tick()
     if( simulation == SIMULATION_STOP ) {
         ui->statusBar->showMessage("Przenieś i upuść na program plik typu (WAV, CSV) drag&drop SIMULATION_STOP",1000);
         ui->actionRun->setChecked(false);
-    } else    {
+    } else {
         auto_actionRun_serial_port(3);                                             // automatyczny start rysowania po ekranie
     }
     //  int size = (DSIZE * ui->spinBox_nDataPerFile->text().toInt());
@@ -568,6 +568,8 @@ void MainWindow::sendCommand()
 
 void MainWindow::paintEvent(QPaintEvent *event)
 {
+
+
 //    Q_UNUSED(event)
     QPainter painter(this);
 
@@ -592,12 +594,10 @@ void MainWindow::paintEvent(QPaintEvent *event)
         timeData.resize(WSIZE);
         if(ui->selectInput1->isChecked())
         {
-
             /// Pytania
             // rysowanie sygnałów (float -> na double)  // w matlabe zakres,
-            // jak regulować FPS
+            // jak regulować FPS => timer
             // czy filtry reagują poprawnie
-            // Wiktor
 
 //            for(int i = 0; i < timeData[0].size(); i++)
 //                timeData[0][i] = (out[0]+i)->r * hamming[i];

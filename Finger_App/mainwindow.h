@@ -15,6 +15,10 @@
 #define NBARS     32                          // to divide  WSIZE
 #define ORDER     (2)
 
+// TO DO: Fir
+// adaptacyjny
+//pętla pll
+
 //#define FPS FPS
 #define DATA_DIR "./data/"
 #define FILE_NAME  "out"
