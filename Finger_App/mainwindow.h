@@ -29,7 +29,7 @@
 #define INI_FILES "Ini_Files"
 #define ALLOW_USE_FILTERS
 
-//#define DISABLE_FILTERS _ON_STARTUP
+#define DISABLE_FILTERS_ON_STARTUP
 
 namespace Ui {
     class MainWindow;
@@ -126,9 +126,10 @@ private:
     QSerialPort serial;
     QByteArray senddata;
     QByteArray readdata, buff;
-    QVector<QVector<float> > timeData;
+    QVector<QVector<float>> wavData;                                            // for wave save
+    QVector<QVector<double>> timeData;                                          // calc and display
     QVector<double> meanData;
-    QVector<QVector<double> > spectrum;                                         // resized to NCH in constructor
+    QVector<QVector<double>> spectrum;                                          // resized to NCH in constructor
     Chart chart;
 
     // Added

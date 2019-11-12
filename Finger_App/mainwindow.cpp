@@ -110,8 +110,8 @@ MainWindow::MainWindow(QWidget *parent) :
     format.setCodec("audio/pcm");
     format.setSampleRate(DSIZE2);                         // Hz sample per second
     format.setChannelCount(1);                              // NCH TODO:
-    format.setSampleSize(sizeof(timeData[0][0])*8);           // sizeof(double) => 8 ( I multiplayng by 4 to get valid 32 bits)
-//    qDebug() << "SampleSize" << sizeof( timeData[0][0])*8 ;
+    format.setSampleSize(sizeof(wavData[0][0])*8);           // sizeof(double) => 8 ( I multiplayng by 4 to get valid 32 bits)
+//    qDebug() << "SampleSize" << sizeof( wavData[0][0])*8 ;
     format.setByteOrder(QAudioFormat::LittleEndian);
     format.setSampleType(QAudioFormat::SampleType::Float); // nie ma double co zrobić?
 
@@ -196,7 +196,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->radioBtn_rect->setChecked(true);
     ui->checkBox_bandStop->setChecked(false);
     ui->checkBox_highPass->setChecked(false);
-    ui->actionLine->setEnabled(true);
+    ui->actionSignal->setEnabled(true);
 #endif
 
 //#ifdef QT_DEBUG
@@ -291,12 +291,15 @@ MainWindow::MainWindow(QWidget *parent) :
 // -----------------------------------------------------------------------------
 void MainWindow::alloc_memory_sub_constructor()
 {
+    wavData.resize(NCH);
     timeData.resize(NCH);
     spectrum.resize(NCH);
     for(int i=0; i< timeData.size();i++)        // dla wszystkich kanalow
     {
         timeData[i].resize(DSIZE2);
         timeData[i].fill(0);
+        wavData[i].resize(DSIZE2);
+        wavData[i].fill(0);
         spectrum[i].resize(DSIZE2);
         spectrum[i].fill(0);
     }
@@ -454,10 +457,12 @@ double rms(double* x, int n)
 
 void MainWindow::externalThread_tick()
 {
+     qDebug()<<"serial"<<serial.size();
     // obsluga przycisku akcji (play/pause)
     if( simulation == SIMULATION_STOP || simulation == GENERATE_SIGNAL ) {
         ui->statusBar->showMessage("Przenieś i upuść na program plik typu (WAV, CSV) drag&drop SIMULATION_STOP",1000);
         ui->actionRun->setChecked(false);
+        serial.clear();
     } else {
         auto_actionRun_serial_port(3);                                             // automatyczny start rysowania po ekranie
     }
@@ -490,22 +495,23 @@ void MainWindow::externalThread_tick()
     {
         //    qDebug() << "simulation:  " <<simulation;
 //        if(buff.size() == 0)
-        {
+//        {
 //            if(simulation)                                  // czytaj dane z pliku
-            {
+//            {
                 //            simulation_read_data_from_file();
-            }
+//            }
 //            else
                 if( serial.size() >= DSIZE  )              // zapisz do pliku
             {
-                readdata = serial.read(DSIZE);
-              qDebug() << readdata.size() << timeData.size();//                timeData[0] = readdata.;
-                //        readdata = serial.readAll();
+//                readdata = serial.read(DSIZE);
+//              qDebug() << readdata.size() << timeData.size();//                timeData[0] = readdata.;
+                        readdata = serial.readAll();
                 //          return readdata.size();
-            }
+
+//                 qDebug() << serial.size();
             //        else
             //            return;
-        }
+//        }
 
         signal_source();        // load from LPC 1347, load from wav or generate signal
 
@@ -525,7 +531,7 @@ void MainWindow::externalThread_tick()
 
 //        if (simulation == GENERATE_SIGNAL)
 //            repaint();    // 100% cpu if emmit thread tick 1ms
-
+}
         ///////////////////////// debug
         ///
 #ifdef QT_DEBUG
@@ -551,24 +557,10 @@ void MainWindow::paintEvent(QPaintEvent *event)
 {
 
 
-//    Q_UNUSED(event)
+    Q_UNUSED(event)
     QPainter painter(this);
 
     chart.drawLinearGrid(painter, centralWidget()->geometry());
-
-    QVector<double> buff;
-    double* ptrD = buff.data();
-    float*  ptrF = (float*)&in[0][0];
-    buff.resize(DSIZE2);
-
-    for (int i = 0; i < WSIZE; i++)
-    {
-        buff[i] = timeData[0][i*2];
-//       *ptrD++ = static_cast<double>(*(ptrF++));
-    }
-
-     chart.plotColor=Qt::red;
-//     chart.drawLinearData(painter, buff);
 
 
     if(ui->actionSignal->isChecked())
@@ -589,19 +581,19 @@ void MainWindow::paintEvent(QPaintEvent *event)
               chart.plotColor=Qt::red;
 //              chart.drawLinearData(painter, meanData[0][0]);
 
-//              chart.plotColor=Qt::yellow;
-//              chart.drawLinearData(painter, spectrum[0]);
+              chart.plotColor=Qt::red;
+              chart.drawLinearData(painter, timeData[0]);
         }
         if(ui->selectInput2->isChecked())
         {
             chart.plotColor=Qt::green;
-            chart.drawLinearData(painter, buff);
+            chart.drawLinearData(painter, timeData[1]);
         }
 
         if(ui->selectInput3->isChecked())
         {
-            chart.plotColor=Qt::darkMagenta;
-//            chart.drawLinearData(painter, timeData[2]);
+            chart.plotColor=Qt::darkCyan;
+            chart.drawLinearData(painter, timeData[2]);
         }
     }
     if( ui->actionSpectrum->isChecked())
@@ -627,7 +619,7 @@ void MainWindow::paintEvent(QPaintEvent *event)
 //    series->setPointLabelsVisible(true);    // is false by default
 //    series->setPointLabelsColor(Qt::black);
 //    series->setPointLabelsFormat("@yPoint");
-    chart.textColor = 0xFFFF00;
+//    chart.textColor = 0xFFFF00;
 //    chart.
     QPen pen;
     pen.setWidth(1);
@@ -642,7 +634,8 @@ void MainWindow::paintEvent(QPaintEvent *event)
             painter.setPen(pen);
             for (int i = 0; i < WSIZE;i++)
             {
-                painter.drawText(QPointF(33+i*(1*i)-(font.pointSize()), 1+i+(font.pointSize()*2)), QString().sprintf("%4d%s",110,"TXT"));
+                painter.drawText(QPointF(33+i*(1*i)-(font.pointSize()), 1+i+(font.pointSize()*2)),
+                                 QString().sprintf("%s","Beta"));
             }
 
 
