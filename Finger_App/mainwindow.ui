@@ -1079,7 +1079,7 @@ color: rgb(255, 255, 255);</string>
     <bool>true</bool>
    </property>
    <property name="checked">
-    <bool>false</bool>
+    <bool>true</bool>
    </property>
    <property name="icon">
     <iconset resource="resources.qrc">

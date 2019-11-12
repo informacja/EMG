@@ -19,7 +19,7 @@
 // adaptacyjny
 //pętla pll
 
-//#define FPS FPS
+#define FPS FPS
 #define DATA_DIR "./data/"
 #define FILE_NAME  "out"
 #define EXT ".wav"
@@ -28,6 +28,7 @@
 #define SQUARE(a) (a*a)
 #define INI_FILES "Ini_Files"
 #define ALLOW_USE_FILTERS
+
 //#define DISABLE_FILTERS _ON_STARTUP
 
 namespace Ui {
@@ -106,7 +107,8 @@ private:
     void process_signals();
     void load_timeData_from_wav_file();    
     void generate_3_signals(int speed, int gap, bool mirror );
-    void apply_filters();
+    void apply_filters();    
+    void signal_source();
 
 //Q_SIGNALS:
 signals:

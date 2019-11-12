@@ -454,9 +454,8 @@ double rms(double* x, int n)
 
 void MainWindow::externalThread_tick()
 {
-
     // obsluga przycisku akcji (play/pause)
-    if( simulation == SIMULATION_STOP ) {
+    if( simulation == SIMULATION_STOP || simulation == GENERATE_SIGNAL ) {
         ui->statusBar->showMessage("Przenieś i upuść na program plik typu (WAV, CSV) drag&drop SIMULATION_STOP",1000);
         ui->actionRun->setChecked(false);
     } else {
@@ -490,15 +489,17 @@ void MainWindow::externalThread_tick()
         //    if( buff.size() > 0)                                                        // serial port lub z pliku
     {
         //    qDebug() << "simulation:  " <<simulation;
-        if(buff.size() == 0)
+//        if(buff.size() == 0)
         {
-            if(simulation)                                  // czytaj dane z pliku
+//            if(simulation)                                  // czytaj dane z pliku
             {
                 //            simulation_read_data_from_file();
             }
-            else if( serial.size() >= DSIZE  )              // zapisz do pliku
+//            else
+                if( serial.size() >= DSIZE  )              // zapisz do pliku
             {
                 readdata = serial.read(DSIZE);
+              qDebug() << readdata.size() << timeData.size();//                timeData[0] = readdata.;
                 //        readdata = serial.readAll();
                 //          return readdata.size();
             }
@@ -506,30 +507,9 @@ void MainWindow::externalThread_tick()
             //            return;
         }
 
-        switch (simulation)
-        {
-            case GENERATE_SIGNAL:
-                generate_3_signals(1, 10, true);
-                apply_filters();
-            break;
-            case SIMUL_REALTIME:
-            {
-                load_data_from_serialport();
-                //      get_data;
-                break;
-            }
+        signal_source();        // load from LPC 1347, load from wav or generate signal
 
-            case SIMULATION_WAV: // read file
-            {
-                //      break;  // jeszcze nie zaimplementowano
-            }
-            case SIMULATION_STOP:
-            default:
-                qDebug() << "State: Simulation stop in externalThread_tick()";
-                return;
-        }
-
-        process_signals();
+        process_signals();      // fft, rms, korelacja
 
         if( ui->actionSave->isChecked() || coutingDownToZero )
             save_to_file( 0 );
@@ -537,9 +517,10 @@ void MainWindow::externalThread_tick()
         update();//      present_data();
 
 //        if(ui->actionRun->isChecked())
-        if (simulation == SIMUL_REALTIME)
+//        if (simulation == SIMUL_REALTIME)
             sendCommand();
 
+            qDebug() << serial.size();
         readdata.resize(0); // don't move, clear readdata only if was displayed
 
 //        if (simulation == GENERATE_SIGNAL)
@@ -580,8 +561,9 @@ void MainWindow::paintEvent(QPaintEvent *event)
     float*  ptrF = (float*)&in[0][0];
     buff.resize(DSIZE2);
 
-    for (int i = 0; i < DSIZE2/4; i++)
+    for (int i = 0; i < WSIZE; i++)
     {
+        buff[i] = timeData[0][i*2];
 //       *ptrD++ = static_cast<double>(*(ptrF++));
     }
 
@@ -613,7 +595,7 @@ void MainWindow::paintEvent(QPaintEvent *event)
         if(ui->selectInput2->isChecked())
         {
             chart.plotColor=Qt::green;
-            chart.drawLinearData(painter, spectrum[0]);
+            chart.drawLinearData(painter, buff);
         }
 
         if(ui->selectInput3->isChecked())
@@ -632,6 +614,39 @@ void MainWindow::paintEvent(QPaintEvent *event)
         chart.plotColor=Qt::cyan;
         chart.drawBarsData(painter, meanData);
     }
+
+    ////////////////////////////////////////////////////////
+
+//    QChartView *chartView = new QChartView;
+//    QValueAxis *axisX = new QValueAxis;
+//    axisX->setRange(10, 20.5);
+//    axisX->setTickCount(10);
+//    axisX->setLabelFormat("%.2f");
+//    chartView->chart()->setAxisX(axisX, series);
+//    QLineSeries  *series = new QLineSeries();
+//    series->setPointLabelsVisible(true);    // is false by default
+//    series->setPointLabelsColor(Qt::black);
+//    series->setPointLabelsFormat("@yPoint");
+    chart.textColor = 0xFFFF00;
+//    chart.
+    QPen pen;
+    pen.setWidth(1);
+//    pen.setColor(backgroundColor);
+    painter.setPen(pen);
+//    painter.setBrush(backgroundColor);
+//    painter.drawRect(geometry);
+            QFont font;
+            font.setPointSize(8);
+            painter.setFont(font);
+            pen.setColor(0xFF);
+            painter.setPen(pen);
+            for (int i = 0; i < WSIZE;i++)
+            {
+                painter.drawText(QPointF(33+i*(1*i)-(font.pointSize()), 1+i+(font.pointSize()*2)), QString().sprintf("%4d%s",110,"TXT"));
+            }
+
+
+    ////////////////////////////////////////////////////////
 
 #ifdef FPS
     fps.paintEvent(event);
@@ -1146,26 +1161,26 @@ void MainWindow::on_radioButton_2_clicked(){
 inline void MainWindow::load_data_from_serialport()
 {
   uint16_t* sample = reinterpret_cast<uint16_t*>(readdata.data());
-  if (simulation == SIMULATION_WAV) // not needet, it cheked above
-  {
-      static size_t krok;
-      sample = reinterpret_cast<uint16_t*>(buff.data());
-      krok += DSIZE;
-      sample += krok;
-        qDebug() <<"krok:" <<  krok<< krok+NCH*DSIZE2;
-      ui->statusBar->showMessage(QString::number(krok));
+//  if (simulation == SIMULATION_WAV) // not needet, it cheked above
+//  {
+//      static size_t krok;
+//      sample = reinterpret_cast<uint16_t*>(buff.data());
+//      krok += DSIZE;
+//      sample += krok;
+//        qDebug() <<"krok:" <<  krok<< krok+NCH*DSIZE2;
+//      ui->statusBar->showMessage(QString::number(krok));
 
-      if( krok >= buff.size()-DSIZE)
-      {
-          qDebug() <<"exit at krok:" <<  krok;
-        ui->actionRun->setChecked(false);
-        buff.clear();
-        buff.resize(0);
-        krok = 0;
-        simulation=SIMULATION_STOP;
-        return;
-      }
-  }
+//      if( krok >= buff.size()-DSIZE)
+//      {
+//          qDebug() <<"exit at krok:" <<  krok;
+//        ui->actionRun->setChecked(false);
+//        buff.clear();
+//        buff.resize(0);
+//        krok = 0;
+//        simulation=SIMULATION_STOP;
+//        return;
+//      }
+//  }
 
   for(int i=0; i<DSIZE2; i++) // czy tu nie powninno byćH D2SIZE
   {
@@ -1410,6 +1425,33 @@ void MainWindow::apply_filters()
               (in[k]+i)->r = 1;
             }
         }
+    }
+}
+
+void MainWindow::signal_source()
+{
+
+    switch (simulation)
+    {
+        case GENERATE_SIGNAL:
+            generate_3_signals(1, 10, true);
+            apply_filters();
+        break;
+        case SIMUL_REALTIME:
+        {
+            load_data_from_serialport();
+            //      get_data;
+            break;
+        }
+
+        case SIMULATION_WAV: // read file
+        {
+            //      break;  // jeszcze nie zaimplementowano
+        }
+        case SIMULATION_STOP:
+        default:
+            qDebug() << "State: Simulation stop in externalThread_tick()";
+            return;
     }
 }
 // ----------------------------------------------------------------------------------------

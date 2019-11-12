@@ -160,7 +160,7 @@ public:
         actionSignal = new QAction(MainWindow);
         actionSignal->setObjectName(QString::fromUtf8("actionSignal"));
         actionSignal->setCheckable(true);
-        actionSignal->setChecked(false);
+        actionSignal->setChecked(true);
         QIcon icon4;
         icon4.addFile(QString::fromUtf8(":/icons/heartbeat.png"), QSize(), QIcon::Normal, QIcon::Off);
         actionSignal->setIcon(icon4);
@@ -323,6 +323,7 @@ public:
 
         radioBtn_hamm = new QRadioButton(groupBox_window);
         radioBtn_hamm->setObjectName(QString::fromUtf8("radioBtn_hamm"));
+        radioBtn_hamm->setEnabled(false);
 
         verticalLayout_3->addWidget(radioBtn_hamm);
 
@@ -370,7 +371,7 @@ public:
         spinBox_BandStop->setMinimum(1);
         spinBox_BandStop->setMaximum(1024);
         spinBox_BandStop->setSingleStep(1);
-//        spinBox_BandStop->setStepType(QAbstractSpinBox::DefaultStepType);
+        spinBox_BandStop->setStepType(QAbstractSpinBox::DefaultStepType);
         spinBox_BandStop->setValue(50);
 
         verticalLayout_6->addWidget(spinBox_BandStop, 0, Qt::AlignHCenter);
