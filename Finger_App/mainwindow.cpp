@@ -107,8 +107,8 @@ MainWindow::MainWindow(QWidget *parent) :
     format.setCodec("audio/pcm");
     format.setSampleRate(DSIZE2);                         // Hz sample per second
     format.setChannelCount(1);                              // NCH TODO:
-    format.setSampleSize(sizeof(wavData[0][0])*8);           // sizeof(double) => 8 ( I multiplayng by 4 to get valid 32 bits)
-//    qDebug() << "SampleSize" << sizeof( wavData[0][0])*8 ;
+    format.setSampleSize(sizeof(in[0][0])*8);           // sizeof(double) => 8 ( I multiplayng by 4 to get valid 32 bits)
+    qDebug() << "SampleSize" << sizeof( in[0][0])*8 ;
     format.setByteOrder(QAudioFormat::LittleEndian);
     format.setSampleType(QAudioFormat::SampleType::Float); // nie ma double co zrobić?
 
@@ -288,15 +288,12 @@ MainWindow::MainWindow(QWidget *parent) :
 // -----------------------------------------------------------------------------
 void MainWindow::alloc_memory_sub_constructor()
 {
-    wavData.resize(NCH);
     timeData.resize(NCH);
     spectrum.resize(NCH);
     for(int i=0; i< timeData.size();i++)        // dla wszystkich kanalow
     {
         timeData[i].resize(DSIZE2);
         timeData[i].fill(0);
-        wavData[i].resize(DSIZE2);
-        wavData[i].fill(0);
         spectrum[i].resize(DSIZE2);
         spectrum[i].fill(0);
     }
@@ -420,7 +417,8 @@ MainWindow::~MainWindow()
  * Github kody publikacja - does't allowed by King
  * flitracja na 50Hz obecnie trzeba podać 100 dla 50
     zapis i odczyt
-    lista plikow
+    lista plikow   
+    jak regulować FPS => timer
 
  * //assume the directory exists and contains some files and you want all jpg and JPG files
 QDir directory("Pictures/MyPictures");
@@ -561,19 +559,9 @@ void MainWindow::paintEvent(QPaintEvent *event)
 
     if(ui->actionSignal->isChecked())
     {
-        timeData.resize(WSIZE);
+//        timeData.resize(WSIZE);
         if(ui->selectInput1->isChecked())
         {
-            // jak regulować FPS => timer
-
-//            for(int i = 0; i < timeData[0].size(); i++)
-//                timeData[0][i] = (out[0]+i)->r * hamming[i];
-            chart.plotColor=Qt::darkGray;
-//            chart.drawLinearData(painter, (QVector<double>*)meanData);
-//            chart.drawLinearData(painter, timeData[0]);
-              chart.plotColor=Qt::red;
-//              chart.drawLinearData(painter, meanData[0][0]);
-
               chart.plotColor=Qt::red;
               chart.drawLinearData(painter, timeData[0]);
         }
@@ -632,8 +620,6 @@ void MainWindow::paintEvent(QPaintEvent *event)
             int gw=geometry().width()-(2*MX);
             int gh=geometry().height()-(2*MY);
 
-
-
             int dx=gw/static_cast<double>(10);
             int dy=gh/static_cast<double>(10);
 
@@ -653,11 +639,19 @@ void MainWindow::paintEvent(QPaintEvent *event)
 //                painter.drawText(QPointF(gx+gw+font.pointSize(), gy+(2-1)*1), QString().sprintf("%.1f","markerY"));
             }
 
-            if (!serial.isOpen()) {
-                painter.drawText(QPointF(gw/2+(font.pointSize()), 90-(font.pointSize())),
-                                 QString().sprintf("%s","Nie nawiązano połączenia, spróbuj podłączyć płytkę i uruchomić program ponownie"));
+        if (!serial.isOpen()) {
+            painter.drawText(QPointF(gw/3+(font.pointSize()), 90-(font.pointSize())),
+                             QString().sprintf("%s","Nie nawiązano połączenia, spróbuj podłączyć płytkę i uruchomić program ponownie"));
 
-            }
+        }
+
+    if ( coutingDownToZero )
+    {
+//        chart.plotColor = Qt::darkRed;
+        int px = MX - 5;
+        int shift = px/3*2;
+        painter.drawRoundedRect(gw+shift*2-1, px+shift+1, px, px, px, px);
+    }
     ////////////////////////////////////////////////////////
 
 #ifdef FPS
@@ -701,23 +695,25 @@ inline void MainWindow::auto_actionRun_serial_port(int count_up_to)
 void MainWindow::save_to_file( bool add_seconds)
 {
 
+  QVector<QVector<float>> wavData;
+
   if ( coutingDownToZero-- >= 0 )
   {
-    if( coutingDownToZero+1 == ui->spinBox_nDataPerFile->value() ) {
+    if( coutingDownToZero+1 == ui->spinBox_nDataPerFile->value() ) { // csv date
       stream <<  ui->lineEdit_path->text()<< "/" << ui->lineEdit_fileN->text()
              << " " << QTime::currentTime().toString() << " " << QDate::currentDate().toString() << endl;
     }
-    ui->progressBar->setValue(ui->spinBox_nDataPerFile->value()-coutingDownToZero);
-    qDebug() << "to zero count:" << coutingDownToZero;
+    ui->progressBar->setValue( ui->spinBox_nDataPerFile->value() - coutingDownToZero);
+//    qDebug() << "to zero count:" << coutingDownToZero;
   }
 
   double *pSrc = nullptr;
   float  *pDsc = nullptr;
 
-  for (int k = 0; k < 1/*NCH*/; k++)
+  for (int k = 0; k < NCH; k++)
   {
      pSrc = timeData[k].data();
-     pDsc = wavData[k].data();
+     pDsc = static_cast<float*>(wavData[k].data());
     for (int i = 0; i < timeData[0].size(); i++)
     {
         *pDsc++ = static_cast<float>(*pSrc++);
@@ -731,15 +727,10 @@ void MainWindow::save_to_file( bool add_seconds)
 //          file_out.write(( QString::toUtf8( QDateTime::currentMSecsSinceEpoch() ) ));
       }
 
-//      TODO: New bufor nagrania, i dwa wskaźniki od ostatniego zapisu do obecnego momentu
-
-//        file_out.write(reinterpret_cast<char*>(timeData[k].data()), static_cast<uint>(timeData[k].size())*sizeof(double));
-//        wav_out->write(reinterpret_cast<char*>(timeData[k].data()), static_cast<uint>(timeData[k].size())*sizeof(timeData[0][0]));
         wav_out->write(reinterpret_cast<char*>(wavData[k].data()), static_cast<uint>(wavData[k].size())*sizeof(wavData[0][0]));
 
-
-        qInfo() <<"zapisano kanał "<<  k << "size(): " << wavData[k].size()*sizeof (wavData[0][0]);
-        for (int i = 0; i < wavData[0].size(); i++)
+        qInfo() <<"zapisano kanał "<<  k << "size(): " << wavData[k].size()*sizeof (wavData[0][0]) <<  QDateTime::currentMSecsSinceEpoch();
+        for (int i = 0; i < wavData[k].size(); i++)
         {
             stream <<  wavData[k][i] << ",";    // out.csv
         }
@@ -1400,24 +1391,37 @@ void MainWindow::generate_3_signals(int speed, int gap, bool mirror )
     double freq;
 
     ink += speed;
-    for (int k = 0; k < NCH; k++)
+    int k = 0;
+//    for (int k = 0; k < NCH; k++)
     {
         freq = ( ink + k * gap ) % 512 * ((mirror == false) ? 1 : 2);// 2*512 (efekt odbijania się od krawędzi)
         for (int i = 0; i < WSIZE; i++)
         {
-            if( ui->selectInput3->isChecked() && k == 0 )
-                timeData[0][i] = static_cast<float>(((k+2.)/20)*sin(((2 * M_PI) * freq * i + fi[k]) / DSIZE2 ));
-            else
-                in[k][i].r = 0;
+            if( ui->selectInput1->isChecked() )
+            {
+                freq = ( ink + k * gap ) % 512 * ((mirror == false) ? 1 : 2);
+                timeData[k][i] =((k+2.)/20)*sin(((2 * M_PI) * freq * i + fi[k]) / DSIZE2 );
+            }
+            else timeData[k][i] = 0;  k++;
 
-            if( ui->selectInput2->isChecked() && k == 1 )
-                in[0][i].r += static_cast<float>(((k+2.)/20)*sin(((2 * M_PI) * freq * i + fi[k]) / DSIZE2 ));
+            if( ui->selectInput2->isChecked()  )
+            {
+                freq = ( ink + k * gap ) % 512 * ((mirror == false) ? 1 : 2);
+                timeData[k][i] = ((k+2.)/20)*sin(((2 * M_PI) * freq * i + fi[k]) / DSIZE2 );
+            }
+            else timeData[k][i] = 0; k++;
 
-            if( ui->selectInput1->isChecked() && k == 2 )
-                in[0][i].r += static_cast<float>(((k+2.)/20)*sin(((2 * M_PI) * freq * i + fi[k]) / DSIZE2 ));
+            if( ui->selectInput3->isChecked() )
+            {
+                freq = ( ink + k * gap ) % 512 * ((mirror == false) ? 1 : 2);
+                timeData[k][i] = ((k+2.)/20)*sin(((2 * M_PI) * freq * i + fi[k]) / DSIZE2 );
+            }
+            else timeData[k][i] = 0; k = 0;
 
-                  timeData[k][i] = in[k][i].r;   // nie ma sensu, a fps-y spadają
             in[k][i].i = 0;
+//            in[0][i].r += timeData[k][i];
+
+            in[0][i].r = timeData[0][i] + timeData[1][i] + timeData[2][i];
         }
     }
 }

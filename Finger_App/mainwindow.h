@@ -23,7 +23,7 @@
 #define DATA_DIR "./data/"
 #define FILE_NAME  "out"
 #define EXT ".wav"
-#define SAMPLE_DIR "../matlab/rect"
+#define SAMPLE_DIR "../matlab/sample"
 //#define B_SIZE DSIZE                          // minimalny rozmiar wczytywaniej paczki danych z pliku
 #define SQUARE(a) (a*a)
 #define INI_FILES "Ini_Files"
@@ -126,7 +126,6 @@ private:
     QSerialPort serial;
     QByteArray senddata;
     QByteArray readdata, buff;
-    QVector<QVector<float>>  wavData;                                           // for wave save
     QVector<QVector<double>> timeData;                                          // calc and display
     QVector<double> meanData;
     QVector<QVector<double>> spectrum;                                          // resized to NCH in constructor
