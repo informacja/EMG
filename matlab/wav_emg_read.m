@@ -1,5 +1,5 @@
 % [Y, FS]=audioread(FILENAME, [START END], DATATYPE);
-function [x] = wav_emg(filename)
+% function [x] = wav_emg(filename)
 
 % to do get current file path from csv log file (last file)
 
@@ -27,7 +27,7 @@ filename = 'sample/out21.wav'; % 2048
 
 filename = 'sample/out28.wav'; % 2048
 
-filename = 'rect/nothing_conected.wav';
+filename = 'Mario62/out4.wav';
 
 info = audioinfo(filename)
 % info.SampleRate = info.SampleRate*4;
@@ -70,7 +70,7 @@ for i = 1:info.Duration
 
  pause(0.111);         
 %  fprintf('Okno (klatka) nr: %d/%d', i, info.Duration); input('');
-end
+%  end
 
  return;
  
@@ -85,6 +85,7 @@ ydft = ydft(1:length(y)/2+1);
 freq = 0:fs/length(y):fs/2;
 % plot magnitude
 subplot(211);
+freq(1) = 0;
 plot(freq,abs(ydft));
 % plot phase
 subplot(212);
@@ -92,8 +93,8 @@ plot(freq,unwrap(angle(ydft)));
 xlabel('Hz');
 
 return;
-% below from csv-------------------------------------------------------------------------
-
+% below read from csv-------------------------------------------------------------------------
+% deprecated %%
 Fs=FS;
 samples = [1,2*Fs];
 [Y, FS] =  audioinfo(filename, samples)
@@ -125,4 +126,4 @@ X = Y;
     
 %     plot(Fv, abs(FX(Iv))*2); figure(1); grid; 
 % end
-end
+ end

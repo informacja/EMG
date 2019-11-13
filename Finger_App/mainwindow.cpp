@@ -35,13 +35,10 @@ MainWindow::MainWindow(QWidget *parent) :
 //        timer->start(50);
 //    m_timer.start(1000, this);
 
-//
-//      qDebug() << b.value();
 //    connect(this->simulation, SIGNAL(simulation_changed(Simulation_Type)), this->simulation, SLOT(simulationSet(const Simulation_Type& )));
 //    connect(slider, SIGNAL(valueChanged(int)), SLOT(onSliderValueChanged(int)));
 
     ui->statusBar->showMessage("No device");
-//    simulation = SIMULATION_STOP;                    // default: find source
     set_simulation( GENERATE_SIGNAL );
 //    set_simulation( SIMULATION_STOP );
 
@@ -457,12 +454,14 @@ double rms(double* x, int n)
 
 void MainWindow::externalThread_tick()
 {
-     qDebug()<<"serial"<<serial.size();
+    //     qDebug()<<"serial"<<serial.size();
+         qDebug()<<"sy"<< simulation;
     // obsluga przycisku akcji (play/pause)
     if( simulation == SIMULATION_STOP || simulation == GENERATE_SIGNAL ) {
         ui->statusBar->showMessage("Przenieś i upuść na program plik typu (WAV, CSV) drag&drop SIMULATION_STOP",1000);
-        ui->actionRun->setChecked(false);
-        serial.clear();
+//        ui->actionRun->setChecked(false);
+//        serial.clear();
+
     } else {
         auto_actionRun_serial_port(3);                                             // automatyczny start rysowania po ekranie
     }
@@ -501,13 +500,16 @@ void MainWindow::externalThread_tick()
                 //            simulation_read_data_from_file();
 //            }
 //            else
-                if( serial.size() >= DSIZE  )              // zapisz do pliku
+            if( serial.size() >= DSIZE  )              // zapisz do pliku
             {
-//                readdata = serial.read(DSIZE);
+              readdata = serial.read(DSIZE);
 //              qDebug() << readdata.size() << timeData.size();//                timeData[0] = readdata.;
-                        readdata = serial.readAll();
-                //          return readdata.size();
+//                readdata = serial.readAll();
 
+                if( ui->actionSave->isChecked() || coutingDownToZero )
+                    save_to_file( 0 );
+//                return readdata.size();
+            }
 //                 qDebug() << serial.size();
             //        else
             //            return;
@@ -517,9 +519,6 @@ void MainWindow::externalThread_tick()
 
         process_signals();      // fft, rms, korelacja
 
-        if( ui->actionSave->isChecked() || coutingDownToZero )
-            save_to_file( 0 );
-
         update();//      present_data();
 
 //        if(ui->actionRun->isChecked())
@@ -527,11 +526,11 @@ void MainWindow::externalThread_tick()
             sendCommand();
 
             qDebug() << serial.size();
-        readdata.resize(0); // don't move, clear readdata only if was displayed
+//        readdata.resize(0); // don't move, clear readdata only if was displayed
 
 //        if (simulation == GENERATE_SIGNAL)
 //            repaint();    // 100% cpu if emmit thread tick 1ms
-}
+
         ///////////////////////// debug
         ///
 #ifdef QT_DEBUG
@@ -555,23 +554,17 @@ void MainWindow::sendCommand()
 
 void MainWindow::paintEvent(QPaintEvent *event)
 {
-
-
     Q_UNUSED(event)
     QPainter painter(this);
 
     chart.drawLinearGrid(painter, centralWidget()->geometry());
-
 
     if(ui->actionSignal->isChecked())
     {
         timeData.resize(WSIZE);
         if(ui->selectInput1->isChecked())
         {
-            /// Pytania
-            // rysowanie sygnałów (float -> na double)  // w matlabe zakres,
             // jak regulować FPS => timer
-            // czy filtry reagują poprawnie
 
 //            for(int i = 0; i < timeData[0].size(); i++)
 //                timeData[0][i] = (out[0]+i)->r * hamming[i];
@@ -630,15 +623,41 @@ void MainWindow::paintEvent(QPaintEvent *event)
             QFont font;
             font.setPointSize(8);
             painter.setFont(font);
-            pen.setColor(0xFF);
+            pen.setColor(0x00aaaaaa);
+            pen.setColor(Qt::white);
             painter.setPen(pen);
-            for (int i = 0; i < WSIZE;i++)
+
+            int gx=geometry().x()+MX;
+            int gy=geometry().y()+MY;
+            int gw=geometry().width()-(2*MX);
+            int gh=geometry().height()-(2*MY);
+
+
+
+            int dx=gw/static_cast<double>(10);
+            int dy=gh/static_cast<double>(10);
+
+            for(int px=0; px<=300; px++)
+                painter.drawText(QPointF(gx-(font.pointSize()/4)+px*dx, gy+gh+(font.pointSize()*2)),
+                                 QString().sprintf("%d",static_cast<int>(0+(1*px)/10)));
+
+            painter.drawText(QPointF(gw+50+(font.pointSize()), gh+30+(font.pointSize())),
+                             QString().sprintf("%s","[Hz]"));
+
+            for (int i = 0; i < 1;i++)
             {
-                painter.drawText(QPointF(33+i*(1*i)-(font.pointSize()), 1+i+(font.pointSize()*2)),
-                                 QString().sprintf("%s","Beta"));
+//                painter.drawText(QPointF(33+i*(1*i)-(font.pointSize()), 1+i+(font.pointSize()*2)),
+//                                 QString().sprintf("%s","Beta"));
+
+//                painter.drawText(QPointF(gx+(12-11)*1, gy-font.pointSize()), QString().sprintf("%.1f","markerX"));
+//                painter.drawText(QPointF(gx+gw+font.pointSize(), gy+(2-1)*1), QString().sprintf("%.1f","markerY"));
             }
 
+            if (!serial.isOpen()) {
+                painter.drawText(QPointF(gw/2+(font.pointSize()), 90-(font.pointSize())),
+                                 QString().sprintf("%s","Nie nawiązano połączenia, spróbuj podłączyć płytkę i uruchomić program ponownie"));
 
+            }
     ////////////////////////////////////////////////////////
 
 #ifdef FPS
@@ -692,8 +711,19 @@ void MainWindow::save_to_file( bool add_seconds)
     qDebug() << "to zero count:" << coutingDownToZero;
   }
 
+  double *pSrc = nullptr;
+  float  *pDsc = nullptr;
+
   for (int k = 0; k < 1/*NCH*/; k++)
   {
+     pSrc = timeData[k].data();
+     pDsc = wavData[k].data();
+    for (int i = 0; i < timeData[0].size(); i++)
+    {
+        *pDsc++ = static_cast<float>(*pSrc++);
+    }
+//}
+
 //      if(add_seconds)
       {
 //          stream << "[" << QDateTime::currentMSecsSinceEpoch() << "]" << readdata << endl;
@@ -704,12 +734,14 @@ void MainWindow::save_to_file( bool add_seconds)
 //      TODO: New bufor nagrania, i dwa wskaźniki od ostatniego zapisu do obecnego momentu
 
 //        file_out.write(reinterpret_cast<char*>(timeData[k].data()), static_cast<uint>(timeData[k].size())*sizeof(double));
-        wav_out->write(reinterpret_cast<char*>(timeData[k].data()), static_cast<uint>(timeData[k].size())*sizeof(timeData[0][0]));
+//        wav_out->write(reinterpret_cast<char*>(timeData[k].data()), static_cast<uint>(timeData[k].size())*sizeof(timeData[0][0]));
+        wav_out->write(reinterpret_cast<char*>(wavData[k].data()), static_cast<uint>(wavData[k].size())*sizeof(wavData[0][0]));
 
-        qInfo() <<"zapisano kanał "<<  k << "size(): " << timeData[k].size()*sizeof (timeData[0][0]);
-        for (int i = 0; i < timeData[0].size(); i++)
+
+        qInfo() <<"zapisano kanał "<<  k << "size(): " << wavData[k].size()*sizeof (wavData[0][0]);
+        for (int i = 0; i < wavData[0].size(); i++)
         {
-            stream <<  timeData[k][i] << ",";    // out.csv
+            stream <<  wavData[k][i] << ",";    // out.csv
         }
         stream << endl;
    }
@@ -1374,7 +1406,7 @@ void MainWindow::generate_3_signals(int speed, int gap, bool mirror )
         for (int i = 0; i < WSIZE; i++)
         {
             if( ui->selectInput3->isChecked() && k == 0 )
-                in[k][i].r = static_cast<float>(((k+2.)/20)*sin(((2 * M_PI) * freq * i + fi[k]) / DSIZE2 ));
+                timeData[0][i] = static_cast<float>(((k+2.)/20)*sin(((2 * M_PI) * freq * i + fi[k]) / DSIZE2 ));
             else
                 in[k][i].r = 0;
 

@@ -126,7 +126,7 @@ private:
     QSerialPort serial;
     QByteArray senddata;
     QByteArray readdata, buff;
-    QVector<QVector<float>> wavData;                                            // for wave save
+    QVector<QVector<float>>  wavData;                                           // for wave save
     QVector<QVector<double>> timeData;                                          // calc and display
     QVector<double> meanData;
     QVector<QVector<double>> spectrum;                                          // resized to NCH in constructor
