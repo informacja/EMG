@@ -1205,9 +1205,6 @@ inline void MainWindow::load_data_from_serialport()
       timeData[k][i]=(*sample++)/65535.0;
 
 //      float freq =200; test[i].r = sin(2 * M_PI * freq * i / DSIZE2), test[i].i = 0;  test[i].i = 0; test[i].r = kiss_fft_scalar (*sample)/65535.0;
-//      if(ui->pwmValue1->value())
-//          (in[k]+i)->r *= ( hamming[i] + ui->pwmValue1->value()/100 );    // TO DO Hamming window
-
 #ifdef ALLOW_USE_FILTERS
    // filtracja
       if(ui->radioBtn_rect->isChecked()) {
@@ -1421,7 +1418,7 @@ void MainWindow::generate_3_signals(int speed, int gap, bool mirror )
             in[k][i].i = 0;
 //            in[0][i].r += timeData[k][i];
 
-            in[0][i].r = timeData[0][i] + timeData[1][i] + timeData[2][i];
+            in[0][i].r = timeData[0][i] + timeData[1][i] + timeData[2][i];                  // add signals for fft
         }
     }
 }

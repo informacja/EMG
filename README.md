@@ -5,11 +5,16 @@ Aplikacja przetwarzająca sygnał elektromiograficzny napięcia mięśni <br>
 	 LPC1347 32-bit ARM Cortex-M3 mikrokontroler
 	 DFRobot Gravity - analogowy czujnik EMG
 
+# Elektrody podpinamy kolejno od pinu P011 (obecnie 3)
+<img src="docs/LPC1347.jpeg">
+
 ### Widmo charakterystyczne EMG, zaciśnięta dłoń (0-512Hz)  
 <img src="docs/now.png">
 
 # Matlab wave fft
 <img src="docs/works.gif">
+
+
 
 ### Hann window (red)
 <img src="docs/hann.png">
