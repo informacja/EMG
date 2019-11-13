@@ -1228,12 +1228,6 @@ inline void MainWindow::load_data_from_serialport()
 
       (in[k]+i)->r = static_cast<float>(timeData[k][i]);
       (in[k]+i)->i = 0;
-
-#ifdef ALLOW_USE_FILTERS
-      if( ui->checkBox_fill1->isChecked() ) {
-        (in[k]+i)->r = 1;
-      }
-#endif // APPLY_FILTERS
     }
   }
 }
@@ -1445,10 +1439,6 @@ void MainWindow::apply_filters()
 
             if( ui->checkBox_highPass->isChecked() ) {
               in[k][i].r = fHiPass.filter( in[k][i].r );
-            }
-
-            if( ui->checkBox_fill1->isChecked() ) {
-              (in[k]+i)->r = 1;
             }
         }
     }
