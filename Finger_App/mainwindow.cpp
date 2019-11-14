@@ -1089,6 +1089,16 @@ void MainWindow::set_simulation(const Simulation_Type &newSimul)
 {
     simulation = newSimul;
         qDebug() << "Simulation tick, new SimType: " << newSimul;
+    bool checked = true;
+
+    if (newSimul == GENERATE_SIGNAL)
+    {
+        ui->actionRun->setChecked(true);
+        ui->actionRms->setChecked(!checked);
+        ui->actionSignal->setChecked(!checked);
+//ui->radioBtn_hann
+    }
+
     emit simulation_changed(newSimul);
 }
 
