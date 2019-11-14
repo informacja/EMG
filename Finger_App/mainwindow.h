@@ -86,6 +86,10 @@ private slots:
     void on_toolButton_enter_clicked();
     void on_pushButton_clicked();
 
+    void on_groupBox_clicked();
+
+    void on_selectInput1_stateChanged(int arg1);
+
 private:
     Ui::MainWindow *ui;
     void paintEvent(QPaintEvent *event);

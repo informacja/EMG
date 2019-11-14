@@ -557,6 +557,14 @@ void MainWindow::paintEvent(QPaintEvent *event)
 
     chart.drawLinearGrid(painter, centralWidget()->geometry());
 
+    // for display more clearly
+    for (int i = 0; i < WSIZE; i++)
+    {
+        timeData[0][i] += 0.2;
+        timeData[1][i] += 0.45;
+        timeData[2][i] += 0.8;
+    }
+
     if(ui->actionSignal->isChecked())
     {
 //        timeData.resize(WSIZE);
@@ -1391,7 +1399,7 @@ void MainWindow::generate_3_signals(int speed, int gap, bool mirror )
             if( ui->selectInput1->isChecked() )
             {
                 freq = ( ink + k * gap ) % 512 * ((mirror == false) ? 1 : 2);
-                timeData[k][i] =((k+2.)/20)*sin(((2 * M_PI) * freq * i + fi[k]) / DSIZE2 );
+                timeData[k][i] = ((k+2.)/20)*sin(((2 * M_PI) * freq * i + fi[k]) / DSIZE2 );
             }
             else timeData[k][i] = 0;  k++;
 
@@ -1414,7 +1422,7 @@ void MainWindow::generate_3_signals(int speed, int gap, bool mirror )
 
             in[0][i].r = timeData[0][i] + timeData[1][i] + timeData[2][i];                  // add signals for fft
         }
-    }
+    }    
 }
 
 // ----------------------------------------------------------------------------------------
@@ -1481,3 +1489,5 @@ void MainWindow::signal_source()
 // ----------------------------------------------------------------------------------------
 
 // ----------------------------------------------------------------------------------------
+
+
