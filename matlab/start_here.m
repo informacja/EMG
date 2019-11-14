@@ -1,7 +1,9 @@
 clear all;
+filename = 'Mario62/out1.wav';
 filename = 'Mario62/out2.wav';
-
-info = audioinfo(filename)
+ filename = '../matlab/generated/out.wav';
+../matlab/generated/out1.wav
+ info = audioinfo(filename)
 
 [data, fs] = audioread(filename,'double');
  
@@ -19,7 +21,7 @@ for i = 1:info.Duration
 % w2 = data_fft(length(data_fft)/2:length(data_fft));
 
  plot(abs(w1(:,1)),'r'); title(filename);  
- xlabel(sprintf( 'w1 - frame nr %.3i [Hz]', i) );
+ xlabel(sprintf( 'w1 - frame nr %.3i/%i [Hz]', i, info.Duration) );
   
 %  ylim([-0.01 0.3])
 %  axis([0 info.SampleRate/2 -0.01 0.3])

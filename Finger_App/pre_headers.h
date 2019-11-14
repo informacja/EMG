@@ -79,8 +79,7 @@
 #include <QDir>
 #include <QProcess>
 #include <QBasicTimer>
-//#include <QLineSeries>
-//#include <QValueAxis>
+#include <QClipboard>
 
 
 // TODO:

@@ -139,12 +139,15 @@ MainWindow::MainWindow(QWidget *parent) :
     if( simulation == SIMULATION_STOP )
         simulation = find_source_file(input_file);
 
+
+
     switch(simulation) // teoretycznie do usunięcia
     {
         case SIMUL_REALTIME:     // nawiązano połączenie z płytką
         {
 //            file_out.open(QIODevice::WriteOnly | QIODevice::Append);    // bin
             QString fName = get_unique_filename(FILE_NAME ".wav", true);
+
             qDebug() << "Plik do zapisu" << wav_out->open( fName, format) << fName;
         } break;
         case SIMULATION_CSV:    break;
@@ -172,17 +175,18 @@ MainWindow::MainWindow(QWidget *parent) :
         case SIMULATION_BINARY: break;      /* deprecated */
         case SIMULATION_STOP:
             set_simulation(GENERATE_SIGNAL);
+
             // szukaj plików do otwarcia
         break;
 //    default: break;
     }
 
+    ui->lineEdit_fileN->setText(FILE_NAME EXT);
     file_csv.open(QIODevice::Append);
     stream.setDevice( (QIODevice*) &file_csv );
 
 //  ui->textEdit->setVisible(ui->actionSave->isChecked());
-    ui->lineEdit_fileN->setText( wav_out->fileName() );
-    ui->lineEdit_path->setText( SAMPLE_DIR );
+
 
 #ifndef ALLOW_USE_FILTERS
     ui->groupBox_window->setDisabled(1);
@@ -498,14 +502,14 @@ void MainWindow::externalThread_tick()
                 //            simulation_read_data_from_file();
 //            }
 //            else
-            if( serial.size() >= DSIZE  )              // zapisz do pliku
+//            if( serial.size() >= DSIZE  )              // zapisz do pliku
             {
-              readdata = serial.read(DSIZE);
+//              readdata = serial.read(DSIZE);
 //              qDebug() << readdata.size() << timeData.size();//                timeData[0] = readdata.;
 //                readdata = serial.readAll();
 
-                if( ui->actionSave->isChecked() || coutingDownToZero )
-                    save_to_file( 0 );
+//                if( ui->actionSave->isChecked() || coutingDownToZero )
+//                    save_to_file( 0 );
 //                return readdata.size();
             }
 //                 qDebug() << serial.size();
@@ -516,14 +520,15 @@ void MainWindow::externalThread_tick()
         signal_source();        // load from LPC 1347, load from wav or generate signal
 
         process_signals();      // fft, rms, korelacja
-
+        if( ui->actionSave->isChecked() || coutingDownToZero )
+            save_to_file( 0 );
         update();//      present_data();
 
 //        if(ui->actionRun->isChecked())
 //        if (simulation == SIMUL_REALTIME)
             sendCommand();
 
-            qDebug() << serial.size();
+//            qDebug() << serial.size();
 //        readdata.resize(0); // don't move, clear readdata only if was displayed
 
 //        if (simulation == GENERATE_SIGNAL)
@@ -702,8 +707,11 @@ inline void MainWindow::auto_actionRun_serial_port(int count_up_to)
 
 void MainWindow::save_to_file( bool add_seconds)
 {
-
   QVector<QVector<float>> wavData;
+
+  wavData.resize(NCH);
+  for (int k = 0; k < NCH; k++)
+    wavData[k].resize(DSIZE2);
 
   if ( coutingDownToZero-- >= 0 )
   {
@@ -715,16 +723,20 @@ void MainWindow::save_to_file( bool add_seconds)
 //    qDebug() << "to zero count:" << coutingDownToZero;
   }
 
+
   double *pSrc = nullptr;
   float  *pDsc = nullptr;
 
   for (int k = 0; k < NCH; k++)
   {
-     pSrc = timeData[k].data();
-     pDsc = static_cast<float*>(wavData[k].data());
+    pSrc = timeData[k].data();
+    pDsc = static_cast<float*>(wavData[k].data());
+
     for (int i = 0; i < timeData[0].size(); i++)
     {
-        *pDsc++ = static_cast<float>(*pSrc++);
+        if( simulation == GENERATE_SIGNAL ) /// TO CHANGE;
+            *pDsc++ = static_cast<float>(in[k][i].r);
+        else *pDsc++ = static_cast<float>(*pSrc++);
     }
 //}
 
@@ -1096,9 +1108,25 @@ void MainWindow::set_simulation(const Simulation_Type &newSimul)
         ui->actionRun->setChecked(true);
         ui->actionRms->setChecked(!checked);
         ui->actionSignal->setChecked(!checked);
+        ui->lineEdit_path->setText( GEN_DIR );
 //ui->radioBtn_hann
     }
 
+    if (newSimul == SIMUL_REALTIME)
+    {
+        ui->actionRun->setChecked(true);
+        ui->actionRms->setChecked(checked);
+        ui->actionSignal->setChecked(checked);
+        ui->lineEdit_path->setText( SAMPLE_DIR );
+
+    }
+
+    if (wav_out != nullptr)
+    {
+        wav_out->close();
+        wav_out->open( get_unique_filename( ui->lineEdit_fileN->text() ), format );
+        ui->lineEdit_fileN->setText( wav_out->fileName() );
+    }
     emit simulation_changed(newSimul);
 }
 
@@ -1157,7 +1185,7 @@ void MainWindow::on_pushButto_kat_clicked(){
         ui->statusBar->showMessage("Nie mogę otworzyć sieżki " + path );
   }
 }
-
+#include <QClipboard>
 void MainWindow::on_pushButton_openFile_clicked()
 {
   wav_out->close();
@@ -1281,6 +1309,12 @@ void MainWindow::on_toolButton_enter_clicked()
     coutingDownToZero =  ui->spinBox_nDataPerFile->value();
     qDebug() << "is open wav" << wav_out->isOpen() << wav_out->fileName();
     ui->progressBar->setValue(100);
+
+    if( ui->checkBox_autoCpyPath->isChecked() )
+    {
+        QClipboard *clipboard = QGuiApplication::clipboard();
+        clipboard->setText( ui->lineEdit_path->text()+ "/" +ui->lineEdit_fileN->text() );
+    }
 }
 // ----------------------------------------------------------------------------------------
 void MainWindow::set_lineEdit_qnique_filename(QString path)

@@ -158,7 +158,7 @@ color: rgb(255, 255, 255);</string>
         <enum>QTabWidget::Triangular</enum>
        </property>
        <property name="currentIndex">
-        <number>0</number>
+        <number>1</number>
        </property>
        <property name="usesScrollButtons">
         <bool>true</bool>
@@ -790,11 +790,29 @@ color: rgb(255, 255, 255);</string>
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
+           <property name="toolTip">
+            <string>Automatycznie kopiuje nazwę do schowka</string>
+           </property>
+           <property name="statusTip">
+            <string/>
+           </property>
+           <property name="whatsThis">
+            <string/>
+           </property>
+           <property name="accessibleDescription">
+            <string/>
+           </property>
+           <property name="inputMethodHints">
+            <set>Qt::ImhTime</set>
+           </property>
            <property name="text">
             <string>Zamknij i pokaż plik</string>
            </property>
            <property name="shortcut">
             <string>Ctrl+,</string>
+           </property>
+           <property name="autoRepeat">
+            <bool>false</bool>
            </property>
           </widget>
          </item>
@@ -996,6 +1014,16 @@ color: rgb(255, 255, 255);</string>
             </size>
            </property>
           </spacer>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="checkBox_autoCpyPath">
+           <property name="text">
+            <string>Ścieżkę do schowka</string>
+           </property>
+           <property name="checked">
+            <bool>true</bool>
+           </property>
+          </widget>
          </item>
         </layout>
        </widget>
@@ -1210,11 +1238,11 @@ color: rgb(255, 255, 255);</string>
    <hints>
     <hint type="sourcelabel">
      <x>60</x>
-     <y>701</y>
+     <y>547</y>
     </hint>
     <hint type="destinationlabel">
      <x>60</x>
-     <y>544</y>
+     <y>457</y>
     </hint>
    </hints>
   </connection>
@@ -1226,11 +1254,11 @@ color: rgb(255, 255, 255);</string>
    <hints>
     <hint type="sourcelabel">
      <x>97</x>
-     <y>701</y>
+     <y>547</y>
     </hint>
     <hint type="destinationlabel">
      <x>97</x>
-     <y>544</y>
+     <y>457</y>
     </hint>
    </hints>
   </connection>
@@ -1242,11 +1270,11 @@ color: rgb(255, 255, 255);</string>
    <hints>
     <hint type="sourcelabel">
      <x>134</x>
-     <y>701</y>
+     <y>547</y>
     </hint>
     <hint type="destinationlabel">
      <x>134</x>
-     <y>544</y>
+     <y>457</y>
     </hint>
    </hints>
   </connection>
