@@ -14,7 +14,8 @@ Aplikacja przetwarzająca sygnał elektromiograficzny napięcia mięśni <br>
 # Matlab wave fft
 <img src="docs/works.gif">
 
-
+### Start_here.m script 
+<img src="docs/matlsig.png">
 
 ### Hann window (red)
 <img src="docs/hann.png">
