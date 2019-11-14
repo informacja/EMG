@@ -20,11 +20,13 @@
 //pętla pll
 
 #define FPS FPS
-#define DATA_DIR "./data/"
+//#define DATA_DIR "./data/"
 #define FILE_NAME  "out"
-#define EXT ".wav"
-#define SAMPLE_DIR  "../matlab/sample"
-#define GEN_DIR     "../matlab/generated"
+#define EXT        ".wav"
+#define MATLAB      "../matlab"
+#define SAMPLE_DIR  MATLAB "/sample"
+#define GEN_DIR     MATLAB "/generated"
+#define CSV_LOG     MATLAB "/log.csv"
 
 //#define B_SIZE DSIZE                          // minimalny rozmiar wczytywaniej paczki danych z pliku
 #define SQUARE(a) (a*a)

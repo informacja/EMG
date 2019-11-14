@@ -1,8 +1,8 @@
 clear all;
 filename = 'Mario62/out1.wav';
 filename = 'Mario62/out2.wav';
- filename = '../matlab/generated/out.wav';
-../matlab/generated/out1.wav
+filename = '../matlab/generated/out17.wav';
+
  info = audioinfo(filename)
 
 [data, fs] = audioread(filename,'double');

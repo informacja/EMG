@@ -112,10 +112,6 @@ MainWindow::MainWindow(QWidget *parent) :
     format.setByteOrder(QAudioFormat::LittleEndian);
     format.setSampleType(QAudioFormat::SampleType::Float); // nie ma double co zrobić?
 
-//    file_out.setFileName( get_unique_filename(FILE_NAME EXT) ); // depracated to uninitlalize
-    file_csv.setFileName( FILE_NAME ".csv");
-
-
 //    qDebug() << "File exist?" << QFile::exists(wav_path) << wav_path;
 
 
@@ -182,8 +178,12 @@ MainWindow::MainWindow(QWidget *parent) :
     }
 
     ui->lineEdit_fileN->setText(FILE_NAME EXT);
+
+    file_csv.setFileName( CSV_LOG );
     file_csv.open(QIODevice::Append);
-    stream.setDevice( (QIODevice*) &file_csv );
+    if( file_csv.isOpen() )
+        stream.setDevice( (QIODevice*) &file_csv );
+    else qDebug() << "Err: file_csv is not open " << file_csv.fileName();
 
 //  ui->textEdit->setVisible(ui->actionSave->isChecked());
 
@@ -742,11 +742,15 @@ void MainWindow::save_to_file( bool add_seconds)
 
 //      if(add_seconds)
       {
-//          stream << "[" << QDateTime::currentMSecsSinceEpoch() << "]" << readdata << endl;
+//          stream << "[" << ( QDateTime::currentMSecsSinceEpoch() )  << "]" << readdata << endl;
           // no csv
 //          file_out.write(( QString::toUtf8( QDateTime::currentMSecsSinceEpoch() ) ));
       }
-
+    QDateTime UTC(QDateTime::currentDateTimeUtc());
+     QDateTime local(UTC.toLocalTime());
+     qDebug() << "UTC time is:" << UTC;
+     qDebug() << "Local time is:" << local;
+     qDebug() << "No difference between times:" << UTC.secsTo(local);
         wav_out->write(reinterpret_cast<char*>(wavData[k].data()), static_cast<uint>(wavData[k].size())*sizeof(wavData[0][0]));
 
         qInfo() <<"zapisano kanał "<<  k << "size(): " << wavData[k].size()*sizeof (wavData[0][0]) <<  QDateTime::currentMSecsSinceEpoch();
@@ -1044,7 +1048,7 @@ void MainWindow::on_actionZapisz_domy_lne_triggered()
 
 void MainWindow::on_actionKatalog_triggered()
 {
-    char dst[512];
+    char dst[1025];
     QString b =  QDir::currentPath();
 //    dst = b.data()
 //    strcpy_s(dst,100, (char*)b);
@@ -1185,7 +1189,7 @@ void MainWindow::on_pushButto_kat_clicked(){
         ui->statusBar->showMessage("Nie mogę otworzyć sieżki " + path );
   }
 }
-#include <QClipboard>
+
 void MainWindow::on_pushButton_openFile_clicked()
 {
   wav_out->close();
@@ -1498,7 +1502,6 @@ void MainWindow::apply_filters()
 
 void MainWindow::signal_source()
 {
-
     switch (simulation)
     {
         case GENERATE_SIGNAL:
