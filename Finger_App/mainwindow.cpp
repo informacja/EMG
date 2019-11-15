@@ -562,11 +562,11 @@ void MainWindow::paintEvent(QPaintEvent *event)
 
     chart.drawLinearGrid(painter, centralWidget()->geometry());
 
-    QPen pen;
-    pen.setWidth(1);
-//    pen.setColor(0x00aaaaaa);
-    pen.setColor(Qt::white);
-    painter.setPen(pen);
+//    QPen pen;
+//    pen.setWidth(1);
+////    pen.setColor(0x00aaaaaa);
+//    pen.setColor(Qt::white);
+//    painter.setPen(pen);
 
     QFont font;
     font.setPointSize(8);
@@ -586,7 +586,6 @@ void MainWindow::paintEvent(QPaintEvent *event)
 
     if(ui->actionSignal->isChecked())
     {
-//        timeData.resize(WSIZE);
         if(ui->selectInput1->isChecked())
         {
               chart.plotColor=Qt::red;
@@ -697,7 +696,7 @@ void MainWindow::save_to_file( bool add_seconds)
   {
     if( coutingDownToZero+1 == ui->spinBox_nDataPerFile->value() ) { // csv date
       stream <<  ui->lineEdit_path->text()<< "/" << ui->lineEdit_fileN->text()
-             << " " << QTime::currentTime().toString() << " " << QDate::currentDate().toString() << endl;
+             << " NCH = " << NCH << " " << QTime::currentTime().toString() << " " << QDate::currentDate().toString() << endl;
     }
     ui->progressBar->setValue( ui->spinBox_nDataPerFile->value() - coutingDownToZero);
 //    qDebug() << "to zero count:" << coutingDownToZero;
@@ -728,12 +727,13 @@ void MainWindow::save_to_file( bool add_seconds)
       }
         wav_out->write(reinterpret_cast<char*>(wavData[k].data()), static_cast<uint>(wavData[k].size())*sizeof(wavData[0][0]));
 
-        qInfo() <<"zapisano kanał "<<  k << "size(): " << wavData[k].size()*sizeof (wavData[0][0]) <<  QDateTime::currentMSecsSinceEpoch();
+        qInfo() <<"zapisano kanał "<<  k << "size(): " << wavData[k].size() << "rozm:" << timeData[0].size()  <<  QDateTime::currentMSecsSinceEpoch();
         for (int i = 0; i < wavData[k].size(); i++)
         {
             stream <<  wavData[k][i] << ",";    // out.csv
         }
         stream << endl;
+
    }
 }
 
@@ -1417,7 +1417,7 @@ void MainWindow::generate_3_signals(int speed, int gap, bool mirror )
 //    for (int k = 0; k < NCH; k++)
     {
         freq = ( ink + k * gap ) % 512 * ((mirror == false) ? 1 : 2);// 2*512 (efekt odbijania się od krawędzi)
-        for (int i = 0; i < WSIZE; i++)
+        for (int i = 0; i < DSIZE2; i++)
         {
             if( ui->selectInput1->isChecked() )
             {
