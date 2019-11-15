@@ -18,6 +18,13 @@
 // TO DO: Fir
 // adaptacyjny
 //pętla pll
+//do 5mV
+//10-400hz
+// podskórne do 1KHz
+
+
+//csv zera
+
 
 #define FPS FPS
 //#define DATA_DIR "./data/"
@@ -89,10 +96,6 @@ private slots:
     void on_toolButton_return_clicked();
     void on_toolButton_enter_clicked();
     void on_pushButton_clicked();
-
-    void on_groupBox_clicked();
-
-    void on_selectInput1_stateChanged(int arg1);
 
 private:
     Ui::MainWindow *ui;

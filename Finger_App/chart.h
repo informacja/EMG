@@ -26,6 +26,7 @@ public:
     void drawBarsData(QPainter &painter, QVector<double> &data);
     void showMarkers(QPainter &painter, QVector<double> &data);
     void getMousePosition(int x, int y);
+    void drawText(QPainter &painter, int x, int y, QString text, QColor color = Qt::white, int size_8 = 8);
 
     int gridNumX=10, gridNumY=10;
     int minValueX=0, maxValueX=100;

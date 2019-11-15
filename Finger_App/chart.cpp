@@ -206,6 +206,27 @@ void Chart::getMousePosition(int x, int y)
     //qDebug()<<markerX<<markerY;
 
 }
+
+void Chart::drawText(QPainter &painter, int x, int y, QString text, QColor color, int size)
+{
+    QPen pen;
+    pen.setWidth(1);
+    pen.setColor(backgroundColor);
+    painter.setPen(pen);
+    painter.setBrush(backgroundColor);
+
+    // ------ desc ----------
+    QFont font;
+    font.setPointSize(size);
+    painter.setFont(font);
+    pen.setColor(color);
+    painter.setPen(pen);
+    dvx = maxValueX-minValueX;
+    dvy = maxValueY-minValueY;
+
+    painter.drawText(QPointF( x, y), text);
+}
+
 void Chart::showMarkers(QPainter &painter, QVector<double> &data)
 {
     dmkx=gw/static_cast<double>(maxValueX-minValueX);

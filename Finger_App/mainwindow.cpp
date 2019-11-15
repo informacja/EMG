@@ -562,6 +562,20 @@ void MainWindow::paintEvent(QPaintEvent *event)
 
     chart.drawLinearGrid(painter, centralWidget()->geometry());
 
+    QPen pen;
+    pen.setWidth(1);
+//    pen.setColor(0x00aaaaaa);
+    pen.setColor(Qt::white);
+    painter.setPen(pen);
+
+    QFont font;
+    font.setPointSize(8);
+    painter.setFont(font);
+    int gx=geometry().x()+MX;
+    int gy=geometry().y()+MY;
+    int gw=geometry().width()-(2*MX);
+    int gh=geometry().height()-(2*MY);
+
     // for display more clearly
     for (int i = 0; i < WSIZE; i++)
     {
@@ -589,11 +603,13 @@ void MainWindow::paintEvent(QPaintEvent *event)
             chart.plotColor=Qt::darkCyan;
             chart.drawLinearData(painter, timeData[2]);
         }
+        chart.drawText(painter, 175+(font.pointSize()), 70+(font.pointSize()), "[mV]");
     }
     if( ui->actionSpectrum->isChecked())
     {
         chart.plotColor=Qt::gray;
         chart.drawLinearData(painter, spectrum[0]);
+        chart.drawText(painter, gw+50+(font.pointSize()), gh+30+(font.pointSize()), "[Hz]");
     }
 
     if(ui->actionRms->isChecked()) {
@@ -601,61 +617,25 @@ void MainWindow::paintEvent(QPaintEvent *event)
         chart.drawBarsData(painter, meanData);
     }
 
-    ////////////////////////////////////////////////////////
-
-//    QChartView *chartView = new QChartView;
-//    QValueAxis *axisX = new QValueAxis;
-//    axisX->setRange(10, 20.5);
-//    axisX->setTickCount(10);
-//    axisX->setLabelFormat("%.2f");
-//    chartView->chart()->setAxisX(axisX, series);
-//    QLineSeries  *series = new QLineSeries();
-//    series->setPointLabelsVisible(true);    // is false by default
-//    series->setPointLabelsColor(Qt::black);
-//    series->setPointLabelsFormat("@yPoint");
-//    chart.textColor = 0xFFFF00;
-//    chart.
-    QPen pen;
-    pen.setWidth(1);
-//    pen.setColor(backgroundColor);
-    painter.setPen(pen);
-//    painter.setBrush(backgroundColor);
-//    painter.drawRect(geometry);
-            QFont font;
-            font.setPointSize(8);
-            painter.setFont(font);
-            pen.setColor(0x00aaaaaa);
-            pen.setColor(Qt::white);
-            painter.setPen(pen);
-
-            int gx=geometry().x()+MX;
-            int gy=geometry().y()+MY;
-            int gw=geometry().width()-(2*MX);
-            int gh=geometry().height()-(2*MY);
-
             int dx=gw/static_cast<double>(10);
             int dy=gh/static_cast<double>(10);
 
-            for(int px=0; px<=300; px++)
-                painter.drawText(QPointF(gx-(font.pointSize()/4)+px*dx, gy+gh+(font.pointSize()*2)),
-                                 QString().sprintf("%d",static_cast<int>(0+(1*px)/10)));
+//            for(int px=0; px<=300; px++)
+//                painter.drawText(QPointF(gx-(font.pointSize()/4)+px*dx, gy+gh+(font.pointSize()*2)),
+//                                 QString().sprintf("%d",static_cast<int>(0+(1*px)/10)));
 
-            painter.drawText(QPointF(gw+50+(font.pointSize()), gh+30+(font.pointSize())),
-                             QString().sprintf("%s","[Hz]"));
 
-            for (int i = 0; i < 1;i++)
-            {
+//            for (int i = 0; i < 1;i++)
+//            {
 //                painter.drawText(QPointF(33+i*(1*i)-(font.pointSize()), 1+i+(font.pointSize()*2)),
 //                                 QString().sprintf("%s","Beta"));
 
 //                painter.drawText(QPointF(gx+(12-11)*1, gy-font.pointSize()), QString().sprintf("%.1f","markerX"));
 //                painter.drawText(QPointF(gx+gw+font.pointSize(), gy+(2-1)*1), QString().sprintf("%.1f","markerY"));
-            }
+//            }
 
         if (!serial.isOpen()) {
-            painter.drawText(QPointF(gw/3+(font.pointSize()), 90-(font.pointSize())),
-                             QString().sprintf("%s","Nie nawiązano połączenia, spróbuj podłączyć płytkę i uruchomić program ponownie"));
-
+            chart.drawText(painter, gw/3+(font.pointSize()), 90-(font.pointSize()), "Nie nawiązano połączenia, spróbuj podłączyć płytkę i uruchomić program ponownie");
         }
 
     if ( coutingDownToZero )
@@ -740,17 +720,12 @@ void MainWindow::save_to_file( bool add_seconds)
     }
 //}
 
-//      if(add_seconds)
+//      if(add_seconds)  // before every canal
       {
 //          stream << "[" << ( QDateTime::currentMSecsSinceEpoch() )  << "]" << readdata << endl;
           // no csv
 //          file_out.write(( QString::toUtf8( QDateTime::currentMSecsSinceEpoch() ) ));
       }
-    QDateTime UTC(QDateTime::currentDateTimeUtc());
-     QDateTime local(UTC.toLocalTime());
-     qDebug() << "UTC time is:" << UTC;
-     qDebug() << "Local time is:" << local;
-     qDebug() << "No difference between times:" << UTC.secsTo(local);
         wav_out->write(reinterpret_cast<char*>(wavData[k].data()), static_cast<uint>(wavData[k].size())*sizeof(wavData[0][0]));
 
         qInfo() <<"zapisano kanał "<<  k << "size(): " << wavData[k].size()*sizeof (wavData[0][0]) <<  QDateTime::currentMSecsSinceEpoch();
@@ -1058,7 +1033,7 @@ void MainWindow::on_actionKatalog_triggered()
 
 
 
-void MainWindow::draw_bars_Hz_gap(int window_length, int  rms)
+void MainWindow::draw_bars_Hz_gap(int window_length, int rms)
 {
 //    int a = 20;
     int n = DSIZE2 / window_length; // Hz (okno)
