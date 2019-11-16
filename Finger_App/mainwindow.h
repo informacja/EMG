@@ -7,8 +7,8 @@
 #include "iir/Iir.h"
 
 #define NCH 3
-#define TEMP_NCH 3
-#define DSIZE    (NCH*1024*4)
+#define TEMP_NCH 8
+#define DSIZE    (NCH*2048)
 #define DSIZE2   (DSIZE/2/NCH)                // number of samples per chanel (uint16_t)
 #define WSIZE    (DSIZE2/2)                   // window length
 #define BUF_LEN   10e6

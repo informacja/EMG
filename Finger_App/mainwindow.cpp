@@ -460,7 +460,8 @@ void MainWindow::externalThread_tick()
          qDebug()<<"sy"<< simulation;
     // obsluga przycisku akcji (play/pause)
     if( simulation == SIMULATION_STOP || simulation == GENERATE_SIGNAL ) {
-        ui->statusBar->showMessage("Przenieś i upuść na program plik typu (WAV, CSV) drag&drop SIMULATION_STOP",1000);
+        ui->statusBar->showMessage( QString().sprintf("Simulation: %i", simulation), 1000);
+//        ui->statusBar->showMessage("Przenieś i upuść na program plik typu (WAV, CSV) drag&drop SIMULATION_STOP",1000);
 //        ui->actionRun->setChecked(false);
 //        serial.clear();
 
