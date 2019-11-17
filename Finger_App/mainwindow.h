@@ -121,7 +121,7 @@ private:
     void apply_filters();    
     void signal_source();
 
-//Q_SIGNALS:
+Q_SIGNALS:
 signals:
     void simulation_changed(Simulation_Type);
 
@@ -131,6 +131,7 @@ public slots:
     void set_butterworth_BandStop_width(int width);
     void set_butterworth_HiPass(int cutoff_frequency);
     void set_lineEdit_qnique_filename(QString path);
+    void simulation_adjust(Simulation_Type);
 
 private:
     Thread thread;

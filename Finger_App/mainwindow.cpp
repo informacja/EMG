@@ -14,20 +14,19 @@ MainWindow::MainWindow(QWidget *parent) :
    QTime myTimer; myTimer.start();
 
     ui->setupUi(this);
-
    qDebug() << "setupUi:" << myTimer.elapsed() << "ms"; myTimer.start();
 
-    connect(&thread, SIGNAL(tick()), this, SLOT(externalThread_tick()));
-    connect(ui->actionRun,  SIGNAL(triggered()), this, SLOT(sendCommand()));
-    connect(ui->actionSignal, SIGNAL(triggered()), this, SLOT(update()));
+    connect(&thread,            SIGNAL(tick()),      this, SLOT(externalThread_tick()));
+    connect(ui->actionRun,      SIGNAL(triggered()), this, SLOT(sendCommand()));
+    connect(ui->actionSignal,   SIGNAL(triggered()), this, SLOT(update()));
     connect(ui->actionSpectrum, SIGNAL(triggered()), this, SLOT(update()));
-    connect(ui->actionRms,  SIGNAL(triggered()), this, SLOT(update()));
-//    connect(this, SIGNAL(simulation_changed()), this, SLOT( set_simulation(Simulation_Type) ));
+    connect(ui->actionRms,      SIGNAL(triggered()), this, SLOT(update()));
+    connect(this,   SIGNAL(simulation_changed(Simulation_Type)),    this, SLOT( simulation_adjust(Simulation_Type) ));
 //    connect(ui->spinBox_hz, SIGNAL(valueChanged()), this, SLOT( ui->pwmValue1->setValue(ui->spinBox_hz->value()) ));
-    connect(ui->spinBox_HiPass, SIGNAL(valueChanged(int)), this, SLOT( set_butterworth_HiPass(int) ));
-    connect(ui->spinBox_BandStop, SIGNAL(valueChanged(int)), this, SLOT( set_butterworth_BandStop_fq(int) ));
-    connect(ui->spinBox_BandStop_width, SIGNAL(valueChanged(int)), this, SLOT( set_butterworth_BandStop_width(int) ));
-    connect(ui->lineEdit_path, SIGNAL(textChanged(QString)), this, SLOT( set_lineEdit_qnique_filename(QString) ));
+    connect(ui->spinBox_HiPass,     SIGNAL(valueChanged(int)),      this, SLOT( set_butterworth_HiPass(int) ));
+    connect(ui->spinBox_BandStop,   SIGNAL(valueChanged(int)),      this, SLOT( set_butterworth_BandStop_fq(int) ));
+    connect(ui->spinBox_BandStop_width, SIGNAL(valueChanged(int)),  this, SLOT( set_butterworth_BandStop_width(int) ));
+    connect(ui->lineEdit_path,      SIGNAL(textChanged(QString)),   this, SLOT( set_lineEdit_qnique_filename(QString) ));
 
 //    QTimer *timer = new QTimer(this);
 //        connect(timer, SIGNAL(timeout()), this, SLOT(this->paintEvent()));
@@ -134,8 +133,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
     if( simulation == SIMULATION_STOP )
         simulation = find_source_file(input_file);
-
-
 
     switch(simulation) // teoretycznie do usunięcia
     {
@@ -1021,6 +1018,7 @@ qint64 MainWindow::simulation_read_data_from_file()
 
     }
  }
+ return 0;
 }
 
 void MainWindow::on_actionOtw_rz_triggered(bool checked)
@@ -1092,32 +1090,7 @@ void MainWindow::set_simulation(const Simulation_Type &newSimul)
 {
     simulation = newSimul;
         qDebug() << "Simulation tick, new SimType: " << newSimul;
-    bool checked = true;
 
-    if (newSimul == GENERATE_SIGNAL)
-    {
-        ui->actionRun->setChecked(true);
-        ui->actionRms->setChecked(!checked);
-        ui->actionSignal->setChecked(!checked);
-        ui->lineEdit_path->setText( GEN_DIR );
-//ui->radioBtn_hann
-    }
-
-    if (newSimul == SIMUL_REALTIME)
-    {
-        ui->actionRun->setChecked(true);
-        ui->actionRms->setChecked(checked);
-        ui->actionSignal->setChecked(checked);
-        ui->lineEdit_path->setText( SAMPLE_DIR );
-
-    }
-
-    if (wav_out != nullptr)
-    {
-        wav_out->close();
-        wav_out->open( get_unique_filename( ui->lineEdit_fileN->text() ), format );
-        ui->lineEdit_fileN->setText( wav_out->fileName() );
-    }
     emit simulation_changed(newSimul);
 }
 
@@ -1251,7 +1224,7 @@ inline void MainWindow::load_data_from_serialport()
         timeData[k][i] *= static_cast<double>(hann[i]);       //(*sample)/65535.0;
       }
       else if (ui->radioBtn_hamm->isChecked()) {
-        timeData[k][i] *= static_cast<float>(hamming[i]);       //(*sample)/65535.0;
+        timeData[k][i] *= static_cast<double>(hamming[i]);       //(*sample)/65535.0;
       }
 
       if( ui->checkBox_bandStop->isChecked() ) {
@@ -1313,6 +1286,36 @@ void MainWindow::set_lineEdit_qnique_filename(QString path)
   QString uniqName = get_unique_filename(path+ "/" + ui->lineEdit_fileN->text() );
   QFileInfo fi(uniqName);
   ui->lineEdit_fileN->setText( fi.fileName() );
+}
+
+void MainWindow::simulation_adjust(Simulation_Type newSimul)
+{
+    bool checked = true;
+
+    if (newSimul == GENERATE_SIGNAL)
+    {
+        ui->actionRun->setChecked(true);
+        ui->actionRms->setChecked(!checked);
+        ui->actionSignal->setChecked(!checked);
+        ui->lineEdit_path->setText( GEN_DIR );
+//ui->radioBtn_hann
+    }
+
+    if (newSimul == SIMUL_REALTIME)
+    {
+        ui->actionRun->setChecked(true);
+        ui->actionRms->setChecked(checked);
+        ui->actionSignal->setChecked(checked);
+        ui->lineEdit_path->setText( SAMPLE_DIR );
+
+    }
+
+    if (wav_out != nullptr)
+    {
+        wav_out->close();
+        wav_out->open( get_unique_filename( ui->lineEdit_fileN->text() ), format );
+        ui->lineEdit_fileN->setText( wav_out->fileName() );
+    }
 }
 
 // ----------------------------------------------------------------------------------------
