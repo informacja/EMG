@@ -106,9 +106,15 @@ MainWindow::MainWindow(QWidget *parent) :
     // Output WAVE settings
     format.setCodec("audio/pcm");
     format.setSampleRate(DSIZE2);                         // Hz sample per second
+<<<<<<< Updated upstream
     format.setChannelCount(1);                              // NCH TODO:
     format.setSampleSize(sizeof(in[0][0])*8);           // sizeof(double) => 8 ( I multiplayng by 4 to get valid 32 bits)
     qDebug() << "SampleSize" << sizeof( in[0][0])*8 ;
+=======
+    format.setChannelCount(NCH);                              // NCH TODO:
+    format.setSampleSize(sizeof(in[0][0])*4);           // sizeof(double) => 8 ( I multiplayng by 4 to get valid 32 bits)
+    qDebug() << "SampleSize" << sizeof( in[0][0])*4 ;
+>>>>>>> Stashed changes
     format.setByteOrder(QAudioFormat::LittleEndian);
     format.setSampleType(QAudioFormat::SampleType::Float); // nie ma double co zrobić?
 
@@ -711,9 +717,15 @@ void MainWindow::save_to_file( bool add_seconds)
   {
     pSrc = timeData[k].data();
     pDsc = static_cast<float*>(wavData[k].data());
+<<<<<<< Updated upstream
 
     for (int i = 0; i < timeData[0].size(); i++)
+=======
+     for (int i = 0; i < timeData[0].size(); i++)
+>>>>>>> Stashed changes
     {
+         qDebug() << "timedata size:" << timeData[0].size() << "wav size:" << wavData[0].size();
+
         if( simulation == GENERATE_SIGNAL ) /// TO CHANGE;
             *pDsc++ = static_cast<float>(in[k][i].r);
         else *pDsc++ = static_cast<float>(*pSrc++);
