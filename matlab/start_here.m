@@ -1,11 +1,11 @@
 clear all;
 filename = 'Mario62/out1.wav';
 filename = 'Mario62/out2.wav';
-filename = '../matlab/generated/out17.wav';
+filename = '../matlab/generated/out27.wav';
 
- info = audioinfo(filename)
+info = audioinfo(filename)
 
-[data, fs] = audioread(filename,'double');
+[data, fs] = audioread(filename,'float');
  
 for i = 1:info.Duration
     
