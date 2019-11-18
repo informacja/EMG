@@ -6,7 +6,7 @@ Aplikacja przetwarzająca sygnał elektromiograficzny napięcia mięśni <br>
 	 DFRobot Gravity - analogowy czujnik EMG
 
 ## Elektrody podpinamy kolejno od pinu P011 (obecnie 3 kanały)
-<img src="docs/LPC1347.jpeg">
+<img src="docs/LPC1347.jpg">
 
 ## Elektroda wykrywając pracę mięśni palca środkowego i zerdecznego  
 <img src="docs/now.png">
