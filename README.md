@@ -15,7 +15,7 @@ Aplikacja przetwarzająca sygnał elektromiograficzny napięcia mięśni <br>
 <img src="docs/now.png">
 
 ## Linux VBox  
-<img src="../docs/matlsig.png">
+<img src="../docs/Centos8Vbox.png">
 
 ### Matlab wave fft
 <img src="docs/works.gif">
