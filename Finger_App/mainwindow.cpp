@@ -34,8 +34,9 @@ MainWindow::MainWindow(QWidget *parent) :
 //        timer->start(50);
 //    m_timer.start(1000, this);
 
-//    connect(this->simulation, SIGNAL(simulation_changed(Simulation_Type)), this->simulation, SLOT(simulationSet(const Simulation_Type& )));
-//    connect(slider, SIGNAL(valueChanged(int)), SLOT(onSliderValueChanged(int)));
+    alloc_memory_sub_constructor();
+    pointers_set_null();
+    alloc_files();
 
     ui->statusBar->showMessage("No device");
     set_simulation( GENERATE_SIGNAL );
@@ -76,9 +77,6 @@ MainWindow::MainWindow(QWidget *parent) :
     chart.dataSize=WSIZE;
     chart.backgroundColor = QColor::Invalid;
 
-    alloc_memory_sub_constructor();
-    pointers_set_null();
-    alloc_files();
 
     isinverse = 0;          // for fft
     coutingDownToZero = 0;
