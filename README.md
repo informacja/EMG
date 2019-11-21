@@ -14,6 +14,9 @@ Aplikacja przetwarzająca sygnał elektromiograficzny napięcia mięśni <br>
 ## Widmo charakterystyczne EMG, zaciśnięta dłoń (0-512Hz)  
 <img src="docs/now.png">
 
+## Linux VBox  
+<img src="docs/Centos8Vbox.png">
+
 ### Matlab wave fft
 <img src="docs/works.gif">
 
