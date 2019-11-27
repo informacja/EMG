@@ -4,11 +4,11 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
-
+QT       += core gui multimedia
+#QT += multimedia
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets serialport
 
-TARGET = DataTransfer
+TARGET = WaveApp
 TEMPLATE = app
 
 # The following define makes your compiler emit warnings if you use
@@ -25,13 +25,19 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++11
 
 SOURCES += \
+    lib/filesFunctions.cpp \
+    lib/wavefilewriter.cpp \
+    lib/wavfilereader.cpp \
         main.cpp \
         mainwindow.cpp \
     thread.cpp \
     chart.cpp
 
 HEADERS += \
+    lib/wavefilewriter.h \
+    lib/wavfilereader.h \
         mainwindow.h \
+    pre_headers.h \
     thread.h \
     chart.h
 

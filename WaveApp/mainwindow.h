@@ -7,6 +7,7 @@
 #include <QPainter>
 #include "thread.h"
 #include "chart.h"
+#include "pre_headers.h"
 
 #define NCH 3
 #define DSIZE    (NCH*2048)
@@ -27,6 +28,14 @@ public:
 private slots:
     void externalThread_tick();
     void sendCommand();
+    void auto_actionRun_serial_port(int try_times);
+    void saveWave();
+
+    void on_pushButton_enter_clicked();
+
+    void on_pushButton_return_clicked();
+
+    void on_commandLinkButton_clicked();
 
 private:
     Ui::MainWindow *ui;
@@ -36,11 +45,13 @@ private:
     QSerialPort serial;
     QByteArray senddata;
     QByteArray readdata;
-    QVector<double> timeDataCh1, timeDataCh2, timeDataCh3;
+//    QVector<double> timeDataCh1, timeDataCh2, timeDataCh3;
     QVector<QVector<double> > timeData;
     QVector<double> meanData;
 
     Chart chart;
+    WaveFileWriter* wav_out;
+    int coutingDownToZero;
 
 };
 
