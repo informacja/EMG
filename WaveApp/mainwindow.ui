@@ -104,7 +104,7 @@ color: rgb(255, 255, 255);</string>
         </widget>
        </item>
        <item>
-        <widget class="QCommandLinkButton" name="commandLinkButton">
+        <widget class="QCommandLinkButton" name="commandLinkButton_show">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Ignored" vsizetype="Maximum">
            <horstretch>0</horstretch>
@@ -112,7 +112,7 @@ color: rgb(255, 255, 255);</string>
           </sizepolicy>
          </property>
          <property name="text">
-          <string>Open</string>
+          <string>Show</string>
          </property>
          <property name="iconSize">
           <size>
@@ -136,7 +136,11 @@ color: rgb(255, 255, 255);</string>
      <item row="22" column="0">
       <layout class="QHBoxLayout" name="horizontalLayout_2">
        <item>
-        <widget class="QLineEdit" name="lineEdit_path"/>
+        <widget class="QLineEdit" name="lineEdit_path">
+         <property name="text">
+          <string>../matlab/out.wav</string>
+         </property>
+        </widget>
        </item>
       </layout>
      </item>
@@ -160,11 +164,17 @@ color: rgb(255, 255, 255);</string>
          <property name="text">
           <string>Return</string>
          </property>
+         <property name="shortcut">
+          <string>Return</string>
+         </property>
         </widget>
        </item>
        <item>
         <widget class="QPushButton" name="pushButton_enter">
          <property name="text">
+          <string>Enter</string>
+         </property>
+         <property name="shortcut">
           <string>Enter</string>
          </property>
         </widget>
@@ -186,8 +196,11 @@ color: rgb(255, 255, 255);</string>
      </item>
      <item row="23" column="0">
       <widget class="QCheckBox" name="checkBoxClipboard">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
        <property name="text">
-        <string>Copy to clipboard</string>
+        <string>Copy filepath to clipboard</string>
        </property>
       </widget>
      </item>
@@ -257,7 +270,10 @@ color: rgb(255, 255, 255);</string>
        <item>
         <widget class="QLabel" name="labelSavingTime">
          <property name="text">
-          <string>Record</string>
+          <string>Recording time:</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
          </property>
         </widget>
        </item>
@@ -281,6 +297,13 @@ color: rgb(255, 255, 255);</string>
         </widget>
        </item>
       </layout>
+     </item>
+     <item row="27" column="0">
+      <widget class="Line" name="line_2">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+      </widget>
      </item>
     </layout>
    </widget>

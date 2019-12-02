@@ -13,6 +13,7 @@
 #define DSIZE    (NCH*2048)
 #define DSIZE2   (DSIZE/2/NCH)
 
+
 namespace Ui {
 class MainWindow;
 }
@@ -30,17 +31,13 @@ private slots:
     void sendCommand();
     void auto_actionRun_serial_port(int try_times);
     void saveWave();
-
     void on_pushButton_enter_clicked();
-
     void on_pushButton_return_clicked();
-
-    void on_commandLinkButton_clicked();
+    void on_commandLinkButton_show_clicked();
 
 private:
     Ui::MainWindow *ui;
     void paintEvent(QPaintEvent *event);
-
     Thread thread;
     QSerialPort serial;
     QByteArray senddata;
@@ -50,8 +47,10 @@ private:
     QVector<double> meanData;
 
     Chart chart;
-    WaveFileWriter* wav_out;
+    QAudioFormat format;
     int coutingDownToZero;
+    WaveFileWriter* wav_out;
+    QVector<QVector<float>> wavData;
 
 };
 

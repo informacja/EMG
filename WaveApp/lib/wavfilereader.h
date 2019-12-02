@@ -60,7 +60,7 @@
 class WavFilerReader : public QFile
 {
 public:
-    WavFilerReader(QObject *parent = 0);
+    WavFilerReader(QObject *parent = nullptr);
 
     using QFile::open;
     bool open(const QString &fileName);

@@ -1,6 +1,13 @@
 #ifndef PRE_HEADERS_H
 #define PRE_HEADERS_H
 
+
+#define FILE_NAME  "out"
+#define EXT        ".wav"
+#define MATLAB      "../matlab"
+#define SAMPLE_DIR  MATLAB "/sample"
+#define GEN_DIR     MATLAB "/generated"
+
 #include <QApplication>
 // chart.h
 #include <QPainter>
@@ -79,11 +86,6 @@
 #include <QClipboard>
 #include "lib/wavefilewriter.h"
 
-#define FILE_NAME  "out"
-#define EXT        ".wav"
-#define MATLAB      "../matlab"
-#define SAMPLE_DIR  MATLAB "/sample"
-#define GEN_DIR     MATLAB "/generated"
 
 
 
