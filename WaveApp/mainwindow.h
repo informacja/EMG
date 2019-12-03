@@ -51,6 +51,7 @@ private:
     int coutingDownToZero;
     WaveFileWriter* wav_out;
     QVector<QVector<float>> wavData;
+    volatile bool trySave;
 
 };
 

@@ -81,7 +81,11 @@ MainWindow::MainWindow(QWidget *parent) :
     format.setSampleType(QAudioFormat::SampleType::Float);
 
     wav_out = new WaveFileWriter(nullptr);
-    ui->checkBoxClipboard->hide();
+    ui->lineEdit_path->setText( get_unique_filename( ui->lineEdit_path->text() ));
+
+//    ui->checkBoxClipboard->hide();
+    coutingDownToZero = 0;
+    trySave = false;
 }
 
 MainWindow::~MainWindow()
@@ -99,19 +103,12 @@ MainWindow::~MainWindow()
 // ------------------------------------------------------------------------------
 
 void MainWindow::externalThread_tick()
-{    
+{
     auto_actionRun_serial_port(3);
 
     // qDebug()<<serial.size();
     if(!ui->actionRun->isChecked())
         serial.clear();
-
-//    for (int i = 0; i < DSIZE2; i++)
-//    {
-//        timeData[0][i] += 0.2;
-//        timeData[1][i] += 0.45;
-//        timeData[2][i] += 0.8;
-//    }
 
     if (serial.size() >= DSIZE){
 
@@ -128,6 +125,9 @@ void MainWindow::externalThread_tick()
         for(int j=0; j<NCH; j++)
             meanData[j] = std::accumulate( timeData[j].begin(), timeData[j].end(), 0.0)/timeData[j].size();
 
+        if ( coutingDownToZero ) { // saveing_sample_counter
+            saveWave();
+        }
         update();
 
         if(ui->actionRun->isChecked())
@@ -155,6 +155,13 @@ void MainWindow::paintEvent(QPaintEvent *event)
     QPainter painter(this);
 
     chart.drawLinearGrid(painter, centralWidget()->geometry());
+
+//    for (int i = 0; i < DSIZE2; i++)
+//    {
+//        timeData[0][i] += 0.2;
+////        timeData[1][i] += 0.0;
+//        timeData[2][i] -= 0.2;
+//    }
 
     if(ui->actionLine->isChecked()){
 
@@ -197,6 +204,12 @@ void MainWindow::paintEvent(QPaintEvent *event)
                      QString().sprintf("%s","Time [ms]"));
 
     if (!serial.isOpen()) {
+        if ( trySave )
+        {
+            pen.setColor(Qt::red);
+            painter.setPen(pen);
+            update();
+        }
         painter.drawText(QPointF(gw/3+(font.pointSize())+5,50+(font.pointSize())),
                          QString().sprintf("%s","Nie nawiązano połączenia, spróbuj podłączyć płytkę i uruchomić program ponownie"));
     }
@@ -234,31 +247,45 @@ void MainWindow::auto_actionRun_serial_port(int try_times)
 // ------------------------------------------------------------------------------
 
 void MainWindow::saveWave()
-{   
+{
+    qDebug() << "count" << coutingDownToZero;
     if ( coutingDownToZero-- >= 0 )
     {
         ui->progressBar->setValue( ui->spinBox->value() - coutingDownToZero);
         //    qDebug() << "to zero count:" << coutingDownToZero;
     }
 
+    QByteArray waveBin;
+    waveBin.resize(DSIZE);
+
     double *pSrc = nullptr;
-    float  *pDsc = nullptr;
+    char  *pDsc = nullptr;
+//    for(int i=0; i<DSIZE2;i++){
 
-    for (int k = 0; k < NCH; k++)
+//        for(int j=0; j<NCH; j++)
+//            timeData[j][i]=(*sample++)/65535.0;
+//    }
+        pDsc = waveBin.data();
+
+    for (int i = 0; i < DSIZE2; i++)
     {
-        pSrc = timeData[k].data();
-        pDsc = static_cast<float*>(wavData[k].data());
 
-        for (int i = 0; i < timeData[0].size(); i++)
-        {
-            *pDsc++ = static_cast<float>(*pSrc++);
+//        pSrc = timeData[k].data();
+//        pDsc = static_cast<float*>(wavData[k].data());
+
+
+        for (int k = 0; k < NCH; k++)
+        {            
+            *pDsc++ = timeData[k][i];
         }
+//        wavData[k][1] = k;
 
-        wav_out->write(reinterpret_cast<char*>(wavData[k].data()), static_cast<uint>(wavData[k].size())*sizeof(wavData[0][0]));
+//        wav_out->write(reinterpret_cast<char*>(wavData[k].data()), static_cast<uint>(wavData[k].size())*sizeof(wavData[0][0]));
 
-        qInfo() <<"zapisano kanał "<<  k << "size(): " << wavData[k].size()*sizeof (wavData[0][0]) <<  QDateTime::currentMSecsSinceEpoch();
+//        qInfo() <<"zapisano kanał "<<  k << "size(): " << wavData[k].size()*sizeof (wavData[0][0]) << "time:" << QDateTime::currentMSecsSinceEpoch();
     }
 
+    wav_out->write(waveBin.data(), DSIZE);
     if (coutingDownToZero == 0)
     {
         wav_out->close();
@@ -269,6 +296,7 @@ void MainWindow::saveWave()
 
 void MainWindow::on_pushButton_enter_clicked()
 {
+    trySave = true;
     QString uniqName = get_unique_filename( ui->lineEdit_path->text() );
     QFileInfo fi(uniqName);                                              // object to get only fileName against path
     QDir dir;// We create the directory if needed
@@ -290,7 +318,7 @@ void MainWindow::on_pushButton_enter_clicked()
         ui->statusBar->showMessage("Error open: " + wav_out->fileName() );
     }
 
-    ui->progressBar->setValue( ui->spinBox->value() );
+//    ui->progressBar->setValue( ui->spinBox->value() );
 
     if( ui->checkBoxClipboard->isChecked() )
     {
@@ -310,8 +338,7 @@ void MainWindow::on_pushButton_return_clicked()
 
 void MainWindow::on_commandLinkButton_show_clicked()
 {
-    QString path = QDir::currentPath()+ "/" +ui->lineEdit_path->text()+ "/" +ui->lineEdit_path->text() ;
-    showFileInFolder(path);
+    showFileInFolder(ui->lineEdit_path->text());
 }
 
 // ------------------------------------------------------------------------------
