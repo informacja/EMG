@@ -41,7 +41,8 @@ private:
     Thread thread;
     QSerialPort serial;
     QByteArray senddata;
-    QByteArray readdata;
+    QByteArray readdata;    // uint16
+    QByteArray waveBin;     // int16_t
 //    QVector<double> timeDataCh1, timeDataCh2, timeDataCh3;
     QVector<QVector<double> > timeData;
     QVector<double> meanData;
@@ -50,7 +51,7 @@ private:
     QAudioFormat format;
     int coutingDownToZero;
     WaveFileWriter* wav_out;
-    QVector<QVector<float>> wavData;
+//    QVector<QVector<float>> wavData;
     volatile bool trySave;
 
 };

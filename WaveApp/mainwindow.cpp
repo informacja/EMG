@@ -30,11 +30,13 @@ MainWindow::MainWindow(QWidget *parent) :
     meanData.resize(NCH);
     meanData.fill(0.0);
 
-    wavData.resize(NCH);
-    for (int k = 0; k < NCH; k++){
-        wavData[k].resize(DSIZE2);
-        wavData[k].fill(0.0);
-    }
+//    wavData.resize(NCH);
+//    for (int k = 0; k < NCH; k++){
+//        wavData[k].resize(DSIZE2);
+//        wavData[k].fill(0.0);
+//    }
+
+    waveBin.resize(sizeof (float)*DSIZE);
 
     ui->statusBar->showMessage("No device");
     QString portname;
@@ -73,7 +75,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // Output WAVE settings
     format.setCodec("audio/pcm");
-    format.setSampleRate(DSIZE2);                           // Hz sample per second
+    format.setSampleRate(DSIZE2*2);                           // Hz sample per second
     format.setChannelCount(NCH);
     format.setSampleSize(sizeof( float )*8);                // sizeof(float) => 4 bytes ( multiplayng by 8 to get valid 32 bits)
     qDebug() << "SampleSize" << sizeof( float )*8;
@@ -86,6 +88,9 @@ MainWindow::MainWindow(QWidget *parent) :
 //    ui->checkBoxClipboard->hide();
     coutingDownToZero = 0;
     trySave = false;
+
+    qDebug()<<std::numeric_limits<uint16_t>::max();
+    qDebug()<<std::numeric_limits<int16_t>::max();
 }
 
 MainWindow::~MainWindow()
@@ -104,6 +109,8 @@ MainWindow::~MainWindow()
 
 void MainWindow::externalThread_tick()
 {
+
+
     auto_actionRun_serial_port(3);
 
     // qDebug()<<serial.size();
@@ -112,22 +119,41 @@ void MainWindow::externalThread_tick()
 
     if (serial.size() >= DSIZE){
 
-        //qDebug()<<serial.size();
-        readdata=serial.read(DSIZE);
+//        qDebug()<<serial.size();
+//        readdata=serial.readd(DSIZE);
+        readdata=serial.readAll();
 
         uint16_t *sample=reinterpret_cast<uint16_t*>(readdata.data());
+        int16_t  *pDsc=reinterpret_cast<int16_t*>(waveBin.data());
+
         for(int i=0; i<DSIZE2;i++){
 
-            for(int j=0; j<NCH; j++)
+            for(int j=0; j<NCH; j++) {
+                *pDsc++ = static_cast<int16_t>((*sample) - (65535+1)/2);
                 timeData[j][i]=(*sample++)/65535.0;
+
+            }
+        }
+        if ( coutingDownToZero ) { // saveing_sample_counter
+//                    saveWave();
+            qDebug() << "count" << coutingDownToZero;
+            if ( coutingDownToZero-- >= 0 )
+            {
+                ui->progressBar->setValue( ui->spinBox->value() - coutingDownToZero);
+                //    qDebug() << "to zero count:" << coutingDownToZero;
+            }
+        }
+        if ( coutingDownToZero )
+            wav_out->write(waveBin.data(), DSIZE);
+
+        if (coutingDownToZero == 0)
+        {
+            wav_out->close();
         }
 
         for(int j=0; j<NCH; j++)
             meanData[j] = std::accumulate( timeData[j].begin(), timeData[j].end(), 0.0)/timeData[j].size();
 
-        if ( coutingDownToZero ) { // saveing_sample_counter
-            saveWave();
-        }
         update();
 
         if(ui->actionRun->isChecked())
@@ -248,48 +274,40 @@ void MainWindow::auto_actionRun_serial_port(int try_times)
 
 void MainWindow::saveWave()
 {
-    qDebug() << "count" << coutingDownToZero;
-    if ( coutingDownToZero-- >= 0 )
-    {
-        ui->progressBar->setValue( ui->spinBox->value() - coutingDownToZero);
-        //    qDebug() << "to zero count:" << coutingDownToZero;
-    }
+//    qDebug() << "count" << coutingDownToZero;
+//    if ( coutingDownToZero-- >= 0 )
+//    {
+//        ui->progressBar->setValue( ui->spinBox->value() - coutingDownToZero);
+//        //    qDebug() << "to zero count:" << coutingDownToZero;
+//    }
 
-    QByteArray waveBin;
-    waveBin.resize(DSIZE);
+//    double *pSrc = nullptr;
+//    float *pDsc = nullptr;
 
-    double *pSrc = nullptr;
-    char  *pDsc = nullptr;
+//    pDsc = reinterpret_cast<float*>(waveBin.data());
 //    for(int i=0; i<DSIZE2;i++){
 
 //        for(int j=0; j<NCH; j++)
-//            timeData[j][i]=(*sample++)/65535.0;
+//            (*pDsc++) = (float)(timeData[j][i]);
 //    }
-        pDsc = waveBin.data();
 
-    for (int i = 0; i < DSIZE2; i++)
-    {
+//    for (int i = 0; i < DSIZE2; i++)
+//    {
 
-//        pSrc = timeData[k].data();
-//        pDsc = static_cast<float*>(wavData[k].data());
+////        pSrc = timeData[k].data();
+////        pDsc = static_cast<float*>(wavData[k].data());
 
+//        for (int k = 0; k < NCH; k++)
+//        {
+//            *pDsc++ = timeData[k][i];
+//        }
+////        wavData[k][1] = k;
 
-        for (int k = 0; k < NCH; k++)
-        {            
-            *pDsc++ = timeData[k][i];
-        }
-//        wavData[k][1] = k;
+////        wav_out->write(reinterpret_cast<char*>(wavData[k].data()), static_cast<uint>(wavData[k].size())*sizeof(wavData[0][0]));
 
-//        wav_out->write(reinterpret_cast<char*>(wavData[k].data()), static_cast<uint>(wavData[k].size())*sizeof(wavData[0][0]));
+////        qInfo() <<"zapisano kanał "<<  k << "size(): " << wavData[k].size()*sizeof (wavData[0][0]) << "time:" << QDateTime::currentMSecsSinceEpoch();
+//    }
 
-//        qInfo() <<"zapisano kanał "<<  k << "size(): " << wavData[k].size()*sizeof (wavData[0][0]) << "time:" << QDateTime::currentMSecsSinceEpoch();
-    }
-
-    wav_out->write(waveBin.data(), DSIZE);
-    if (coutingDownToZero == 0)
-    {
-        wav_out->close();
-    }
 }
 
 // ------------------------------------------------------------------------------
