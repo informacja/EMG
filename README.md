@@ -15,4 +15,4 @@ Aplikacja przetwarzająca sygnał elektromiograficzny napięcia mięśniowego (u
 <img src="docs/spider.gif">
 
 ## Synał z trzech kanałów: pojedyncze zaciśnięcia dłoni, parami oraz niepodpięty kanał (ujemna amplituda niesymetryczna)
-<img src="docs/out54.png">
+<img src="docs/out56.png">
