@@ -1,5 +1,5 @@
-# Finger_EMG 
-Aplikacja przetwarzająca sygnał elektromiograficzny napięcia mięśni <br> 
+# EMG WaveApp
+Aplikacja przetwarzająca sygnał elektromiograficzny napięcia nerwów sterujących mięśniami <br> 
 
 ##### Specyfikacja sprzętowa:
 	 LPC1347 32-bit ARM Cortex-M3 mikrokontroler
@@ -8,8 +8,8 @@ Aplikacja przetwarzająca sygnał elektromiograficzny napięcia mięśni <br>
 ## Elektrody podpinamy kolejno zacznąc od pinu P0_11 (obecnie 3 kanały)
 <img src="docs/LPC1347.jpg">
 
-## Elektroda wykrywając pracę mięśni palca środkowego i serdecznego  
-<img src="docs/spider.gif">
-
 ## Widmo charakterystyczne EMG, zaciśnięta dłoń (0-512Hz)  
 <img src="docs/now.png">
+
+## Elektroda wykrywając pracę mięśni palca środkowego i serdecznego  
+<img src="docs/spider.gif">
