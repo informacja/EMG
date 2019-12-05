@@ -5,7 +5,7 @@ Aplikacja przetwarzająca sygnał elektromiograficzny napięcia mięśni <br>
 	 LPC1347 32-bit ARM Cortex-M3 mikrokontroler
 	 DFRobot Gravity - analogowy czujnik EMG
 
-## Elektrody podpinamy kolejno zacznąc od pinu P0_11 (obecnie 3 kanały)
+## Generowanie sygnałów
 <img src="docs/generate.gif">
 
 ## Elektrody podpinamy kolejno zacznąc od pinu P0_11 (obecnie 3 kanały)
