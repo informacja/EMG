@@ -255,7 +255,7 @@ public:
         spinBox->setObjectName(QString::fromUtf8("spinBox"));
         spinBox->setMinimum(1);
         spinBox->setMaximum(3600);
-        spinBox->setStepType(QAbstractSpinBox::DefaultStepType);
+//        spinBox->setStepType(QAbstractSpinBox::DefaultStepType);
         spinBox->setValue(10);
 
         horizontalLayout_3->addWidget(spinBox);

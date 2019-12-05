@@ -12,6 +12,8 @@
 #define NCH 3
 #define DSIZE    (NCH*2048)
 #define DSIZE2   (DSIZE/2/NCH)
+#define TIME_FACTOR 4
+
 
 
 namespace Ui {

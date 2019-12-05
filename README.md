@@ -13,3 +13,6 @@ Aplikacja przetwarzająca sygnał elektromiograficzny napięcia mięśniowego (u
 
 ## Elektroda wykrywając pracę mięśni palca środkowego i serdecznego  
 <img src="docs/spider.gif">
+
+## Synał z trzech kanałów: pojedyncze zaciśnięcia dłoni, parami oraz niepodpięty kanał (ujemna amplituda niesymetryczna)
+<img src="docs/out54.png">

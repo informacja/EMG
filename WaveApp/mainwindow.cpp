@@ -75,22 +75,24 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // Output WAVE settings
     format.setCodec("audio/pcm");
-    format.setSampleRate(DSIZE2*2);                           // Hz sample per second
+    format.setSampleRate(DSIZE/NCH);                           // Hz sample per second
     format.setChannelCount(NCH);
-    format.setSampleSize(sizeof( float )*8);                // sizeof(float) => 4 bytes ( multiplayng by 8 to get valid 32 bits)
-    qDebug() << "SampleSize" << sizeof( float )*8;
+    format.setSampleSize(sizeof(float)*8);                // sizeof(float) => 4 bytes ( multiplayng by 8 bits to get valid 32 bits)
+//    qDebug() << "SampleSize" << sizeof( float )*8 ;
     format.setByteOrder(QAudioFormat::LittleEndian);
-    format.setSampleType(QAudioFormat::SampleType::Float);
+    format.setSampleType(QAudioFormat::SampleType::Unknown);
 
     wav_out = new WaveFileWriter(nullptr);
     ui->lineEdit_path->setText( get_unique_filename( ui->lineEdit_path->text() ));
 
 //    ui->checkBoxClipboard->hide();
+//    ui->checkBoxClipboard->setChecked(false);
+    ui->checkBoxClipboard->setChecked(true);
+
     coutingDownToZero = 0;
     trySave = false;
-
-    qDebug()<<std::numeric_limits<uint16_t>::max();
-    qDebug()<<std::numeric_limits<int16_t>::max();
+    qDebug() << std::numeric_limits<int16_t>::max();
+    qDebug() << std::numeric_limits<int16_t>::min();
 }
 
 MainWindow::~MainWindow()
@@ -109,8 +111,6 @@ MainWindow::~MainWindow()
 
 void MainWindow::externalThread_tick()
 {
-
-
     auto_actionRun_serial_port(3);
 
     // qDebug()<<serial.size();
@@ -120,36 +120,29 @@ void MainWindow::externalThread_tick()
     if (serial.size() >= DSIZE){
 
 //        qDebug()<<serial.size();
-//        readdata=serial.readd(DSIZE);
-        readdata=serial.readAll();
+        readdata=serial.read(DSIZE);
+//        readdata=serial.readAll();
 
-        uint16_t *sample=reinterpret_cast<uint16_t*>(readdata.data());
         int16_t  *pDsc=reinterpret_cast<int16_t*>(waveBin.data());
-
+        uint16_t *sample=reinterpret_cast<uint16_t*>(readdata.data());
         for(int i=0; i<DSIZE2;i++){
 
             for(int j=0; j<NCH; j++) {
-                *pDsc++ = static_cast<int16_t>((*sample) - (65535+1)/2);
+                *pDsc++ = static_cast<int16_t>((*sample) - std::numeric_limits<int16_t>::max()+1); // from -32768 to 32767 values
                 timeData[j][i]=(*sample++)/65535.0;
-
             }
         }
-        if ( coutingDownToZero ) { // saveing_sample_counter
-//                    saveWave();
-            qDebug() << "count" << coutingDownToZero;
-            if ( coutingDownToZero-- >= 0 )
-            {
-                ui->progressBar->setValue( ui->spinBox->value() - coutingDownToZero);
-                //    qDebug() << "to zero count:" << coutingDownToZero;
-            }
-        }
-        if ( coutingDownToZero )
-            wav_out->write(waveBin.data(), DSIZE);
 
-        if (coutingDownToZero == 0)
+        if ( coutingDownToZero-- > 0 )
         {
-            wav_out->close();
+            ui->progressBar->setValue( ui->spinBox->value()*TIME_FACTOR - coutingDownToZero);
+            wav_out->write(waveBin.data(), DSIZE);
+            qDebug() << "to zero count:" << coutingDownToZero << "time:" << QDateTime::fromTime_t(QTime::currentTime().second()).toUTC().toString("hh:mm:ss");
+            if (coutingDownToZero == 0) {
+                wav_out->close();
+            }
         }
+
 
         for(int j=0; j<NCH; j++)
             meanData[j] = std::accumulate( timeData[j].begin(), timeData[j].end(), 0.0)/timeData[j].size();
@@ -239,12 +232,12 @@ void MainWindow::paintEvent(QPaintEvent *event)
         painter.drawText(QPointF(gw/3+(font.pointSize())+5,50+(font.pointSize())),
                          QString().sprintf("%s","Nie nawiązano połączenia, spróbuj podłączyć płytkę i uruchomić program ponownie"));
     }
-    //    if ( coutingDownToZero ) {
-    ////        chart.plotColor = Qt::darkRed;
-    //        int px = MX - 5;
-    //        int shift = px/3*2;
-    //        painter.drawRoundedRect(gw+shift*2-1, px+shift+1, px, px, px, px);
-    //    }
+        if ( coutingDownToZero > 0 ) {
+    //        chart.plotColor = Qt::darkRed;
+            int px = MX - 5;
+            int shift = px/3*2;
+            painter.drawRoundedRect(gw+shift*2-1, px-1, px, px, px, px);
+        }
 }
 
 // ------------------------------------------------------------------------------
@@ -320,7 +313,7 @@ void MainWindow::on_pushButton_enter_clicked()
     QDir dir;// We create the directory if needed
 
     ui->lineEdit_path->setText( fi.filePath() );
-    ui->progressBar->setRange(0, ui->spinBox->value());
+    ui->progressBar->setRange(0, ui->spinBox->value() * TIME_FACTOR);
     ui->progressBar->setValue(0);
     wav_out->close();
 
@@ -329,8 +322,7 @@ void MainWindow::on_pushButton_enter_clicked()
     }
 
     wav_out->open(  ui->lineEdit_path->text(), format );
-    ui->spinBox->setStepType(QAbstractSpinBox::StepType::AdaptiveDecimalStepType);
-    coutingDownToZero = ui->spinBox->value();
+    coutingDownToZero = ui->spinBox->value() * TIME_FACTOR;
 
     if ( !wav_out->isOpen() ) {
         ui->statusBar->showMessage("Error open: " + wav_out->fileName() );
@@ -341,7 +333,7 @@ void MainWindow::on_pushButton_enter_clicked()
     if( ui->checkBoxClipboard->isChecked() )
     {
         QClipboard *clipboard = QGuiApplication::clipboard();
-        clipboard->setText( ui->lineEdit_path->text()+ "/" +ui->lineEdit_path->text() );
+        clipboard->setText( fi.baseName() );
     }
 }
 
