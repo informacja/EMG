@@ -1,5 +1,5 @@
 # EMG WaveApp
-Aplikacja przetwarzająca sygnał elektromiograficzny napięcia mięśniowego (układ newrwowy) <br> 
+Aplikacja przetwarzająca sygnał elektromiograficzny napięcia mięśniowego <br> 
 
 ##### Specyfikacja sprzętowa:
 	 LPC1347 32-bit ARM Cortex-M3 mikrokontroler
