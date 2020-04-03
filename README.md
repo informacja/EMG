@@ -11,7 +11,7 @@ Aplikacja przetwarzająca sygnał elektromiograficzny napięcia mięśniowego <b
 ## Widmo charakterystyczne EMG, zaciśnięta dłoń (0-512Hz)  
 <img src="docs/now.png">
 
-## Elektroda wykrywając pracę mięśni palca środkowego i serdecznego (like Spiderman)
+## Elektroda wykrywając pracę mięśni palca środkowego i serdecznego (Spiderman)
 <img src="docs/spider.gif">
 
 ## Synał z trzech kanałów: pojedyncze zaciśnięcia dłoni, parami oraz niepodpięty kanał (ujemna amplituda niesymetryczna)
