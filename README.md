@@ -14,5 +14,5 @@ Aplikacja przetwarzająca sygnał elektromiograficzny napięcia mięśniowego <b
 ## Elektroda wykrywając pracę mięśni palca środkowego i serdecznego (Spiderman)
 <img src="docs/spider.gif">
 
-## Synał z trzech kanałów: pojedyncze zaciśnięcia dłoni, parami oraz niepodpięty kanał (ujemna amplituda niesymetryczna)
+## Synał z trzech kanałów: niepodpięty kanał (ujemna amplituda niesymetryczna), kanał 2-gi i 3-ci podpięty jest do prawej i lewej dłoni zaciskanych naprzemiennie przez 20 sekund
 <img src="docs/out56.png">
