@@ -1,6 +1,6 @@
-# Matlab WaveReader
+## Matlab Editor VS Code 
 
-> Wtyczka wsparcia dla języka [Matlab do edytora VS Code
+> Wtyczka wsparcia *lint, snippets, run* dla języka [Matlab do edytora VS Code
 ![Snippets](../docs/mSnippets.png)](https://marketplace.visualstudio.com/items?itemName=bat67.matlab-extension-pack#review-details)
 
 >[alternative Matlab ide
