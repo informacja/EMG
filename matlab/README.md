@@ -1,3 +1,7 @@
+## Pytania
+
+> Czy sygnału miograficznego można słuchać, tak jak dzwięku? Cisnienie akustyczne jest to różnica od ciśnienia atmosferycznego. Wobec tego "mowa" mięśni to różnica od "masy" potencjału elektrycznego ciała?
+
 ## Matlab Editor VS Code 
 
 > Wtyczka wsparcia *lint, snippets, run* dla języka [Matlab do edytora VS Code
