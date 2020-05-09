@@ -1,16 +1,24 @@
 % Prog2b.m
 close all
 
-[X, fpr] = audioread('one&two.wav')
-x = X(:, 1);
-plot(x);
+[X, fpr] = audioread('oneTwo.wav')
+x = X(:, 1); % First chanel only
+figure, subplot(311), plot(x); title("Raw signal"); xlabel("Time"), ylabel("Voltage")
+subplot(312), plot(diff(x),'g');   title("Derivative");
+subplot(313), plot(diff(diff(x)), 'b'); title(" Second derivative");
+
+figure, subplot(311), plot(rms(x,10)); title("RMS");
+subplot(312), plot(diff(rms(x,500)));   title("Derivative");
+subplot(313), plot(rms(x,128)); title(" Second derivative");
+
+% soundsc(x, fpr*2);
 % soundsc(x, fpr);
 % spectrogram(x, 256, 256 - 16, 4096, fpr);'
-
+ 
 figure
 Nwin = 512;
 Nfft = 2048;
-k = 16
+k    = 16;
 subplot(221), spectrogram(x, Nwin, Nwin - k, Nfft, fpr / 2, 'yaxis');
 % Nwin = 256;
 Nfft = 2048 * 2;
