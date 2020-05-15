@@ -5,7 +5,7 @@
 ## Prototypy
 
 >[Analiza one&two.wav
-![aMi](../docs/512w.png)](https://htmlpreview.github.io/?https://raw.githubusercontent.com/informacja/EMG/master/matlab/Spectral%20Analysis/Prog2b.html) 
+![aMi](../docs/512w.png)](https://htmlpreview.github.io/?https://raw.githubusercontent.com/informacja/EMG/master/matlab/Spectral%20Analysis/Prog2b.html)
 
 ## Matlab Editor VS Code 
 
