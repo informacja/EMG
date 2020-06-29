@@ -1,15 +1,25 @@
 % Prog2b.m
 close all
 
-figure, ribbon(X); title("Tak reprezetuj¹c dodatkow¹ powierzchni¹ sygna³y, dobrze widaæ kiedy miêsieñ mia³ wysoki potencja³ napiêcia w czasie"); ylabel("Czas"), xlabel("Kana³y")
 
-[X, fpr] = audioread('oneTwo.wav')
+[X, fpr] = audioread('oneTwo.wav');
 x = X(:, 1); % First chanel only
+figure, ribbon(X); title("Tak reprezetuj¹c dodatkow¹ powierzchni¹ sygna³y, dobrze widaæ kiedy miêsieñ mia³ wysoki potencja³ napiêcia w czasie"); ylabel("Czas"), xlabel("Kana³y")
 
 figure, subplot(311), plot(x); title("Raw signal"); xlabel("Time"), ylabel("Voltage")
 subplot(312), plot(diff(x),'g');   title("Derivative");
 subplot(313), plot(diff(diff(x)), 'b'); title(" Second derivative");
 
+if(1) % for book
+  figure; plot(t,x,'b-'); xlabel('t [s]'); title('x(t)'); axis([-2,2,-0.25,1.25]); grid;
+  FigType=2; MyFigFile='DFT_time_RectPulse';    % FigType = 1=long, 2=short
+  FigsTZ;
+  figure; plot(f,X,'b-'); xlabel('f [Hz]'); title('X(f)'); grid;
+  FigType=2; MyFigFile='DFT_freq_RectPulse';    % FigType = 1=long, 2=short
+  FigsTZ;
+end
+
+return;
 fcutlow = 10; %low cut frequency in Hz
 fcuthigh = 500; %high cut frequency in Hz
 [b, a] = butter(2, [fcutlow, fcuthigh] / (fpr / 2), 'bandpass');
@@ -33,6 +43,7 @@ subplot(224), spectrogram(filtsig, Nwin, Nwin - k, Nfft, fpr / 2); title("Filter
 
 Signal = x; Windowing = 256; Overlap = Windowing-16; Zeropadding = 0;
 % emg_rms = rms_gbiomech(Signal, Windowing, Overlap, Zeropadding);
+ 
 
 d = mean(x) - mean(filtsig);
 figure, 

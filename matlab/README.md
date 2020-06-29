@@ -1,4 +1,7 @@
-## Pytania
+##
+##### Zadania:
+- rozpocząć w wrześniu mailowanie (inercja odpowiedzi, by inni ruszyli z początkiem października)
+- znaleźć osobę która dopiero rozpoczyna studia i zaproponować jej udział w projekcie## Pytania
 
 > Czy sygnału miograficznego można słuchać, tak jak dzwięku? Cisnienie akustyczne jest to różnica od ciśnienia atmosferycznego. Wobec tego "mowa" mięśni to różnica od "masy" potencjału elektrycznego ciała?
 

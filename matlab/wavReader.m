@@ -3,7 +3,7 @@ clear all;
 filename =  'incrementUint16_t.wav'; % W aplikacji nagrywającej zapisywałem inkrementuącą się zmienną, sam nie wiem jak to zinterpretowć :)
 filename =  'noConnected.wav'; % Elektroda nie jest podpięta do płytki LPC 1347 widać szum z ADC
 filename =  'one&two.wav'; % 2 elektrody podpięte do prawej i lewej dłoni, zaciskanych naprzemiennie, 3-ci kanał ma przesłuchy (amplituda jest niesymetryczna)
-
+filename = "M:\Elektryczne Gitary & Kuba Sienkiewicz-Antologia\8-Nie Jestem Z Miasta - 1997\2-Wlosy.mp3"
 info = audioinfo(filename)
 
 [data, fs] = audioread(filename);
