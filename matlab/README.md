@@ -17,3 +17,9 @@
 
 ### Trzy kanały (pierwszy jest w środku)
 <img src="../docs/matlabWaterfall.png">
+ 
+### Zapis do pliku png
+```matlab
+[a,fname,c] = fileparts( mfilename('fullpath')); 
+print( strcat(fname,'.png'),'-dpng');
+```
