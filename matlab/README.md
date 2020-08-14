@@ -26,3 +26,4 @@
 [a,fname,c] = fileparts( mfilename('fullpath')); 
 print( strcat(fname,'.png'),'-dpng');
 ```
+https://stijournal.pl/resources/html/article/details?id=204954#233202
