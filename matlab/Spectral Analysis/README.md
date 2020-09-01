@@ -29,3 +29,12 @@ Pytania:
 - [ ] Myślałem że gradient to coś więcej niż pochodna
 - [ ] RMS okno gausoidalne
 
+<!-- <iframe width="600" height="371" seamless frameborder="0" scrolling="no" src="https://docs.google.com/spreadsheets/d/1fwnl5hvkkwz-YDZrogyGnx274BqmozGlIeXyjJ2TKmE/pubchart?oid=462316012&amp;format=interactive"></iframe> -->
+<iframe width="600" height="371" seamless frameborder="0" scrolling="yes" src="https://coggle.it/diagram/X05skZkqojpDUPos/t/widoczno%C5%9B%C4%87-w-internecie/0518b674c29981c60d6c9e9db7f509b4cde7825289ee4d000670af02ec21e404"></iframe>
+<iframe src="https://gitmind.com/app/doc/90b09a52ef706137d4d77ace7b73702f"></iframe>
+
+
+$$
+\Gamma(z) = \int_0^\infty t^{z-1}e^{-t}dt\,.
+$$
+https://coggle.it/diagram/X05skZkqojpDUPos/t/widoczno%C5%9B%C4%87-w-internecie/0518b674c29981c60d6c9e9db7f509b4cde7825289ee4d000670af02ec21e404

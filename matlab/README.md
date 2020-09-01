@@ -1,7 +1,7 @@
-##
 ##### Zadania:
 - rozpocząć w wrześniu mailowanie (inercja odpowiedzi, by inni ruszyli z początkiem października)
 - znaleźć osobę która dopiero rozpoczyna studia i zaproponować jej udział w projekcie## Pytania
+- [sieci](http://playground.tensorflow.org/#activation=tanh&batchSize=10&dataset=circle&regDataset=reg-plane&learningRate=0.03&regularizationRate=0&noise=0&networkShape=4,6&seed=0.26866&showTestData=false&discretize=false&percTrainData=50&x=true&y=true&xTimesY=false&xSquared=true&ySquared=false&cosX=false&sinX=false&cosY=false&sinY=false&collectStats=false&problem=classification&initZero=false&hideText=false)
 
 > Czy sygnału miograficznego można słuchać, tak jak dzwięku? Cisnienie akustyczne jest to różnica od ciśnienia atmosferycznego. Wobec tego "mowa" mięśni to różnica od "masy" potencjału elektrycznego ciała?
 
