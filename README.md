@@ -8,7 +8,7 @@ Aplikacja przetwarzająca sygnał elektromiograficzny napięcia mięśniowego <b
 ## Elektrody podpinamy kolejno zacznąc od pinu P0_11 (obecnie 3 kanały)
 <img src="docs/LPC1347.jpg">
 
-## Widmo charakterystyczne EMG, zaciśnięta dłoń (0-512Hz)  
+## Widmo charakterystyczne sEMG, zaciśnięta dłoń (0-512Hz)  
 <img src="docs/now.png">
 
 ## Elektroda wykrywając pracę mięśni palca środkowego i serdecznego (Spiderman)
