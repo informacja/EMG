@@ -1,6 +1,6 @@
 # FingerEMG  (deprecated)
 
-Aplikacja generująca sygnał "3 mnichów" w dziedzine częstotliwości, rozwój zakończony w grudnu 2019 roku w trakcie długich oczekiwaniań na sprzęt <br> 
+Aplikacja generująca sygnał "3 mnichów" w dziedzine częstotliwości, rozwój zakończony w grudnu 2019 roku w trakcie długich oczekiwaniań na sprzęt :smirk: <br> 
 
 ## Generowanie sygnałów
 ![](docs/generate.gif)
