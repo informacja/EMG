@@ -1,5 +1,11 @@
-# EMG WaveApp
-Aplikacja przetwarzająca sygnał elektromiograficzny napięcia mięśniowego <br> 
+# FingerEMG  (deprecated)
+
+Aplikacja generująca sygnał "3 mnichów" w dziedzine częstotliwości, rozwój zakończony w grudnu 2019 roku w trakcie długich oczekiwaniań na sprzęt <br> 
+
+## Generowanie sygnałów
+![](docs/generate.gif)
+
+# Po pewnym czasie ... 
 
 ##### Specyfikacja sprzętowa:
 	 LPC1347 32-bit ARM Cortex-M3 mikrokontroler
