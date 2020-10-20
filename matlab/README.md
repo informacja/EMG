@@ -18,12 +18,19 @@
 >[alternative Matlab ide
 ![aMi](../docs/aMi.png)](https://marketplace.visualstudio.com/items?itemName=marmottet.ami) 
 
-### Trzy kanały (pierwszy jest w środku)
-<img src="../docs/matlabWaterfall.png">
  
 ### Zapis do pliku \*.png o nazwie m-pliku
 ```matlab
 [a,fname,c] = fileparts( mfilename('fullpath')); 
 print( strcat(fname,'.png'),'-dpng');
 ```
+
+ 
+### Zapis do pliku z numerem figury
+```matlab
+[a,fname,c] = fileparts( mfilename('fullpath'));                   % get current m-file name
+print( strcat(fname, '_', num2str(get(gcf,'Number')), '.png'),'-dpng'); % save file CurrentMFile-lastFigureNumber.png
+
+```
+
 https://stijournal.pl/resources/html/article/details?id=204954#233202
