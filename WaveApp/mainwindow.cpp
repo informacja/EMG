@@ -293,6 +293,8 @@ void MainWindow::on_actionSave_triggered()
     qDebug()<<"DataLength"<<waveHdr.DataLength;
 
     qDebug()<<waveSignal.size();
+    qDebug()<<VSIZE;
+
 
     file.write(reinterpret_cast<char*>(&waveHdr), static_cast<uint>(sizeof(waveHdr)));
     file.write(reinterpret_cast<char*>(waveSignal.data()), static_cast<uint>(waveSignal.size()*sizeof(short)));
