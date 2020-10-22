@@ -11,6 +11,6 @@ Application collecting sEMG data written in C++ &amp; Signal processing in Matla
 [Signal Classification Using Dictionary Learning](https://www.mdpi.com/1424-8220/19/10/2370)
 
 ### FAQ
-Co to [sEMG](https://pl.wikipedia.org/wiki/Elektromiografia)?
+Co to jest [sEMG](https://pl.wikipedia.org/wiki/Elektromiografia)?
 > Jest to powierzchniowe (eng. **s**urface) badanie sygnau aktywności **e**lektrycznej  **m**ięśni.  
     
