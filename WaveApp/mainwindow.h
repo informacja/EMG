@@ -26,7 +26,7 @@
 #define DSIZE2   (DSIZE/2)
 
 #define VSIZE (DSIZE2/NCH)   //256
-#define FRCNT NCH // 8 kanałów, 5 sekund
+#define FRCNT NCH*3 // 8 kanałów, 5 sekund
 
 #define FFT_SIZE VSIZE*FRCNT
 
