@@ -12,7 +12,7 @@ Nwin = 512;
 Nfft = 2048;
 k = 16
 subplot(221), spectrogram(x, Nwin, Nwin - k, Nfft, fpr / 2, 'yaxis');
-% Nwin = 256;
+% Nwin = 256;C:\Users\Puler\Dysk Google\PWSZwTarnowie\s5\Wyk³adowcy (materia³y)\Wojciech Œwita³a - Automatyka lab+æw\3\
 Nfft = 2048 * 2;
 subplot(222), spectrogram(x, Nwin, Nwin - k, Nfft, fpr / 2, 'yaxis');
 % Nwin = 512;
