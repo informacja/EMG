@@ -29,7 +29,4 @@ print( strcat(fname, '_', num2str(get(gcf,'Number')), '.png'),'-dpng'); % save f
 
 ```
 
-##### Zadania (ToDo):
-- [Sieci neuronowe](http://playground.tensorflow.org/#activation=tanh&batchSize=10&dataset=circle&regDataset=reg-plane&learningRate=0.03&regularizationRate=0&noise=0&networkShape=4,6&seed=0.26866&showTestData=false&discretize=false&percTrainData=50&x=true&y=true&xTimesY=false&xSquared=true&ySquared=false&cosX=false&sinX=false&cosY=false&sinY=false&collectStats=false&problem=classification&initZero=false&hideText=false) (wizualizacja)
-
 https://stijournal.pl/resources/html/article/details?id=204954#233202
