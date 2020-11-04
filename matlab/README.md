@@ -24,7 +24,7 @@ print( strcat(fname,'.png'),'-dpng');
  
 ### Zapis do pliku z numerem figury
 ```matlab
-[a,fname,c] = fileparts( mfilename('fullpath'));                   % get current m-file name
+[a,fname,c] = fileparts( mfilename('fullpath'));                        % get current m-file name
 print( strcat(fname, '_', num2str(get(gcf,'Number')), '.png'),'-dpng'); % save file CurrentMFile-lastFigureNumber.png
 
 ```
