@@ -12,7 +12,8 @@ Celem projektu jest stworzenie prototypu dłoni reagującego w czasie rzeczywist
 
 ### FAQ
 Co to jest [sEMG](https://pl.wikipedia.org/wiki/Elektromiografia)?
-> Jest to powierzchniowe (eng. **s**urface) badanie sygnau aktywności **e**lektrycznej  **m**ięśni.  
+
+> Jest to powierzchniowe (eng. **s**urface) badanie bio**e**lektrycznej aktywności **m**ięśni.  
 
 #### Zadania (ToDo):
 - [Sieci neuronowe](http://playground.tensorflow.org/#activation=tanh&batchSize=10&dataset=circle&regDataset=reg-plane&learningRate=0.03&regularizationRate=0&noise=0&networkShape=4,6&seed=0.26866&showTestData=false&discretize=false&percTrainData=50&x=true&y=true&xTimesY=false&xSquared=true&ySquared=false&cosX=false&sinX=false&cosY=false&sinY=false&collectStats=false&problem=classification&initZero=false&hideText=false) (wizualizacja)
