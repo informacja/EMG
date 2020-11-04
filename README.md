@@ -1,5 +1,5 @@
 # EMG
-Application collecting sEMG data written in C++ &amp; Signal processing in Matlab
+Celem projektu jest stworzenie prototypu dłoni reagującego w czasie rzeczywistym.
 
 ## [Concept](https://stijournal.pl/resources/html/article/details?id=204954&language=en)  [pl](https://stijournal.pl/resources/html/article/details?id=204954&language=pl) 
 [
