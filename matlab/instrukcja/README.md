@@ -7,8 +7,7 @@
 3. zaciskanie
 4. rozluźnianie
 5. Łapawica. takzwana jaszczurka
+![](docs/Łapawica.jpg)
 
-
-5.
 
 https://stijournal.pl/resources/html/article/details?id=204954#233202
