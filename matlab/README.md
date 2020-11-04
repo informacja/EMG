@@ -1,4 +1,4 @@
-> Czy sygnału miograficznego można słuchać, tak jak dzwięku? Cisnienie akustyczne jest to różnica od ciśnienia atmosferycznego. Wobec tego "mowa" mięśni to różnica od "masy" potencjału elektrycznego ciała?
+> Czy sygnału miograficznego można słuchać, tak jak dzwięku? Cisnienie akustyczne to różnica ciśnienia atmosferycznego. Wobec tego "mowa" mięśni to różnica od "masy" potencjału elektrycznego ciała?
 
  **Tak, powiem więcej, warto nawet przeskalować(resampling) do pasma słyszalnego przez ludzi** *~TZ*
 
