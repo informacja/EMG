@@ -1,8 +1,8 @@
 ## Gesty dłoni
 
-1. rozluźniona (pomiar szumu)
+1. Rozluźniona (pomiar szumu)
 ![]()
-2. zaciśnięta pięść
+2. Zacśnięta pięść (elektrody to nie kajdanki :wink:)
 ![](docs/piesc.jpeg)
 3. zaciskanie
 4. rozluźnianie
