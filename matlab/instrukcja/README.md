@@ -1,5 +1,7 @@
 ## Gesty dłoni
 
+Kanał pierwszy umieszczony na mięśniu ramienno-promieniowym, kolejność kanałów w stronę zewnętrzną
+
 1. Rozluźniona (pomiar szumu)
 ![]()
 2. Zacśnięta pięść (elektrody to nie kajdanki :wink:)
