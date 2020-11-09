@@ -6,7 +6,7 @@ Celem projektu jest stworzenie prototypu dłoni reagującego w czasie rzeczywist
     ![Mapa Myśli](docs/coggle.png)
 ](https://coggle.it/diagram/X3_3tBiU9E_wpker/t/bioniczna-dłoń-image-ki)
 
-[Podgląd Mapy](https://coggle.it/diagram/X3_3tBiU9E_wpker/t/bioniczna-d%C5%82o%C5%84-image-ki/6e02177ca5137de29b0a257721d5d5c0df390b9d885b2d90c6b684851fdd79f3)
+[Podgląd mapy projektu](https://coggle.it/diagram/X3_3tBiU9E_wpker/t/bioniczna-d%C5%82o%C5%84-image-ki/6e02177ca5137de29b0a257721d5d5c0df390b9d885b2d90c6b684851fdd79f3)
 
 ### FAQ
 Co to jest [sEMG](https://pl.wikipedia.org/wiki/Elektromiografia)?
