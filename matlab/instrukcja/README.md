@@ -1,6 +1,8 @@
 ## Gesty dłoni
 
 Kanał pierwszy umieszczony na mięśniu ramienno-promieniowym, kolejność kanałów w stronę zewnętrzną
+
+
 ![](https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTpUkAjiMyoZzuavHc8DX1U3L5eJvvODlEhVg&usqp=CAU)
 
 1. Rozluźniona (pomiar szumu)
