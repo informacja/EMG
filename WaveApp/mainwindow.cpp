@@ -8,7 +8,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     connect(ui->actionRun, &QAction::triggered, this, &MainWindow::sendCommand);
-   // connect(&serial, &QSerialPort::readyRead, this, &MainWindow::readData);
+    // connect(&serial, &QSerialPort::readyRead, this, &MainWindow::readData);
 
     connect(&serial, SIGNAL(readyRead()), this, SLOT(readData()));
 
@@ -100,11 +100,15 @@ MainWindow::~MainWindow()
 
 void MainWindow::sendCommand()
 {
-    serial.clear();
-    senddata.clear();
-    senddata.resize(1);
-    senddata[0]=static_cast<char>(128*ui->actionRun->isChecked());
-    serial.write(senddata);
+
+    if(ui->actionRun->isChecked()) {
+         cnt=0;
+        serial.clear();
+        senddata.clear();
+        senddata.resize(1);
+        senddata[0]=static_cast<char>(128*ui->actionRun->isChecked());
+        serial.write(senddata);
+    }
 }
 
 void MainWindow::readData()
@@ -138,11 +142,17 @@ void MainWindow::readData()
         }
 
 
-
         cnt++;
-        if(cnt>=FRCNT)
+        if(cnt>=FRCNT) {
             cnt=0;
-
+            if(!ui->actionRun->isChecked()){
+                serial.clear();
+                senddata.clear();
+                senddata.resize(1);
+                senddata[0]=0;
+                serial.write(senddata);
+            }
+        }
         calculateFFT();
         update();
 
@@ -293,8 +303,6 @@ void MainWindow::on_actionSave_triggered()
     qDebug()<<"DataLength"<<waveHdr.DataLength;
 
     qDebug()<<waveSignal.size();
-    qDebug()<<VSIZE;
-
 
     file.write(reinterpret_cast<char*>(&waveHdr), static_cast<uint>(sizeof(waveHdr)));
     file.write(reinterpret_cast<char*>(waveSignal.data()), static_cast<uint>(waveSignal.size()*sizeof(short)));
