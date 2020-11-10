@@ -1,6 +1,6 @@
 # Instrukcja
 ### Przygotowanie przed zbieraniem sygnałów
-Miejsce pomiędzy nadgarstkiem, a łokciem (długość elektrody to ok. 5 cm) musi zostać oczyszczone z: owłosienia, martwego naskórka, tłuszczu (należy przetrzeć skórę roztworem o minimalnym stężeniu alkoholu 70%)
+Miejsce między nadgarstkiem, a łokciem (długość elektrody to ok. 5 cm) musi zostać oczyszczone z: owłosienia, martwego naskórka, tłuszczu (należy przetrzeć skórę roztworem o minimalnym stężeniu alkoholu 70%)
 
 > Kanał pierwszy umieszczony na mięśniu ramienno-promieniowym, kolejność kanałów w stronę zewnętrzną, patrząc od strony pacjenta.
 >
