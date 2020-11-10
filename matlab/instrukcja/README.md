@@ -4,7 +4,8 @@ Kanał pierwszy umieszczony na mięśniu ramienno-promieniowym, kolejność kana
 
 
 ![](https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTpUkAjiMyoZzuavHc8DX1U3L5eJvvODlEhVg&usqp=CAU)
-
+![](https://fizjoterapeuty.pl/wp-content/uploads/2017/03/miesien-ramienno-promieniowy-441x600.jpg)
+![](https://poradniksportowy.pl/wp-content/uploads/2018/02/5481_0.jpg)
 1. Rozluźniona (pomiar szumu)
 ![]()
 2. Zacśnięta pięść (elektrody to nie kajdanki :wink:)
