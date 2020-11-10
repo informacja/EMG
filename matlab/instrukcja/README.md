@@ -22,4 +22,7 @@ Kanał pierwszy umieszczony na mięśniu ramienno-promieniowym, kolejność kana
 8. Trzymanie kubka ![](docs/kubek.jpeg)
 9. Gest spidermana ![](spiderman.jpeg)
 
-https://stijournal.pl/resources/html/article/details?id=204954#233202
+## Przekazanie sygnałów
+[Gdrive](https://drive.google.com/drive/folders/1npeQl9UDTk9C8ySy3Q2Y92O75FMjxhix?usp=sharing) (należy poprosić o dostęp, w wyprzedzeniem)
+
+[Koncept}(https://stijournal.pl/resources/html/article/details?id=204954#233202)
