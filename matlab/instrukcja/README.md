@@ -6,8 +6,6 @@ Miejsce pomiędzy nadgarstkiem, a łokciem (długość elektrody to ok. 5 cm) mu
 >
 > ![](https://fizjoterapeuty.pl/wp-content/uploads/2017/03/miesien-ramienno-promieniowy-441x600.jpg)
 
-![](https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTpUkAjiMyoZzuavHc8DX1U3L5eJvvODlEhVg&usqp=CAU)
-
 ## Gesty dłoni (9)
 1. Rozluźniona (pomiar szumu)
 ![]()
