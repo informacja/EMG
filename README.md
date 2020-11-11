@@ -13,8 +13,9 @@ Co to jest [sEMG](https://pl.wikipedia.org/wiki/Elektromiografia)?
 
 > Jest to powierzchniowe (eng. **s**urface) badanie bio**e**lektrycznej aktywności **m**ięśni.  
 
-### References: 
+### References
 [Signal Classification Using Dictionary Learning](https://www.mdpi.com/1424-8220/19/10/2370)
+
 [Efektywne metody selekcji cech (SVM)](https://www.ippt.pan.pl/_download/doktoraty/2013chmielnicki_w_doktorat.pdf)
 
 #### Zadania (ToDo):
