@@ -1,5 +1,5 @@
 # EMG
-Celem projektu jest stworzenie prototypu dłoni reagującego w czasie rzeczywistym.
+Celem projektu jest stworzenie kontroli nad sterowaniem prototypu dłoni reagującego w czasie rzeczywistym.
 
 ## [Concept](https://stijournal.pl/resources/html/article/details?id=204954&language=en)  [pl](https://stijournal.pl/resources/html/article/details?id=204954&language=pl) 
 [
