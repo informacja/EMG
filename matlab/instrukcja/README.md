@@ -8,18 +8,22 @@ Miejsce między nadgarstkiem, a łokciem (długość elektrody to ok. 5 cm) musi
 
 ## Gesty prawej dłoni (10)
 0. Rozluźniona (pomiar szumu)
+[ Howdy Image Here ](docs/)
 1. Moc 
-![](docs/power.gif)
+![visual](docs/power.gif)
 2.  Zaciśnięta pięść (elektrody to nie kajdanki :wink:)
-![](docs/piesc.jpeg)
-3. zaciskanie
+![cliCk](docs/piesc.jpeg)
+3. zaciskanie OK
+![zeroKiled](docs/zk.gif)
 4. rozluźnianie
+![open](docs/open.gif)
 5. Łapawica, tak zwana jaszczurka
 ![](docs/łapawica.jpeg)
-6. ![Vka](docs/Vka.jpeg)
-7. Up&Down![Kasia](path/gif/gesture)
-8. Trzymanie kubka ![](docs/kubek.jpeg)
-9. Gest spidermana ![](docs/spiderman.jpeg)
+6. Viktoria 
+![V](docs/Vka.jpeg)
+7. Up&Down![-Kasia-](path/gif/gesture)
+8. Trzymanie kubka ![hold](docs/kubek.jpeg)
+9. Gest spidermana ![impact hit](docs/spiderman.jpeg)
 
 ## Przekazanie sygnałów
 [Gdrive](https://drive.google.com/drive/folders/1npeQl9UDTk9C8ySy3Q2Y92O75FMjxhix?usp=sharing) (należy poprosić o dostęp z wyprzedzeniem ;))
