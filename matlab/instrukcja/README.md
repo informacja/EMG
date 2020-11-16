@@ -26,7 +26,7 @@ Miejsce między nadgarstkiem, a łokciem (długość elektrody to ok. 5 cm) musi
 9. Gest spidermana ![impact hit](docs/spiderman.jpeg)
 
 ## Przekazanie sygnałów
-[Gdrive](https://drive.google.com/drive/folders/1npeQl9UDTk9C8ySy3Q2Y92O75FMjxhix?usp=sharing) (należy poprosić o dostęp z wyprzedzeniem ;))
+[Gdrive](https://drive.google.com/drive/folders/1npeQl9UDTk9C8ySy3Q2Y92O75FMjxhix?usp=sharing) (należy poprosić o dostęp z wyprzedzeniem :wink:)
 
 [Koncept PDF](https://stijournal.pl/resources/html/article/details?id=204954#233202)
 > Ciekawostka
