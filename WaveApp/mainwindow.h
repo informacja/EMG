@@ -23,7 +23,8 @@
 #define DSIZE    4096
 #define NCH 8
 #define FS 2048
-#define DSIZE2   (DSIZE/2)
+#define QLV_BYTES_PER_WORD     // uint16 // Quantisation LeVel, number of bytes per variable, number of bytes per variable. Scale factor
+#define DSIZE2   (DSIZE/QLV_BYTES_PER_WORD)
 
 #define VSIZE (DSIZE2/NCH)      // 256
 #define SECONDS 5               // of recording
