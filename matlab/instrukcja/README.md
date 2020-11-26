@@ -25,9 +25,9 @@ Miejsce między nadgarstkiem, a łokciem (długość elektrody to ok. 5 cm) musi
 <!-- ![open](docs/open.gif) -->
 5. Łapawica, tak zwana jaszczurka
 ![](docs/łapawica.jpeg)
-6. 
+6. Up&
 <!-- ![V](docs/Vka.jpeg) -->
-7. Up&Down![](path/gif/gesture)
+7. Down![](path/gif/gesture)
 8. Trzymanie kubka ![hold](docs/kubek.jpeg)
 9. Gest spidermana ![impact hit](docs/spiderman.jpeg)
 
