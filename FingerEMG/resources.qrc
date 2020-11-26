@@ -1,8 +1,0 @@
-<RCC>
-    <qresource prefix="/">
-        <file>icons/run.png</file>
-        <file>icons/trigger.png</file>
-        <file>icons/lines.png</file>
-        <file>icons/bars.png</file>
-    </qresource>
-</RCC>
