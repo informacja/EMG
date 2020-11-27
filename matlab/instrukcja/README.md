@@ -16,30 +16,37 @@ Miejsce między nadgarstkiem, a łokciem (długość elektrody to ok. 5 cm) musi
 > ![](docs/miesien-ramienno-promieniowy-441x600.jpg)
 
 ## Gesty prawej dłoni 
-0. Rozluźniona (rererencyjny pomiar szumu)
-![ Howdy Image Here ](docs/ref.gif)
->1. Moc Moutza 
->![visual](docs/moutz.gif)
->2. Zaciśnięta pięść z kciukiem na zewnątrz pięści (elektrody to nie kajdanki :wink:)
->![cliCk](docs/fist.gif)
+> 0. Rozluźniona (rererencyjny pomiar szumu)
+> ![ Howdy Image Here ](docs/ref.gif)
+
+> 1. Moutza moc
+> ![visual](docs/moutz.gif)
+
+> 2. Zaciśnięta pięść z kciukiem na zewnątrz pięści (elektrody to nie kajdanki :wink:)
+> ![cliCk](docs/fist.gif)
 <!-- ![zeroKiled](docs/zk.gif) kciuk do srodka -->
-3. OK - trzymać poziom (zeroKiled)
-![zeroKiled](docs/ok.gif)
-4. Wzkazywanie palcem (pistolet)
+
+> 3. OK - trzymać poziom (zeroKiled)
+> ![zeroKiled](docs/ok.gif)
+
+> 4. Wskazywanie palcem (pistolet)
 <!-- ![open](docs/toDo.gif) -->
-5. Kciuk w górę 
+1. Kciuk w górę
 <!-- ![open](docs/toDo.gif) -->
 6. Call me
 <!-- ![impact hit](docs/toDo.gif) -->
-7. Łapawica, tak zwana jaszczurka
-![](docs/lapawica.gif)
-8. Otwieranie dłoni
-![openHand](docs/gOpen.gif)
-9. Zginanie palców po kolei
-<!-- ![impact hit](docs/toDo.gif) -->
-10. Trzymanie kubka ![hold](docs/kubek.jpeg)
+> 7. Łapawica, tak zwana jaszczurka
+> ![pawn](docs/lapawica.gif)
+
+> 8. Otwieranie dłoni
+> ![openHand](docs/gOpen.gif)
+
+> 9. Zginanie palców po kolei
+> <!-- ![impact hit](docs/toDo.gif) -->
+> 10.  Trzymanie ołówka ![hold](docs/pen.jpg)
 LUB
-11. Trzymanie ołówka ![hold](docs/pen.jpg)
+12.  Trzymanie kubka ![hold](docs/kubek.jpeg)
+
 <!-- ![impact hit](docs/toDo.gif) -->
 
 ## Przekazanie sygnałów
