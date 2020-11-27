@@ -5,7 +5,7 @@
       - [Przygotowanie skóry](#przygotowanie-skóry)
       - [Ułożenie elektrod](#ułożenie-elektrod)
       - [Pozycja mięśnia](#pozycja-mięśnia)
-  - [Gesty prawej dłoni](#gesty-prawej-dłoni)
+  - [Gesty prawej dłoni (10)](#gesty-prawej-dłoni-10)
   - [Przekazanie sygnałów](#przekazanie-sygnałów)
 
 ### Przygotowanie przed zbieraniem sygnałów
@@ -23,7 +23,7 @@
 > 
 > ![](docs/miesien-ramienno-promieniowy-441x600.jpg)
 
-## Gesty prawej dłoni 
+## Gesty prawej dłoni (10)
 > 0. Rozluźniona (rererencyjny pomiar szumu) ![ Howdy Image Here ](docs/ref.gif)
 
 > 1. Moutza moc - Otwarta dłoń z szeroko rozpostartymi palcami ![visual](docs/moutz.gif)
