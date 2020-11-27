@@ -1,6 +1,6 @@
-# Instrukcja
+# Instrukcja zbierania sygnałów sEMG
 
-- [Instrukcja](#instrukcja)
+- [Instrukcja zbierania sygnałów sEMG](#instrukcja-zbierania-sygnałów-semg)
     - [Przygotowanie przed zbieraniem sygnałów](#przygotowanie-przed-zbieraniem-sygnałów)
       - [Przygotowanie skóry](#przygotowanie-skóry)
       - [Ułożenie elektrod](#ułożenie-elektrod)
