@@ -24,7 +24,7 @@
 > ![](docs/miesien-ramienno-promieniowy-441x600.jpg)
 
 ## Gesty prawej dłoni (10)
-> 0. Rozluźniona (rererencyjny pomiar szumu) ![ Howdy Image Here ](docs/ref.gif)
+> 0. Rozluźniona (referencyjny pomiar szumu) ![ Howdy Image Here ](docs/ref.gif)
 
 > 1. Moutza moc - Otwarta dłoń z szeroko rozpostartymi palcami ![visual](docs/moutz.gif)
 
