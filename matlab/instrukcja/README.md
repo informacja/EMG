@@ -24,7 +24,7 @@
 > ![](docs/miesien-ramienno-promieniowy-441x600.jpg)
 
 ## Gesty prawej dłoni (10)
-> 0. Rozluźniona (rererencyjny pomiar szumu) ![ Howdy Image Here ](docs/ref.gif)
+> 0. Rozluźniona (rererencyjny pomiar szumu) ![ RefSignal ](docs/ref.gif)
 
 > 1. Moutza moc - Otwarta dłoń z szeroko rozpostartymi palcami ![visual](docs/moutz.gif)
 
@@ -38,8 +38,9 @@
 > 5. Kciuk w górę
 <!-- ![open](docs/toDo.gif) -->
 
-> 6. Call me
-<!-- ![impact hit](docs/toDo.gif) -->
+> 6. Call me ![zeroKiled]  
+> <!-- ![impact hit](docs/toDo.gif) -->
+> (docs/callMe.jpg)
 
 > 7. Łapawica, tak zwana jaszczurka ![pawn](docs/lapawica.gif)
 
