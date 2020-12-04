@@ -24,6 +24,7 @@
 > ![](docs/miesien-ramienno-promieniowy-441x600.jpg)
 
 ## Gesty prawej dłoni (10)
+
 > 0. Rozluźniona (rererencyjny pomiar szumu) ![ RefSignal ](docs/ref.gif)
 
 > 1. Moutza moc - Otwarta dłoń z szeroko rozpostartymi palcami ![visual](docs/moutz.gif)
@@ -52,7 +53,7 @@
 > 10.  Trzymanie ołówka ![hold](docs/pen.jpg)
 
 LUB
-11.   Trzymanie kubka ![hold](docs/kubek.jpeg)
+1.    Trzymanie kubka ![hold](docs/kubek.jpeg)
 
 ## Przekazanie sygnałów
 [Gdrive](https://drive.google.com/drive/folders/1npeQl9UDTk9C8ySy3Q2Y92O75FMjxhix?usp=sharing) (należy poprosić o dostęp z wyprzedzeniem :wink:)
