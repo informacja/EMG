@@ -25,19 +25,18 @@
 
 ## Gesty prawej dłoni (10)
 
-> 0. Rozluźniona (rererencyjny pomiar szumu) ![ RefSignal ](docs/ref.gif)
+> 0. Rozluźniona (rererencyjny pomiar szumu) ![ RefSignal ](docs/0.gif)
 
-> 1. Moutza moc - Otwarta dłoń z szeroko rozpostartymi palcami ![visual](docs/moutz.gif)
+> 1. Moutza moc - Otwarta dłoń z szeroko rozpostartymi palcami ![visual](docs/1.gif)
 
-> 2. Zaciśnięta pięść z kciukiem na zewnątrz pięści (elektrody to nie kajdanki :wink:) ![cliCk](docs/fist.gif)
+> 2. Zaciśnięta pięść z kciukiem na zewnątrz pięści (elektrody to nie kajdanki :wink:) ![cliCk](docs/2.gif)
 <!-- ![zeroKiled](docs/zk.gif) kciuk do srodka -->
 
-> 3. OK - trzymać poziom (zeroKiled) ![zeroKiled](docs/ok.gif)
+> 3. OK - trzymać poziom (zeroKiled) ![zeroKiled](docs/3.gif)
 
-> 4. Wskazywanie palcem (pistolet) <!-- ![open](docs/toDo.gif) -->
+> 4. Wskazywanie palcem ![open](docs/4.gif) 
 
-> 5. Kciuk w górę
-<!-- ![open](docs/toDo.gif) -->
+> 5. Kciuk w górę ![open](docs/5.gif) 
 
 > 6. Call me ![zeroKiled]  
 > <!-- ![impact hit](docs/toDo.gif) -->
