@@ -34,25 +34,19 @@
 
 > 3. OK - trzymać poziom (zeroKiled) ![zeroKiled](docs/3.gif)
 
-> 4. Wskazywanie palcem ![open](docs/4.gif) 
+> 4. Wskazywanie palcem  ![open](docs/4.gif)
 
-> 5. Kciuk w górę ![open](docs/5.gif) 
+> 5. Kciuk w górę ![open](docs/5.gif)
 
-> 6. Call me ![zeroKiled]  
-> <!-- ![impact hit](docs/toDo.gif) -->
-> (docs/callMe.jpg)
+> 6. Call me ![zeroKiled] ![impact hit](docs/6.gif)
 
-> 7. Łapawica, tak zwana jaszczurka ![pawn](docs/lapawica.gif)
+> 7. Łapawica, tak zwana jaszczurka ![pawn](docs/7.gif)
 
-> 8. Otwieranie dłoni ![openHand](docs/gOpen.gif)
+> 8. Otwieranie dłoni ![openHand](docs/8.gif)
 
-> 9. Zginanie palców po kolei
-> <!-- ![impact hit](docs/toDo.gif) -->
+> 9. Zginanie palców po kolei ![impact hit](docs/9.gif)
 
-> 10.  Trzymanie ołówka ![hold](docs/pen.jpg)
-
-LUB
-1.    Trzymanie kubka ![hold](docs/kubek.jpeg)
+> 10.  Trzymanie ołówka ![hold](docs/10.jpg)
 
 ## Przekazanie sygnałów
 [Gdrive](https://drive.google.com/drive/folders/1npeQl9UDTk9C8ySy3Q2Y92O75FMjxhix?usp=sharing) (należy poprosić o dostęp z wyprzedzeniem :wink:)
