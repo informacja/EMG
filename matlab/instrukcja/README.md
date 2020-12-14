@@ -34,11 +34,11 @@
 
 > 3. OK - trzymać poziom (zeroKiled) ![zeroKiled](docs/3.gif)
 
-> 4. Wskazywanie palcem  ![open](docs/4.gif)
+> 4. Wskazywanie palcem ![open](docs/4.gif)
 
 > 5. Kciuk w górę ![open](docs/5.gif)
 
-> 6. Call me ![zeroKiled] ![impact hit](docs/6.gif)
+> 6. Call me ![impact hit](docs/6.gif)
 
 > 7. Łapawica, tak zwana jaszczurka ![pawn](docs/7.gif)
 
