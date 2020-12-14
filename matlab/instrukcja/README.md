@@ -46,7 +46,7 @@
 
 > 9. Zginanie palców po kolei ![impact hit](docs/9.gif)
 
-> 10.  Trzymanie ołówka ![hold](docs/10.jpg)
+> 10.  Trzymanie ołówka ![hold](docs/10.gif)
 
 ## Przekazanie sygnałów
 [Gdrive](https://drive.google.com/drive/folders/1npeQl9UDTk9C8ySy3Q2Y92O75FMjxhix?usp=sharing) (należy poprosić o dostęp z wyprzedzeniem :wink:)
