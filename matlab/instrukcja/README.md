@@ -34,7 +34,8 @@
 
 > 3. OK - trzymać poziom (zeroKiled) ![zeroKiled](docs/3.gif)
 
-> 4. Wskazywanie palcem 
+> 4. Wskazywanie palcem
+> 
 > ![open](docs/4.gif)
 
 > 5. Kciuk w górę ![open](docs/5.gif)
@@ -47,8 +48,7 @@
 
 > 9. Zginanie palców po kolei ![impact hit](docs/9.gif)
 
-> 10. Trzymanie ołówka 
-> ![hold](docs/10.gif)
+> 10. Trzymanie ołówka![hold](docs/10.gif)
 
 ## Przekazanie sygnałów
 [Gdrive](https://drive.google.com/drive/folders/1npeQl9UDTk9C8ySy3Q2Y92O75FMjxhix?usp=sharing) (należy poprosić o dostęp z wyprzedzeniem :wink:)
