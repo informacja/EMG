@@ -21,6 +21,7 @@ Co to jest [sEMG](https://pl.wikipedia.org/wiki/Elektromiografia)?
 [ HILBERT HUANG RELATED MATHEMATICAL PROBLEMS](docs/HHT.pdf)
 
 #### Zadania (ToDo):
-- [Instrukcja](https://github.com/informacja/EMG/tree/master/matlab/instrukcja#readme) zbierania sygnałów
-- Sieci neuronowe [TF](http://playground.tensorflow.org/#activation=tanh&batchSize=10&dataset=circle&regDataset=reg-plane&learningRate=0.03&regularizationRate=0&noise=0&networkShape=4,6&seed=0.26866&showTestData=false&discretize=false&percTrainData=50&x=true&y=true&xTimesY=false&xSquared=true&ySquared=false&cosX=false&sinX=false&cosY=false&sinY=false&collectStats=false&problem=classification&initZero=false&hideText=false) (wizualizacja)
+- [x] [Instrukcja](https://github.com/informacja/EMG/tree/master/matlab/instrukcja#readme) zbierania sygnałów
+- [ ] Sieci neuronowe [TF](http://playground.tensorflow.org/#activation=tanh&batchSize=10&dataset=circle&regDataset=reg-plane&learningRate=0.03&regularizationRate=0&noise=0&networkShape=4,6&seed=0.26866&showTestData=false&discretize=false&percTrainData=50&x=true&y=true&xTimesY=false&xSquared=true&ySquared=false&cosX=false&sinX=false&cosY=false&sinY=false&collectStats=false&problem=classification&initZero=false&hideText=false) (wizualizacja)
+- [ ] [Progesty YT](https://www.youtube.com/watch?v=6bW5ptZm0g4)
 
