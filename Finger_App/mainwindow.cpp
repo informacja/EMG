@@ -46,7 +46,11 @@ MainWindow::MainWindow(QWidget *parent) :
     const auto infos = QSerialPortInfo::availablePorts();
     for (const QSerialPortInfo &info : infos)
     {
-        if(info.serialNumber()=="NXP-77")
+#ifdef Q_OS_UNIX
+       if (info.description()=="NXP-77")
+#else
+       if (info.description()=="Urządzenie szeregowe USB")
+#endif
         {
             portname=info.portName();
             serial.setPortName(portname);
@@ -463,6 +467,7 @@ void MainWindow::externalThread_tick()
     } else {
         auto_actionRun_serial_port(3);                                             // automatyczny start rysowania po ekranie
     }
+    return;
     //  int size = (DSIZE * ui->spinBox_nDataPerFile->text().toInt());
     //  if(wait_for_data)
     //   if( serial.size() >= size)
