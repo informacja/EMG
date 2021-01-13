@@ -1,5 +1,5 @@
 # Instrukcja zbierania sygnałów sEMG
-
+Kontakt preferowany: [MS Teams](https://teams.microsoft.com/l/team/19%3a67c1ec377a0740bfaa2965296928e4f4%40thread.tacv2/conversations?groupId=5e515d1e-49ec-40ae-b085-1ca4a7b3a426&tenantId=5bcccb35-0e7b-4ed1-b306-b54b683947cc)
 - [Instrukcja zbierania sygnałów sEMG](#instrukcja-zbierania-sygnałów-semg)
     - [Przygotowanie przed zbieraniem sygnałów](#przygotowanie-przed-zbieraniem-sygnałów)
       - [Przygotowanie skóry](#przygotowanie-skóry)
