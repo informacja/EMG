@@ -90,7 +90,7 @@
 
 enum Simulation_Type {
         // data from NXP board
-    SIMUL_REALTIME = 0,
+    SIMUL_FROM_REALPORT = 0,             // Virtual Communication Measure Source
         // from file
     SIMULATION_BINARY,              // depracated
     SIMULATION_CSV,                 // depracated
@@ -100,8 +100,6 @@ enum Simulation_Type {
         // fatal error
     SIMULATION_STOP = 0xFF
 };
-
-
 
 
 #endif // PRE_HEADERS_H

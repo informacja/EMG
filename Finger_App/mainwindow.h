@@ -2,16 +2,17 @@
 #define MAINWINDOW_H
 
 #include "pre_headers.h"
-
 #include "kissfft-131/kiss_fft.h"
 #include "iir/Iir.h"
 
 
+#define FS          8000 // dla procesora M33 z ostatnich zajęć tydzień temu
+#define DSIZE       8192
 
 
-#define DSIZE    4096
+//#define DSIZE    4096
 #define NCH 8
-#define FS 2048
+//#define FS 2048
 #define QLV_BYTES_PER_WORD 2   // uint16 // Quantisation LeVel, number of bytes per variable. Scale factor
 #define DSIZE2   (DSIZE/QLV_BYTES_PER_WORD)
 #define WSIZE    (DSIZE2/2)                   // window length
@@ -38,10 +39,6 @@
 //10-400hz
 // podskórne do 1KHz
 
-
-//csv zera
-
-
 #define FPS FPS
 //#define DATA_DIR "./data/"
 #define FILE_NAME  "out"
@@ -54,7 +51,7 @@
 //#define B_SIZE DSIZE                          // minimalny rozmiar wczytywaniej paczki danych z pliku
 #define SQUARE(a) (a*a)
 #define INI_FILES "Ini_Files"
-#define ALLOW_USE_FILTERS
+//#define ALLOW_USE_FILTERS
 
 #define DISABLE_FILTERS_ON_STARTUP
 
@@ -142,7 +139,7 @@ signals:
     void simulation_changed(Simulation_Type);
 
 public slots:
-    void set_simulation(const Simulation_Type &newSimul);
+    void set_simulation_info(const Simulation_Type &newSimul);
     void set_butterworth_BandStop_fq(int cutoff_frequency);
     void set_butterworth_BandStop_width(int width);
     void set_butterworth_HiPass(int cutoff_frequency);
@@ -156,13 +153,13 @@ private:
     QByteArray readdata, buff;
     QVector<QVector<double>> timeData;                                          // calc and display
     QVector<double> meanData;
-    QVector<QVector<double>> spectrum;                                          // resized to NCH in constructor
+    QVector<QVector<double>> spectrums;                                          // resized to NCH in constructor
     Chart chart;
 
     // Added
     kiss_fft_cfg cfg;
     int isinverse;                                                  // fft needed
-    kiss_fft_cpx* in[NCH];
+    kiss_fft_cpx* input[NCH];
     kiss_fft_cpx* out[NCH];
     kiss_fft_cpx test[DSIZE2];
 
@@ -174,8 +171,8 @@ private:
     QTextStream stream;                                         // for csv read and write;
     Simulation_Type simulation;
     FPS fps;
-    WavFilerReader* wav_in;                                     // input or output
-    WaveFileWriter* wav_out;
+    WavFilerReader* fileWaveIn;                                     // input or output
+    WaveFileWriter* fileWaveOut;
     QAudioFormat format;
     int coutingDownToZero;
     bool wait_for_data = true;

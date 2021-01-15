@@ -110,16 +110,16 @@ RESOURCES += \
 #DISTFILES +=
 
 
-# Added by Piotr
+# Added by Piotr below
 
 *msvc* { # visual studio spec filter
   QMAKE_CXXFLAGS += -MP8
 }
 
+# Compilation speed up method by precompiled headers
 CONFIG += precompile_header
 
 #PRECOMPILED_HEADER = pre_headers.h
-
 
 #SUBDIRS += \
 #    spectrum/app/app.pro \

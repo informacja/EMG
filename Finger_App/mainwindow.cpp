@@ -1,11 +1,13 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 //#include <QTimer>
-//#include "kissfft-131/kiss_fft.c"
-// samo .h nie bangla, uzasadnienie poniżej
-//Kissfft is not really something you need to make and install like other libraries. If you need complex ffts,
-//then all you need to do is compile the kiss_fft.c in your project. If you need something more specialized
-//like multidimensional or real ffts, then you should also compile the apropriate file(s) from the tools dir.
+
+// #include "kissfft-131/kiss_fft.c"
+// Sam plik nagłówkowy kiss_fft.h nie bangla, trzeba użyć źródłowy jak wyżej, uzasadnienie poniżej
+
+// "Keep it simple stupid" fft is not really something you need to make and install like other libraries. If you need complex ffts,
+// then all you need to do is compile the kiss_fft.c in your project. If you need something more specialized
+// like multidimensional or real ffts, then you should also compile the apropriate file(s) from the tools dir.
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -39,7 +41,7 @@ MainWindow::MainWindow(QWidget *parent) :
     alloc_files();
 
     ui->statusBar->showMessage("No device");
-    set_simulation( GENERATE_SIGNAL );
+    set_simulation_info( GENERATE_SIGNAL );
 //    set_simulation( SIMULATION_STOP );
 
     QString portname;
@@ -59,7 +61,7 @@ MainWindow::MainWindow(QWidget *parent) :
 //                serial.setBaudRate( serial.Baud115200,  serial.AllDirections);
                 ui->statusBar->showMessage(tr("Device: %1").arg(info.serialNumber()));
                 serial.clear();
-                simulation = SIMUL_REALTIME;
+                simulation = SIMUL_FROM_REALPORT;
 //                thread.start(thread.HighestPriority);     // zawsze startuj wątek, przeniesione poniżej
             }
             else {
@@ -108,8 +110,8 @@ MainWindow::MainWindow(QWidget *parent) :
     format.setCodec("audio/pcm");
     format.setSampleRate(DSIZE2);                         // Hz sample per second
     format.setChannelCount(NCH);                              // NCH TODO:
-    format.setSampleSize(sizeof(in[0][0])*4);           // sizeof(double) => 8 ( I multiplayng by 4 to get valid 32 bits)
-    qDebug() << "SampleSize" << sizeof( in[0][0])*4 ;
+    format.setSampleSize(sizeof(input[0][0])*4);           // sizeof(double) => 8 ( I multiplayng by 4 to get valid 32 bits)
+    qDebug() << "SampleSize" << sizeof( input[0][0])*4 ;
     format.setByteOrder(QAudioFormat::LittleEndian);
     format.setSampleType(QAudioFormat::SampleType::Float); // nie ma double co zrobić?
 
@@ -138,12 +140,12 @@ MainWindow::MainWindow(QWidget *parent) :
 
     switch(simulation) // teoretycznie do usunięcia
     {
-        case SIMUL_REALTIME:     // nawiązano połączenie z płytką
+        case SIMUL_FROM_REALPORT:     // nawiązano połączenie z płytką
         {
 //            file_out.open(QIODevice::WriteOnly | QIODevice::Append);    // bin
             QString fName = get_unique_filename(FILE_NAME ".wav", true);
 
-            qDebug() << "Plik do zapisu" << wav_out->open( fName, format) << fName;
+            qDebug() << "Plik do zapisu" << fileWaveOut->open( fName, format) << fName;
         } break;
         case SIMULATION_CSV:    break;
         case SIMULATION_WAV:
@@ -157,21 +159,22 @@ MainWindow::MainWindow(QWidget *parent) :
 //                break;
 //            }
 
-            if( !wav_in->open(input_file) ) // WAV have valid header
+            if( !fileWaveIn->open(input_file) ) // WAV have valid header
             {
                 ui->statusBar->showMessage("Niepoprawny plik WAV: "+input_file);
-                simulation =SIMULATION_STOP;
+                simulation = SIMULATION_STOP;
             }
             else {
                 ui->statusBar->showMessage(input_file);
             }
             break;
         }
-        case SIMULATION_BINARY: break;      /* deprecated */
-        case SIMULATION_STOP:
-            set_simulation(GENERATE_SIGNAL);
 
-            // szukaj plików do otwarcia
+        case SIMULATION_BINARY: break;      /* deprecated */        
+        case SIMULATION_STOP:
+            set_simulation_info(GENERATE_SIGNAL);
+
+            // szukaj plików do otwarcia w katalogu
         break;
 //    default: break;
     }
@@ -292,13 +295,13 @@ MainWindow::MainWindow(QWidget *parent) :
 void MainWindow::alloc_memory_sub_constructor()
 {
     timeData.resize(NCH);
-    spectrum.resize(NCH);
+    spectrums.resize(NCH);
     for(int i=0; i< timeData.size();i++)        // dla wszystkich kanalow
     {
         timeData[i].resize(DSIZE2);
         timeData[i].fill(0);
-        spectrum[i].resize(DSIZE2);
-        spectrum[i].fill(0);
+        spectrums[i].resize(DSIZE2);
+        spectrums[i].fill(0);
     }
 
     meanData.resize(NCH);
@@ -313,9 +316,9 @@ void MainWindow::alloc_memory_sub_constructor()
 
     for (int i = 0; i < NCH; i++)
     {
-        in[i]=static_cast<kiss_fft_cpx*>(KISS_FFT_MALLOC(DSIZE2*sizeof(*in[0])));
+        input[i]=static_cast<kiss_fft_cpx*>(KISS_FFT_MALLOC(DSIZE2*sizeof(*input[0])));
         out[i]=static_cast<kiss_fft_cpx*>(KISS_FFT_MALLOC(DSIZE2*sizeof(*out[0])));
-        if(in[i] == nullptr){
+        if(input[i] == nullptr){
             ui->statusBar->showMessage(tr("Can't alloc in[%d] in MainWindow(QWidget *parent) "),i);
             return;
         }
@@ -323,7 +326,7 @@ void MainWindow::alloc_memory_sub_constructor()
             ui->statusBar->showMessage(tr("Can't alloc out[%d] in MainWindow(QWidget *parent) "), i);
             return;
         }
-        memset(in[i],0,DSIZE2  * sizeof(*in[0]));
+        memset(input[i],0,DSIZE2  * sizeof(*input[0]));
         memset(out[i],0,DSIZE2 * sizeof(*out[0]));
     }
 
@@ -348,21 +351,21 @@ void MainWindow::alloc_memory_sub_constructor()
 
 void MainWindow::pointers_set_null()
 {
-    wav_out = nullptr;
-    wav_in  = nullptr;
+    fileWaveOut = nullptr;
+    fileWaveIn  = nullptr;
     wait_for_data = false;
 }
 void MainWindow::alloc_files()
 {
-  wav_in = new WavFilerReader(nullptr);
-  wav_out = new WaveFileWriter(nullptr);
+  fileWaveIn = new WavFilerReader(nullptr);
+  fileWaveOut = new WaveFileWriter(nullptr);
 }
 
 MainWindow::~MainWindow()
 {    
-    wav_in->close();
+    fileWaveIn->close();
 //    qDebug() << "len"<< wav_out->get_len();
-      wav_out->close();
+      fileWaveOut->close();
 
     thread.terminate();
     thread.wait();
@@ -373,7 +376,7 @@ MainWindow::~MainWindow()
     if(file_csv.isOpen()) file_csv.close();
     for (int i = 0; i < NCH; i++)
     {
-        free(in[i]);
+        free(input[i]);
         free(out[i]);
     }
     kiss_fft_free(cfg);
@@ -383,8 +386,8 @@ MainWindow::~MainWindow()
 //    delete file_csv;
 //    delete file_out;
     delete [] hamming, hann;
-    delete wav_in;
-    delete wav_out;
+    delete fileWaveIn;
+    delete fileWaveOut;
     delete ui;
 }
 
@@ -399,15 +402,10 @@ MainWindow::~MainWindow()
 // 4 integracja z sprz etaem, przyciski. kontrolki,
 //5zrobienie sprz etu
 
-
-
 //sniadanie
-//rozmowa z grafikami
+//rozmowa z grafikami (Dział wizualizacji reprezentacyjnej)
 //z szefem
-//robienie swojego
-
-
-
+//czas na swoje projekty
 
 // =============================================================================
 /* ToDo:
@@ -455,10 +453,32 @@ double rms(double* x, int n)
 
 void MainWindow::externalThread_tick()
 {
-    //     qDebug()<<"serial"<<serial.size();
-         qDebug()<<"sy"<< simulation;
+    if (serial.size() >= DSIZE) {
+
+        readdata = serial.read(DSIZE);
+        qDebug() << readdata.size();
+
+        uint16_t *sample=reinterpret_cast<uint16_t*>(readdata.data());
+        for (int n=0; n < chart.dataSize; n++)
+        {
+           spectrums[0][n] = (sample[n]-32768)/32768.0;
+        }
+    }
+
+    update();//      present_data();
+    sendCommand();
+
+    return;
+
+
+
+
+   qDebug() << "simulationType:" << simulation
+            << "dataSize" << serial.size();
+
     // obsluga przycisku akcji (play/pause)
-    if( simulation == SIMULATION_STOP || simulation == GENERATE_SIGNAL ) {
+    if( simulation == SIMULATION_STOP || simulation == GENERATE_SIGNAL )
+    {
         ui->statusBar->showMessage( QString().sprintf("Simulation: %i", simulation), 1000);
 //        ui->statusBar->showMessage("Przenieś i upuść na program plik typu (WAV, CSV) drag&drop SIMULATION_STOP",1000);
 //        ui->actionRun->setChecked(false);
@@ -467,7 +487,7 @@ void MainWindow::externalThread_tick()
     } else {
         auto_actionRun_serial_port(3);                                             // automatyczny start rysowania po ekranie
     }
-    return;
+
     //  int size = (DSIZE * ui->spinBox_nDataPerFile->text().toInt());
     //  if(wait_for_data)
     //   if( serial.size() >= size)
@@ -521,12 +541,15 @@ void MainWindow::externalThread_tick()
         signal_source();        // load from LPC 1347, load from wav or generate signal
 
         process_signals();      // fft, rms, korelacja
-        if( ui->actionSave->isChecked() || coutingDownToZero )
-        {
-            save_to_file( 0 );
-            if ( coutingDownToZero == 1 )
-                 wav_out->close();
-        }
+// return;
+
+//        if( ui->actionSave->isChecked() || coutingDownToZero )
+//        {
+//            save_to_file( 0 );
+//            if ( coutingDownToZero == 1 )
+//                 wav_out->close();
+//        }
+
 //        else if ( coutingDownToZero == 0 )
         {
 //            coutingDownToZero = -1;
@@ -535,7 +558,7 @@ void MainWindow::externalThread_tick()
         update();//      present_data();
 
 //        if(ui->actionRun->isChecked())
-//        if (simulation == SIMUL_REALTIME)
+//        if (simulation == SIMUL_REALPORT)
             sendCommand();
 
 //            qDebug() << serial.size();
@@ -617,7 +640,7 @@ void MainWindow::paintEvent(QPaintEvent *event)
     if( ui->actionSpectrum->isChecked())
     {
         chart.plotColor=Qt::gray;
-        chart.drawLinearData(painter, spectrum[0]);
+        chart.drawLinearData(painter, spectrums[0]);
         chart.drawText(painter, gw+50+(font.pointSize()), gh+30+(font.pointSize()), "[Hz]");
     }
 
@@ -726,7 +749,7 @@ void MainWindow::save_to_file( bool add_seconds)
 //         qDebug() << "timedata size:" << timeData[0].size() << "wav size:" << wavData[0].size();
 
         if( simulation == GENERATE_SIGNAL ) /// TO CHANGE;
-            *pDsc++ = static_cast<float>(in[k][i].r);
+            *pDsc++ = static_cast<float>(input[k][i].r);
         else *pDsc++ = static_cast<float>(*pSrc++);
     }
 //}
@@ -737,7 +760,7 @@ void MainWindow::save_to_file( bool add_seconds)
           // no csv
 //          file_out.write(( QString::toUtf8( QDateTime::currentMSecsSinceEpoch() ) ));
       }
-        wav_out->write(reinterpret_cast<char*>(wavData[k].data()), static_cast<uint>(wavData[k].size())*sizeof(wavData[0][0]));
+        fileWaveOut->write(reinterpret_cast<char*>(wavData[k].data()), static_cast<uint>(wavData[k].size())*sizeof(wavData[0][0]));
 
         qInfo() <<"zapisano kanał "<<  k << "size(): " << wavData[k].size() << "rozm:" << timeData[0].size()  <<  QDateTime::currentMSecsSinceEpoch();
         for (int i = 0; i < wavData[k].size(); i++)
@@ -830,13 +853,13 @@ bool MainWindow::simulation_open_file( QString fileName ) // retrun? enum simula
     {
         case SIMULATION_WAV:
         {
-          wav_in->close();                 // zamknij poprzedni plik
+          fileWaveIn->close();                 // zamknij poprzedni plik
 
-          wav_in->setFileName( fileName );
-          wav_in->open(QIODevice::ReadOnly);
+          fileWaveIn->setFileName( fileName );
+          fileWaveIn->open(QIODevice::ReadOnly);
 
-          qDebug() << "isOpen:" << wav_in->isOpen();
-          if( !wav_in->isOpen() )
+          qDebug() << "isOpen:" << fileWaveIn->isOpen();
+          if( !fileWaveIn->isOpen() )
               return false;
 
         } break;
@@ -910,7 +933,7 @@ qint64 MainWindow::simulation_read_data_from_file()
  {
   switch (simulation)
   {
-      case SIMUL_REALTIME: return 0;
+      case SIMUL_FROM_REALPORT: return 0;
       case SIMULATION_CSV:
       {
         for (int i = 0; i < DSIZE2; i++)                        //  1024
@@ -965,7 +988,7 @@ qint64 MainWindow::simulation_read_data_from_file()
         ui->statusBar->showMessage(QString::number(i++));
 
 //        qWarning()<<"rozm:" << buff.size();
-        if(wav_in->atEnd() || i  > 100) //TODO
+        if(fileWaveIn->atEnd() || i  > 100) //TODO
         {
             simulation = SIMULATION_STOP;
             ui->statusBar->showMessage("ST0P");
@@ -973,7 +996,7 @@ qint64 MainWindow::simulation_read_data_from_file()
             return false;
         }
 
-        buff = wav_in->readAll();
+        buff = fileWaveIn->readAll();
 
         return  buff.size();
 //      }
@@ -994,10 +1017,10 @@ qint64 MainWindow::simulation_read_data_from_file()
    // TODO binary optimise full CPU load                                                                          // read binary data
     {
 //          qInfo() << file.pos();
-           if( wav_in->atEnd() )
+           if( fileWaveIn->atEnd() )
            {
 //            if( file.pos() != 0)  // jezeli nie na początku pliku
-              wav_in->seek(0);     // zacznij jeszcze raz czytać plik (zapętl)
+              fileWaveIn->seek(0);     // zacznij jeszcze raz czytać plik (zapętl)
               ui->actionRun->setChecked(false);
            }
 
@@ -1010,7 +1033,7 @@ qint64 MainWindow::simulation_read_data_from_file()
 //            qCritical() << "Error read file, buff size: " << size << endl;
 //            if(size == -1)      // jeśli plik pusty lub nie istnieje
 //              {
-//                simulation = SIMUL_REALTIME;
+//                simulation = SIMUL_REALPORT;
 //                return false;
 //              }
 //          }
@@ -1070,7 +1093,7 @@ Simulation_Type MainWindow::find_source_file(QString filename)
 {
     if( QFileInfo(filename).isFile() ) {
         if( simulation_open_file(filename) == false) {
-            set_simulation(SIMULATION_STOP);
+            set_simulation_info(SIMULATION_STOP);
 //            simulation = ;
         }
         qDebug() << "Find source: " << filename << simulation;
@@ -1089,7 +1112,7 @@ Simulation_Type MainWindow::find_source_file(QString filename)
 //    simulation = newSimul;
 //    emit simulation_changed(newSimul);
 //}
-void MainWindow::set_simulation(const Simulation_Type &newSimul)
+void MainWindow::set_simulation_info(const Simulation_Type &newSimul)
 {
     simulation = newSimul;
         qDebug() << "Simulation tick, new SimType: " << newSimul;
@@ -1155,7 +1178,7 @@ void MainWindow::on_pushButto_kat_clicked(){
 
 void MainWindow::on_pushButton_openFile_clicked()
 {
-  wav_out->close();
+  fileWaveOut->close();
   QString path = QDir::currentPath()+ "/" +ui->lineEdit_path->text()+ "/" +ui->lineEdit_fileN->text() ;
   showFileInFolder(path);
 }
@@ -1213,11 +1236,17 @@ inline void MainWindow::load_data_from_serialport()
 
   for(int i=0; i<DSIZE2; i++) // czy tu nie powninno byćH D2SIZE
   {
+       spectrums[0][2] = (*sample++)/65535.0;
+       qDebug() <<  spectrums[0][2];
     for(int k=0; k<NCH; k++)
     {
-      timeData[k][i]=(*sample++)/65535.0;
-
-//      float freq =200; test[i].r = sin(2 * M_PI * freq * i / DSIZE2), test[i].i = 0;  test[i].i = 0; test[i].r = kiss_fft_scalar (*sample)/65535.0;
+        break;
+//      timeData[k][i]=(*sample++)/65535.0;
+        spectrums[0][2] = (*sample++)/65535.0;
+        float freq = 200;
+        test[i].r = sin(2 * M_PI * freq * i / DSIZE2),  0;
+        test[i].i = 0;
+        test[i].r = kiss_fft_scalar (*sample)/65535.0;
 #ifdef ALLOW_USE_FILTERS
    // filtracja
       if(ui->radioBtn_rect->isChecked()) {
@@ -1239,8 +1268,10 @@ inline void MainWindow::load_data_from_serialport()
       }
 #endif // APPLY_FILTERS
 
-      (in[k]+i)->r = static_cast<float>(timeData[k][i]);
-      (in[k]+i)->i = 0;
+//      (in[k]+i)->r = static_cast<float>(timeData[k][i]);
+
+      (input[k]+i)->r = test->r;
+      (input[k]+i)->i = 0;
     }
   }
 }
@@ -1257,7 +1288,7 @@ void MainWindow::on_toolButton_enter_clicked()
   ui->progressBar->setRange(0, ui->spinBox_nDataPerFile->value());
   ui->progressBar->setValue(0);
 
-    wav_out->close();
+    fileWaveOut->close();
     if ( ui->lineEdit_path->text().isEmpty() )
         fName = ui->lineEdit_fileN->text();
     else
@@ -1272,9 +1303,9 @@ void MainWindow::on_toolButton_enter_clicked()
     ui->lineEdit_fileN->setText( fi.completeBaseName()+ "." +fi.completeSuffix() );
 
     fName = ui->lineEdit_path->text()+ "/" +ui->lineEdit_fileN->text();
-    wav_out->open( fName, format );
+    fileWaveOut->open( fName, format );
     coutingDownToZero =  ui->spinBox_nDataPerFile->value();
-    qDebug() << "is open wav" << wav_out->isOpen() << wav_out->fileName();
+    qDebug() << "is open wav" << fileWaveOut->isOpen() << fileWaveOut->fileName();
     ui->progressBar->setValue(100);
 
     if( ui->checkBox_autoCpyPath->isChecked() )
@@ -1304,7 +1335,7 @@ void MainWindow::simulation_adjust(Simulation_Type newSimul)
 //ui->radioBtn_hann
     }
 
-    if (newSimul == SIMUL_REALTIME)
+    if (newSimul == SIMUL_FROM_REALPORT)
     {
         ui->actionRun->setChecked(true);
         ui->actionRms->setChecked(checked);
@@ -1313,11 +1344,11 @@ void MainWindow::simulation_adjust(Simulation_Type newSimul)
 
     }
 
-    if (wav_out != nullptr)
+    if (fileWaveOut != nullptr)
     {
-        wav_out->close();
-        wav_out->open( get_unique_filename( ui->lineEdit_fileN->text() ), format );
-        ui->lineEdit_fileN->setText( wav_out->fileName() );
+        fileWaveOut->close();
+        fileWaveOut->open( get_unique_filename( ui->lineEdit_fileN->text() ), format );
+        ui->lineEdit_fileN->setText( fileWaveOut->fileName() );
     }
 }
 
@@ -1333,14 +1364,27 @@ void MainWindow::on_pushButton_clicked()
 
 inline void MainWindow::process_signals()
 {
-    spectrum[0].fill(0);        // uzywany jako wynik wymnozenia widm 3-ch kanlow
+    spectrums[0].fill(0);        // uzywany jako wynik wymnozenia widm 3-ch kanlow
 
     for (int k = 0; k < NCH; k++)
     {
-        kiss_fft( cfg, in[k], out[k] );
+        kiss_fft( cfg, input[k], out[k] );
 
         for (int i = 1; i < WSIZE; i++) // fft gives redundant spectrum, use only half of window  (WSIZE)
         {
+            spectrums[0][i] =  sqrt(SQUARE((out[k]+i)->r) + SQUARE((out[k]+i)->i))/51.2;
+        }
+    }
+
+    return;
+
+    for (int k = 0; k < NCH; k++)
+    {
+        kiss_fft( cfg, input[k], out[k] );
+
+        for (int i = 1; i < WSIZE; i++) // fft gives symetric spectrum, use only half of dataSize (WSIZE)
+        {
+            break;
             if ( i >= DSIZE2 ) // na wypadek zwiękaszania pętli np. razy 2
             {
                 //          break;
@@ -1352,10 +1396,9 @@ inline void MainWindow::process_signals()
             int scalar = 1;
             i *= scalar;       // przedział zmiennej i: od 0 do 512 mnożony razy dwa
 
-
             if (k == 0 )
             {
-                spectrum[0][i] = mag ;            // TODO nie mieści się na wykresie//                  spectrum[k][i] = (out[0]+i)->r * hamming[i];
+                spectrums[0][i] = mag;            // TODO nie mieści się na wykresie//                  spectrum[k][i] = (out[0]+i)->r * hamming[i];
             }
 //            else if (k == 1){
 //                spectrum[0][i] *= mag * ui->pwmValue2->value(); // razy wspoczynnik z sowaka
@@ -1407,6 +1450,7 @@ inline void MainWindow::process_signals()
             //                   qInfo() << amplitude << (out[k]+i)->r << (out[k]+i)->i;
         }
     }
+    return;
 
     int d = WSIZE/NBARS;
 
@@ -1418,7 +1462,7 @@ inline void MainWindow::process_signals()
     for (int i = 0; i < NBARS; i++) {
         //            meanData[i]=(double)i/d;
         //             if( a < i && i < DSIZE2-a) // Hz
-        meanData[i] = rms(&spectrum[0][(d)*i],d);
+        meanData[i] = rms( &spectrums[0][(d)*i], d);
         //            meanData[i]=rms(&spectrum[0][d*q],0);
     }
 }
@@ -1430,7 +1474,7 @@ void MainWindow::generate_3_signals(int speed, int gap, bool mirror, bool fillHa
     static int ink;
     double freq;
 
-    int N = (mirror) ? WSIZE : WSIZE; //  bug should bee DSIZE2
+    int N = (mirror) ? WSIZE : WSIZE; //  bug, should bee DSIZE2
 
     int NLE = (fillHalf) ? WSIZE : DSIZE2;
 
@@ -1449,7 +1493,7 @@ void MainWindow::generate_3_signals(int speed, int gap, bool mirror, bool fillHa
             }
             else timeData[k][i] = 0;  k++;
 
-            if( ui->selectInput2->isChecked()  )
+            if( ui->selectInput2->isChecked() )
             {
                 freq = ( ink + k * gap ) % 512 * ((mirror == false) ? 1 : 2);
                 timeData[k][i] = ((k+2.)/20)*sin(((2 * M_PI) * freq * i + fi[k]) / N );
@@ -1463,10 +1507,10 @@ void MainWindow::generate_3_signals(int speed, int gap, bool mirror, bool fillHa
             }
             else timeData[k][i] = 0; k = 0;
 
-            in[k][i].i = 0;
+            input[k][i].i = 0;
 //            in[0][i].r += timeData[k][i];
 
-            in[0][i].r = timeData[0][i] + timeData[1][i] + timeData[2][i];                  // add signals for fft
+            input[0][i].r = timeData[0][i] + timeData[1][i] + timeData[2][i];                  // add signals for fft
         }
     }    
 }
@@ -1481,18 +1525,18 @@ void MainWindow::apply_filters()
               // do nothing, just assingn
             }
             else if (ui->radioBtn_hann->isChecked()) {
-              in[k][i].r *= (hann[i]);       //(*sample)/65535.0;
+              input[k][i].r *= (hann[i]);       //(*sample)/65535.0;
             }
             else if (ui->radioBtn_hamm->isChecked()) {
-              in[k][i].r *= (hamming[i]);       //(*sample)/65535.0;
+              input[k][i].r *= (hamming[i]);       //(*sample)/65535.0;
             }
 
             if( ui->checkBox_bandStop->isChecked() ) {
-              in[k][i].r = fBandStop.filter( in[k][i].r );
+              input[k][i].r = fBandStop.filter( input[k][i].r );
             }
 
             if( ui->checkBox_highPass->isChecked() ) {
-              in[k][i].r = fHiPass.filter( in[k][i].r );
+              input[k][i].r = fHiPass.filter( input[k][i].r );
             }
         }
     }
@@ -1500,33 +1544,35 @@ void MainWindow::apply_filters()
 
 void MainWindow::signal_source()
 {
-    switch (simulation)
-    {
-        case GENERATE_SIGNAL:
+//    switch (simulation)
+//    {
+//        case GENERATE_SIGNAL:
+//        {
+//            generate_3_signals(ui->pwmValue2->value(),
+//                               ui->pwmValue1->value(),
+//                               ui->checkBoxReverseMirror->isChecked(),
+//                               ui->checkBoxHalfData->isChecked()
+//                               );
+//            apply_filters();
+//            break;
+//        }
 
-            generate_3_signals(ui->pwmValue2->value(),
-                               ui->pwmValue1->value(),
-                               ui->checkBoxReverseMirror->isChecked(),
-                               ui->checkBoxHalfData->isChecked()
-                               );
-            apply_filters();
-        break;
-        case SIMUL_REALTIME:
-        {
+//        case SIMUL_FROM_REALPORT:
+//        {
             load_data_from_serialport();
             //      get_data;
-            break;
-        }
+//            break;
+//        }
 
-        case SIMULATION_WAV: // read file
-        {
-            //      break;  // jeszcze nie zaimplementowano
-        }
-        case SIMULATION_STOP:
-        default:
-            qDebug() << "State: Simulation stop in externalThread_tick()";
-            return;
-    }
+//        case SIMULATION_WAV: // read file
+//        {
+//            //      break;  // jeszcze nie zaimplementowano
+//        }
+//        case SIMULATION_STOP:
+//        default:
+//            qDebug() << "State: Simulation stop in externalThread_tick()";
+//            return;
+//    }
 }
 // ----------------------------------------------------------------------------------------
 
