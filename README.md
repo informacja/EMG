@@ -1,5 +1,5 @@
 # EMG
-Celem projektu uczenia gestów jest stworzenie metody kontroli nad sterowaniem prototypu dłoni reagującego w czasie rzeczywistym.
+Temat projektu: nauczenie gestów metody kaskadowej prototypu dłoni nadążania w czasie rzeczywistym.
 
 ## [Concept](https://stijournal.pl/resources/html/article/details?id=204954&language=en)  [pl](https://stijournal.pl/resources/html/article/details?id=204954&language=pl) 
 [
