@@ -89,6 +89,10 @@ MainWindow::MainWindow(QWidget *parent) :
     // Hann Window
     //    for(int i=0; i<DSIZE2;i++)
     //        fftWin[i]=(0.5*(1-cos(2*M_PI*i/(DSIZE2-1))));
+
+//    ui->spinBox_gestureNr->setValue(0);
+//    ui->spinBox_personNr->setValue( 42);
+    ui->checkBoxSpectrum->setChecked(true);
 }
 
 MainWindow::~MainWindow()
@@ -233,45 +237,37 @@ void MainWindow::filterData()
 
 void MainWindow::on_actionOpen_triggered()
 {
-    QString FileName;
-    FileName = QFileDialog::getOpenFileName(this, tr("Open File"),"/home", tr("Data (*.dat)"));
-    QFile file(FileName);
-    if (!file.open(QIODevice::ReadOnly))
-        return;
-    //file.read(reinterpret_cast<char*>(timeData[0].data()), static_cast<uint>(VSIZE*FRCNT*sizeof(double)));
+//    QString FileName = ui->spinBox_gestureNr->text() + ui->spinBox_personNr->text() + ".wav";
+//    FileName = QFileDialog::getOpenFileName(this, tr("Open File"),"/home", tr("Data (*.dat)"));
+//    QFile file(FileName);
+//    if (!file.open(QIODevice::ReadOnly))
+//        return;
+//    //file.read(reinterpret_cast<char*>(timeData[0].data()), static_cast<uint>(VSIZE*FRCNT*sizeof(double)));
 
-    for(int j=0; j<NCH; j++)
-        file.read(reinterpret_cast<char*>(timeData[j].data()), static_cast<uint>(VSIZE*FRCNT*sizeof(double)));
-    file.close();
+//    for(int j=0; j<NCH; j++)
+//        file.read(reinterpret_cast<char*>(timeData[j].data()), static_cast<uint>(VSIZE*FRCNT*sizeof(double)));
+//    file.close();
 
+        QString FileName;
+        FileName = QFileDialog::getOpenFileName(this, tr("Open File"),"/home", tr("Data (*.wav)"));
+        QFile file(FileName);
+        if (!file.open(QIODevice::ReadOnly))
+            return;
 
+       // qDebug()<< file.size();
 
+        WaveHeaderEx waveHdr1, waveHdr2;
 
-    //    QString FileName;
-    //    FileName = QFileDialog::getOpenFileName(this, tr("Open File"),"/home", tr("Data (*.wav)"));
-    //    QFile file(FileName);
-    //    if (!file.open(QIODevice::ReadOnly))
-    //        return;
+        //waveSignal.resize((file.size()-sizeof(waveHdr2))/sizeof(short));
+        //waveSignal.fill(0);
+        file.read(reinterpret_cast<char*>(&waveHdr2), static_cast<uint>(sizeof(waveHdr2)));
+        //file.read(reinterpret_cast<char*>(waveSignal.data()), static_cast<uint>(waveSignal.size()*sizeof(short)));
+        file.close();
 
-
-
-    //   // qDebug()<< file.size();
-
-    //    WaveHeaderEx waveHdr1, waveHdr2;
-
-
-
-    //    //waveSignal.resize((file.size()-sizeof(waveHdr2))/sizeof(short));
-    //    //waveSignal.fill(0);
-    //    file.read(reinterpret_cast<char*>(&waveHdr2), static_cast<uint>(sizeof(waveHdr2)));
-    //    //file.read(reinterpret_cast<char*>(waveSignal.data()), static_cast<uint>(waveSignal.size()*sizeof(short)));
-    //    file.close();
-
-    //    qDebug()<<"Channels"<<waveHdr2.Channels;
-    //    qDebug()<<"dwSampleLength"<<waveHdr2.dwSampleLength;
-    //    qDebug()<<"DataLength"<<waveHdr2.DataLength;
-    //    qDebug()<<waveSignal.size();
-
+        qDebug()<<"Channels"<<waveHdr2.Channels;
+        qDebug()<<"dwSampleLength"<<waveHdr2.dwSampleLength;
+        qDebug()<<"DataLength"<<waveHdr2.DataLength;
+        qDebug()<<waveSignal.size();
 
     //    CreateWaveHeader(waveHdr1, NCH, 96000,  static_cast<uint>(waveSignal.size()*sizeof(short)/NCH));
 
@@ -280,9 +276,11 @@ void MainWindow::on_actionOpen_triggered()
 
 void MainWindow::on_actionSave_triggered()
 {
-    QString FileName;
+    QString FileName = "/home";
+    FileName =  QString("%1").arg( ui->spinBox_gestureNr->value(), 2 , 10, QChar('0')) +
+                QString("%1").arg(  ui->spinBox_personNr->value(), 3 , 10, QChar('0')) + ".wav";
     //FileName = QFileDialog::getSaveFileName(this, tr("Save File"),"/home", tr("Data (*.dat)"));
-    FileName = QFileDialog::getSaveFileName(this, tr("Save File"),"/home", tr("Data (*.wav)"));
+    FileName = QFileDialog::getSaveFileName(this, tr("Save File"), FileName, tr("Data (*.wav)"));
     QFile file(FileName);
     if (!file.open(QIODevice::WriteOnly))
         return;
@@ -291,7 +289,6 @@ void MainWindow::on_actionSave_triggered()
     for(int i=0; i<VSIZE*FRCNT;i++){
         for(int j=0; j<NCH; j++)
             waveSignal[k++]=static_cast<short>(timeData[j][i]*32767);
-
     }
 
     WaveHeaderEx waveHdr;
@@ -311,9 +308,22 @@ void MainWindow::on_actionSave_triggered()
     //    for(int j=0; j<NCH; j++)
     //        file.write(reinterpret_cast<char*>(timeData[j].data()), static_cast<uint>(VSIZE*FRCNT*sizeof(double)));
 
-
-
     file.close();
 
+    QFileInfo fileInfo(file.fileName());
+    ui->groupBox_2->setTitle( fileInfo.fileName());
+}
 
+void MainWindow::on_pushButton_clicked()
+{
+    on_actionSave_triggered(); // save file
+    if( ui->spinBox_gestureNr->value() < 7)
+    {
+        ui->spinBox_gestureNr->setValue( ui->spinBox_gestureNr->value()+1 );
+    }
+    else
+    {
+         ui->spinBox_gestureNr->setValue( 0 );
+         ui->spinBox_personNr->setValue( ui->spinBox_personNr->value()+1 );
+    }
 }

@@ -50,6 +50,8 @@ private slots:
     void on_actionOpen_triggered();
     void on_actionSave_triggered();
 
+    void on_pushButton_clicked();
+
 private:
     Ui::MainWindow *ui;
     void paintEvent(QPaintEvent *event);
