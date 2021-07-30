@@ -28,6 +28,7 @@
 #include <stdexcept>
 #include "FftComplex.h"
 
+
 using std::complex;
 using std::size_t;
 using std::vector;
@@ -110,7 +111,7 @@ void Fft::transformBluestein(vector<complex<double> > &vec) {
 	for (size_t i = 0; i < n; i++) {
 		unsigned long long temp = static_cast<unsigned long long>(i) * i;
 		temp %= static_cast<unsigned long long>(n) * 2;
-		double angle = M_PI * temp / n;
+        double angle = M_PI * temp / n;
 		// Less accurate alternative if long long is unavailable: double angle = M_PI * i * i / n;
 		expTable[i] = std::exp(complex<double>(0, -angle));
 	}

@@ -137,7 +137,9 @@ void Chart::drawLinearGrid(QPainter &painter, QRect geometry)
     dvx=maxValueX-minValueX;
     dvy=maxValueY-minValueY;
     for(int px=0; px<=gridNumX; px++)
+    {
         painter.drawText(QPointF(gx-(font.pointSize()/4)+px*dx, gy+gh+(font.pointSize()*2)), QString().asprintf("%d",static_cast<int>(minValueX+(dvx*px)/gridNumX)));
+    }
     for(int py=0; py<=gridNumY; py++)
         painter.drawText(QPointF(gx-(font.pointSize()*4), gy+(font.pointSize()/2)+py*dy), QString().asprintf("%4.1f",(maxValueY-(dvy*py)/gridNumY)));
 

@@ -2,6 +2,14 @@
 #include "ui_mainwindow.h"
 #include <QDebug>
 
+#include <QDragEnterEvent>
+#include <QDragLeaveEvent>
+#include <QDragMoveEvent>
+#include <QDropEvent>
+#include <QMimeData>
+#include <QUrl>
+#include <QList>
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -26,14 +34,22 @@ MainWindow::MainWindow(QWidget *parent) :
         timeData[i].resize(VSIZE*FRCNT);
         timeData[i].fill(0);
     }
+    timeDataView.resize(NCH);
+    for(int i=0; i< timeData.size();i++){
+        timeDataView[i].resize(VSIZE*FRCNT);
+        timeDataView[i].fill(0);
+    }
     cnt=0;
 
     fftData.resize(FFT_SIZE);
     fftWin.resize(FFT_SIZE);
 
-    magnitudeData.resize(FFT_SIZE/2);
-    phaseData.resize(FFT_SIZE/2);
+    magnitudeData.resize(NCH);
+    for(int i=0; i < magnitudeData.size(); i++) {
+        magnitudeData[i].resize(FFT_SIZE);   // should be FFT_SIZE/2, but for display optimalisation
+    }
 
+    phaseData.resize(FFT_SIZE/2);
 
     waveSignal.resize(VSIZE*FRCNT*NCH);
     waveSignal.fill(0);
@@ -65,7 +81,7 @@ MainWindow::MainWindow(QWidget *parent) :
     }
 
 
-    chart.gridNumX=FRCNT/20;
+    chart.gridNumX=FRCNT/NCH;
     chart.gridNumY=10;
     chart.minValueX= 1;
     chart.maxValueX= 125*FRCNT;
@@ -86,25 +102,48 @@ MainWindow::MainWindow(QWidget *parent) :
     // Rectangular Window
     fftWin.fill(1);
 
+
     // Hann Window
     //    for(int i=0; i<DSIZE2;i++)
     //        fftWin[i]=(0.5*(1-cos(2*M_PI*i/(DSIZE2-1))));
 
+    setAcceptDrops(true);
+    on_textEditFeatures_textChanged();
+
+    qDebug() << "\nLegenda gestów dłoni:";
+    qDebug() << "00. Pomiar szumu referencyjnego";
+    qDebug() << "01. Moutza moc";
+    qDebug() << "02. Zaciśnięta pięść";
+    qDebug() << "05. Kciuk w górę";
+    qDebug() << "11. Victoria";    
+    qDebug() << "13. Złączone 3 środkowe palce ";
+    qDebug() << "18. serdecznySpiderMan w środek dłoni";    
+    qDebug() << "19. małyPalec";
+
+#ifndef Q_OS_MAC
+    ui->pushButtonMac->setVisible(false);
+#endif
+    ui->checkBoxARMA->setChecked(true);
+    ui->checkBoxARMA->setChecked(false); // hide vidgets
+    ui->radioButtonSigVCom->setVisible(false);
+    ui->radioButtonSigSimulateSer->setVisible(false);
+
+    ui->labelSMOK->setVisible(false);
+    ui->labelState->setVisible(false);
+    ui->labelFeed->setVisible(false);
 //    ui->spinBox_gestureNr->setValue(0);
 //    ui->spinBox_personNr->setValue( 42);
-    ui->checkBoxSpectrum->setChecked(true);
+//    ui->textEditFeatures->toPlainText()
 }
 
 MainWindow::~MainWindow()
 {
-
     serial.close();
     delete ui;
 }
 
 void MainWindow::sendCommand()
 {
-
     if(ui->actionRun->isChecked()) {
          cnt=0;
         serial.clear();
@@ -117,7 +156,6 @@ void MainWindow::sendCommand()
 
 void MainWindow::readData()
 {
-
     // qDebug()<< serial.size();
     if (serial.size() >= DSIZE){
 
@@ -127,9 +165,7 @@ void MainWindow::readData()
         uint16_t *sample=reinterpret_cast<uint16_t*>(readdata.data());
         for(int i=0; i<VSIZE;i++){
             for(int j=0; j<NCH; j++)
-                timeData[j][i+(cnt*VSIZE)]=((*sample++)-32768)/32768.0;
-
-
+                timeData[j][i+(cnt*VSIZE)]=(double)((*sample++)-32768)/32768.0;
         }
         double bias[NCH];
         for(int j=0; j<NCH; j++){
@@ -142,9 +178,16 @@ void MainWindow::readData()
             bias[j]/=VSIZE;
 
             for(int i=0; i<VSIZE;i++)
+            {
                 timeData[j][i+(cnt*VSIZE)]-=bias[j];
-        }
+                if(ui->checkBoxVirtualSpace->isChecked())
+                {
+                    timeDataView[j][i+(cnt*VSIZE)] = timeData[j][i+(cnt*VSIZE)]+(j+0.5)/NCH*2-1;
+                }
+                else    timeDataView[j][i+(cnt*VSIZE)] = timeData[j][i+(cnt*VSIZE)];
 
+            }
+        }
 
         cnt++;
         if(cnt>=FRCNT) {
@@ -157,9 +200,11 @@ void MainWindow::readData()
                 serial.write(senddata);
             }
         }
-        calculateFFT();
-        update();
 
+        if(ui->checkBoxSpectrum->isChecked())
+              calculateFFT(cnt);
+
+        update();
     }
 }
 
@@ -171,57 +216,87 @@ void MainWindow::paintEvent(QPaintEvent *event)
     chart.drawLinearGrid(painter, centralWidget()->geometry());
 
     painter.setRenderHint(QPainter::Antialiasing, true);
-    // painter.setCompositionMode(QPainter::CompositionMode_HardLight);
+
+//    painter.setCompositionMode(QPainter::CompositionMode_HardLight);
+
+
+//          if(ui->radioCh_1->isChecked())
+//              chart.drawLinearData(painter, timeData[0], chart.plotColors[0]);
+//          if(ui->radioCh_2->isChecked())
+//              chart.drawLinearData(painter, timeData[1], chart.plotColors[1]);
+//          if(ui->radioCh_3->isChecked())
+//              chart.drawLinearData(painter, timeData[2], chart.plotColors[2]);
+//          if(ui->radioCh_4->isChecked())
+//              chart.drawLinearData(painter, timeData[3], chart.plotColors[3]);
+//          if(ui->radioCh_5->isChecked())
+//              chart.drawLinearData(painter, timeData[4], chart.plotColors[4]);
+//          if(ui->radioCh_6->isChecked())
+//              chart.drawLinearData(painter, timeData[5], chart.plotColors[5]);
+//          if(ui->radioCh_7->isChecked())
+//              chart.drawLinearData(painter, timeData[6], chart.plotColors[6]);
+//          if(ui->radioCh_8->isChecked())
+//              chart.drawLinearData(painter, timeData[7], chart.plotColors[7]);
 
     if(ui->radioCh_1->isChecked())
-        chart.drawLinearData(painter, timeData[0], chart.plotColors[0]);
+        chart.drawLinearData(painter, timeDataView[0], chart.plotColors[0]);
     if(ui->radioCh_2->isChecked())
-        chart.drawLinearData(painter, timeData[1], chart.plotColors[1]);
+        chart.drawLinearData(painter, timeDataView[1], chart.plotColors[1]);
     if(ui->radioCh_3->isChecked())
-        chart.drawLinearData(painter, timeData[2], chart.plotColors[2]);
+        chart.drawLinearData(painter, timeDataView[2], chart.plotColors[2]);
     if(ui->radioCh_4->isChecked())
-        chart.drawLinearData(painter, timeData[3], chart.plotColors[3]);
+        chart.drawLinearData(painter, timeDataView[3], chart.plotColors[3]);
     if(ui->radioCh_5->isChecked())
-        chart.drawLinearData(painter, timeData[4], chart.plotColors[4]);
+        chart.drawLinearData(painter, timeDataView[4], chart.plotColors[4]);
     if(ui->radioCh_6->isChecked())
-        chart.drawLinearData(painter, timeData[5], chart.plotColors[5]);
+        chart.drawLinearData(painter, timeDataView[5], chart.plotColors[5]);
     if(ui->radioCh_7->isChecked())
-        chart.drawLinearData(painter, timeData[6], chart.plotColors[6]);
+        chart.drawLinearData(painter, timeDataView[6], chart.plotColors[6]);
     if(ui->radioCh_8->isChecked())
-        chart.drawLinearData(painter, timeData[7], chart.plotColors[7]);
+        chart.drawLinearData(painter, timeDataView[7], chart.plotColors[7]);
 
 
-    //        chart.drawLogGrid(painter, centralWidget()->geometry());
-    //        chart.drawLogData(painter, magnitudeData);
+//    for( int i = 0; i < NCH; i++)
+//    {
+//         chart.drawLinearData(painter,  magnitudeData[i], chart.plotColors[i]);
+//    }
+//            chart.drawLogData(painter, magnitudeData);
 }
 
-void MainWindow::calculateFFT()
+void MainWindow::calculateFFT(int cnt)
 {
-    for(int i=0;i<FFT_SIZE; i++){
+//    FFT_WINDOW
 
-        fftData[static_cast<uint>(i)].real(timeData[0][i]*fftWin[i]);
-        fftData[static_cast<uint>(i)].imag(0);
-    }
+    for(int k=0; k < NCH; k++) {
+        for(int i=0;i<FFT_SIZE; i++){
+            fftData[static_cast<uint>(i)].real(timeData[k][i]*fftWin[i]);
+            fftData[static_cast<uint>(i)].imag(0);
+        }
 
 #if ARMADILLO_FFT
-    fftData=arma::fft(fftData);
+        fftData=arma::fft(fftData);
 #else
-    Fft::transform(fftData);
+        Fft::transform(fftData);
 #endif
+        for(int i=0;i<FFT_SIZE/2; i++) {
+            magnitudeData[k][i] = abs(fftData[static_cast<uint>(i)])*1;
+            //        phaseData[i]=arg(fftData[static_cast<uint>(i)]);
+        }
 
-    for(int i=0;i<FFT_SIZE/2; i++){
+        double max = *std::max_element(magnitudeData[k].begin(), magnitudeData[k].end());
 
-        magnitudeData[i]=abs(fftData[static_cast<uint>(i)])*1;
-        phaseData[i]=arg(fftData[static_cast<uint>(i)]);
+        for(int i = 0; i<FFT_SIZE/2; i++) {
+            if(max>0)
+                magnitudeData[k][i]/=max;  //normalise
+            magnitudeData[k][i]+=0.01-1; // saturate -40 dB
+        }
+
+        for(int i = 0; i<FFT_SIZE/2; i++) { // fill all window
+
+//            timeData[k][FFT_SIZE - i] = magnitudeData[k][i];
+//            timeData[k][FFT_SIZE - i*2+1] = magnitudeData[k][i];
+        }
     }
-
-    double max=*std::max_element(magnitudeData.begin(), magnitudeData.end());
-    for(int i=0;i<FFT_SIZE/2; i++){
-
-        if(max>0)
-            magnitudeData[i]/=max;  //normalise
-        magnitudeData[i]+=0.01; //saturate -40 dB
-    }
+    //    qDebug() << sizeof (timeData[0]);
 }
 
 void MainWindow::filterData()
@@ -242,7 +317,7 @@ void MainWindow::on_actionOpen_triggered()
 //    QFile file(FileName);
 //    if (!file.open(QIODevice::ReadOnly))
 //        return;
-//    //file.read(reinterpret_cast<char*>(timeData[0].data()), static_cast<uint>(VSIZE*FRCNT*sizeof(double)));
+    //file.read(reinterpret_cast<char*>(timeData[0].data()), static_cast<uint>(VSIZE*FRCNT*sizeof(double)));
 
 //    for(int j=0; j<NCH; j++)
 //        file.read(reinterpret_cast<char*>(timeData[j].data()), static_cast<uint>(VSIZE*FRCNT*sizeof(double)));
@@ -250,35 +325,16 @@ void MainWindow::on_actionOpen_triggered()
 
         QString FileName;
         FileName = QFileDialog::getOpenFileName(this, tr("Open File"),"/home", tr("Data (*.wav)"));
-        QFile file(FileName);
-        if (!file.open(QIODevice::ReadOnly))
-            return;
 
-       // qDebug()<< file.size();
-
-        WaveHeaderEx waveHdr1, waveHdr2;
-
-        //waveSignal.resize((file.size()-sizeof(waveHdr2))/sizeof(short));
-        //waveSignal.fill(0);
-        file.read(reinterpret_cast<char*>(&waveHdr2), static_cast<uint>(sizeof(waveHdr2)));
-        //file.read(reinterpret_cast<char*>(waveSignal.data()), static_cast<uint>(waveSignal.size()*sizeof(short)));
-        file.close();
-
-        qDebug()<<"Channels"<<waveHdr2.Channels;
-        qDebug()<<"dwSampleLength"<<waveHdr2.dwSampleLength;
-        qDebug()<<"DataLength"<<waveHdr2.DataLength;
-        qDebug()<<waveSignal.size();
-
-    //    CreateWaveHeader(waveHdr1, NCH, 96000,  static_cast<uint>(waveSignal.size()*sizeof(short)/NCH));
-
-    update();
+        loadFile((FileName));
+//        calculateFFT(0);
 }
 
 void MainWindow::on_actionSave_triggered()
 {
     QString FileName = "/home";
     FileName =  QString("%1").arg( ui->spinBox_gestureNr->value(), 2 , 10, QChar('0')) +
-                QString("%1").arg(  ui->spinBox_personNr->value(), 3 , 10, QChar('0')) + ".wav";
+                QString("%1").arg( ui->spinBox_personNr->value(), 3 , 10, QChar('0')) + ".wav";
     //FileName = QFileDialog::getSaveFileName(this, tr("Save File"),"/home", tr("Data (*.dat)"));
     FileName = QFileDialog::getSaveFileName(this, tr("Save File"), FileName, tr("Data (*.wav)"));
     QFile file(FileName);
@@ -317,13 +373,141 @@ void MainWindow::on_actionSave_triggered()
 void MainWindow::on_pushButton_clicked()
 {
     on_actionSave_triggered(); // save file
-    if( ui->spinBox_gestureNr->value() < 7)
+    static int i;
+    if( ui->spinBox_gestureNr->value() < *std::max_element(gestureNr.begin(), gestureNr.end()))
     {
-        ui->spinBox_gestureNr->setValue( ui->spinBox_gestureNr->value()+1 );
+        i++;
+        ui->spinBox_gestureNr->setValue( gestureNr.at(i % gestureNr.count()) );
     }
     else
     {
          ui->spinBox_gestureNr->setValue( 0 );
          ui->spinBox_personNr->setValue( ui->spinBox_personNr->value()+1 );
     }
+}
+
+void MainWindow::on_textEditFeatures_textChanged()
+{
+    QString data = ui->textEditFeatures->toPlainText();    
+    QStringList strListGestureNr = data.split(QRegExp(" "), QString::SkipEmptyParts);
+    gestureNr.clear();
+    for(auto i : strListGestureNr)
+    {
+        gestureNr.append(i.toUInt());
+    }
+    if(gestureNr.size())
+        ui->spinBox_gestureNr->setValue(gestureNr.first());
+}
+
+//#include <QMimeData>
+//#include <QDragEnterEvent>
+void MainWindow::dragEnterEvent(QDragEnterEvent *e)
+{
+    if (e->mimeData()->hasUrls()) {
+        e->acceptProposedAction();
+    }
+}
+
+void MainWindow::dropEvent(QDropEvent *e)
+{
+    foreach (const QUrl &url, e->mimeData()->urls()) {
+        QString fileName = url.toLocalFile();
+        ui->statusBar->setStatusTip(fileName);
+        loadFile(fileName);
+//        ui->listWidget->addItem(fileName);
+    }
+
+}
+
+void MainWindow::loadFile( QString FileName )
+{
+    QFile file(FileName);
+    {
+        if (!file.open(QIODevice::ReadOnly))
+            return;
+
+        // qDebug()<< file.size();
+
+        WaveHeaderEx waveHdr2;
+
+        waveSignal.resize((file.size()-sizeof(waveHdr2))/sizeof(short));
+        waveSignal.fill(0);
+        file.read(reinterpret_cast<char*>(&waveHdr2), static_cast<uint>(sizeof(waveHdr2)));
+        file.read(reinterpret_cast<char*>(waveSignal.data()), static_cast<uint>(waveSignal.size()*sizeof(short)));
+        file.close();
+
+        //        for(int j=0; j<NCH; j++)
+        //            file.read(reinterpret_cast<char*>(timeData[j].data()), static_cast<uint>(VSIZE*FRCNT*sizeof(double)));
+
+        int k=0;
+        for(int i=0; i<(int)waveHdr2.dwSampleLength/waveHdr2.Channels; i++) {
+            for(int j=0; j< waveHdr2.Channels; j++){
+                timeData[j][i] = static_cast<double>(waveSignal[k++]/32767.0) ;
+//                timeDataView[j][i] = timeData[j][i] + (j+0.5)/waveHdr2.Channels*2-1;;
+            }
+        }
+        virtualSeparate();
+
+        qDebug()<<"Channels"<<waveHdr2.Channels;
+        qDebug()<<"dwSampleLength"<<waveHdr2.dwSampleLength;
+        qDebug()<<"DataLength"<<waveHdr2.DataLength;
+        qDebug()<<waveSignal.size();
+
+        //    CreateWaveHeader(waveHdr1, NCH, 96000,  static_cast<uint>(waveSignal.size()*sizeof(short)/NCH));
+
+        update();
+    }
+}
+
+
+void MainWindow::virtualSeparate()
+{
+    if(ui->checkBoxVirtualSpace->isChecked())
+    {
+        for (int k = 0; k < NCH; k++) {
+            for (int i = 0; i < VSIZE*FRCNT; i++) {
+                timeDataView[k][i] = timeData[k][i] + (k+0.5)/NCH*2-1; // separation normalized
+            }
+        }
+    }
+    else
+    {
+        for (int k = 0; k < NCH; k++) {
+            for (int i = 0; i < VSIZE*FRCNT; i++) {
+                timeDataView[k][i] = timeData[k][i];
+            }
+        }
+    }
+}
+
+void MainWindow::on_actionMaximize_triggered()
+{
+    if(!ui->actionMaximize->isChecked())
+        this->showNormal();
+    else
+        this->showFullScreen();
+}
+
+void MainWindow::on_pushButtonMac_clicked()
+{
+    this->on_pushButton_clicked();
+}
+
+void MainWindow::on_checkBoxARMA_stateChanged(int arg1)
+{    
+    ui->dockWidgetHorizontal->setVisible(arg1);
+    ui->dockWidgetVertical->setVisible(arg1);
+}
+
+
+void MainWindow::on_groupBox_clicked()
+{
+
+    ui->radioCh_1->setChecked( !ui->radioCh_1->isChecked() );
+}
+
+void MainWindow::on_checkBoxVirtualSpace_stateChanged(int arg1)
+{
+    virtualSeparate();
+    update();
 }
