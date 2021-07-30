@@ -90,7 +90,7 @@
 
 enum Simulation_Type {
         // data from NXP board
-    SIMUL_FROM_REALPORT = 0,             // Virtual Communication Measure Source
+    SIMUL_FROM_VCOM = 0,             // Virtual Communication Measure Source
         // from file
     SIMULATION_BINARY,              // depracated
     SIMULATION_CSV,                 // depracated

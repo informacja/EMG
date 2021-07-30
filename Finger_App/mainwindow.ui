@@ -91,8 +91,8 @@
    <addaction name="actionRun"/>
    <addaction name="actionTrigger"/>
    <addaction name="separator"/>
-   <addaction name="actionSignal"/>
    <addaction name="actionSpectrum"/>
+   <addaction name="actionSignal"/>
    <addaction name="actionRms"/>
    <addaction name="separator"/>
    <addaction name="actionSave"/>

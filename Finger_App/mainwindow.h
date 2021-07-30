@@ -51,7 +51,7 @@
 //#define B_SIZE DSIZE                          // minimalny rozmiar wczytywaniej paczki danych z pliku
 #define SQUARE(a) (a*a)
 #define INI_FILES "Ini_Files"
-//#define ALLOW_USE_FILTERS
+#define ALLOW_USE_FILTERS
 
 #define DISABLE_FILTERS_ON_STARTUP
 

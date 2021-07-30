@@ -61,7 +61,7 @@ MainWindow::MainWindow(QWidget *parent) :
 //                serial.setBaudRate( serial.Baud115200,  serial.AllDirections);
                 ui->statusBar->showMessage(tr("Device: %1").arg(info.serialNumber()));
                 serial.clear();
-                simulation = SIMUL_FROM_REALPORT;
+                simulation = SIMUL_FROM_VCOM;
 //                thread.start(thread.HighestPriority);     // zawsze startuj wątek, przeniesione poniżej
             }
             else {
@@ -140,7 +140,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     switch(simulation) // teoretycznie do usunięcia
     {
-        case SIMUL_FROM_REALPORT:     // nawiązano połączenie z płytką
+        case SIMUL_FROM_VCOM:     // nawiązano połączenie z płytką
         {
 //            file_out.open(QIODevice::WriteOnly | QIODevice::Append);    // bin
             QString fName = get_unique_filename(FILE_NAME ".wav", true);
@@ -402,11 +402,6 @@ MainWindow::~MainWindow()
 // 4 integracja z sprz etaem, przyciski. kontrolki,
 //5zrobienie sprz etu
 
-//sniadanie
-//rozmowa z grafikami (Dział wizualizacji reprezentacyjnej)
-//z szefem
-//czas na swoje projekty
-
 // =============================================================================
 /* ToDo:
  *
@@ -464,12 +459,15 @@ void MainWindow::externalThread_tick()
            spectrums[0][n] = (sample[n]-32768)/32768.0;
         }
     }
+//    generate_3_signals(23,3,1,0);
+    signal_source();        // load from LPC 1347, load from wav or generate signal
+
+    process_signals();      // fft, rms, korelacja
 
     update();//      present_data();
     sendCommand();
 
     return;
-
 
 
 
@@ -933,7 +931,7 @@ qint64 MainWindow::simulation_read_data_from_file()
  {
   switch (simulation)
   {
-      case SIMUL_FROM_REALPORT: return 0;
+      case SIMUL_FROM_VCOM: return 0;
       case SIMULATION_CSV:
       {
         for (int i = 0; i < DSIZE2; i++)                        //  1024
@@ -1335,7 +1333,7 @@ void MainWindow::simulation_adjust(Simulation_Type newSimul)
 //ui->radioBtn_hann
     }
 
-    if (newSimul == SIMUL_FROM_REALPORT)
+    if (newSimul == SIMUL_FROM_VCOM)
     {
         ui->actionRun->setChecked(true);
         ui->actionRms->setChecked(checked);
@@ -1372,11 +1370,11 @@ inline void MainWindow::process_signals()
 
         for (int i = 1; i < WSIZE; i++) // fft gives redundant spectrum, use only half of window  (WSIZE)
         {
-            spectrums[0][i] =  sqrt(SQUARE((out[k]+i)->r) + SQUARE((out[k]+i)->i))/51.2;
+            spectrums[k][i] =  sqrt(SQUARE((out[k]+i)->r) + SQUARE((out[k]+i)->i))/51.2;
         }
     }
 
-    return;
+return;
 
     for (int k = 0; k < NCH; k++)
     {
@@ -1469,40 +1467,39 @@ inline void MainWindow::process_signals()
 
 // ----------------------------------------------------------------------------------------
 
-void MainWindow::generate_3_signals(int speed, int gap, bool mirror, bool fillHalf)
+void MainWindow::generate_3_signals(int speed, int gap, bool reversMirror, bool fillHalf)
 {
     static int ink;
     double freq;
 
-    int N = (mirror) ? WSIZE : WSIZE; //  bug, should bee DSIZE2
+    int N = (reversMirror) ? WSIZE : DSIZE2; //  bug, should bee DSIZE2
 
     int NLE = (fillHalf) ? WSIZE : DSIZE2;
-
 
     ink += speed;
     int k = 0;
 //    for (int k = 0; k < NCH; k++)
     {
-        freq = ( ink + k * gap ) % 512 * ((mirror == false) ? 1 : 2);// 2*512 (efekt odbijania się od krawędzi)
+        freq = ( ink + k * gap ) % 512 * ((reversMirror == false) ? 1 : 2);// 2*512 (efekt odbijania się od krawędzi)
         for (int i = 0; i < NLE; i++)
         {
             if( ui->selectInput1->isChecked() )
             {
-                freq = ( ink + k * gap ) % 512 * ((mirror == false) ? 1 : 2);
+                freq = ( ink + k * gap ) % 512 * ((reversMirror == false) ? 1 : 2);
                 timeData[k][i] = ((k+2.)/20)*sin(((2 * M_PI) * freq * i + fi[k]) / N );
             }
             else timeData[k][i] = 0;  k++;
 
             if( ui->selectInput2->isChecked() )
             {
-                freq = ( ink + k * gap ) % 512 * ((mirror == false) ? 1 : 2);
+                freq = ( ink + k * gap ) % 512 * ((reversMirror == false) ? 1 : 2);
                 timeData[k][i] = ((k+2.)/20)*sin(((2 * M_PI) * freq * i + fi[k]) / N );
             }
             else timeData[k][i] = 0; k++;
 
             if( ui->selectInput3->isChecked() )
             {
-                freq = ( ink + k * gap ) % 512 * ((mirror == false) ? 1 : 2);
+                freq = ( ink + k * gap ) % 512 * ((reversMirror == false) ? 1 : 2);
                 timeData[k][i] = ((k+2.)/20)*sin(((2 * M_PI) * freq * i + fi[k]) / N );
             }
             else timeData[k][i] = 0; k = 0;
@@ -1510,7 +1507,9 @@ void MainWindow::generate_3_signals(int speed, int gap, bool mirror, bool fillHa
             input[k][i].i = 0;
 //            in[0][i].r += timeData[k][i];
 
-            input[0][i].r = timeData[0][i] + timeData[1][i] + timeData[2][i];                  // add signals for fft
+            input[0][i].r = timeData[0][i] + timeData[1][i] + timeData[2][i];
+//            input[k][i].r = timeData[k][i];
+
         }
     }    
 }
@@ -1544,35 +1543,35 @@ void MainWindow::apply_filters()
 
 void MainWindow::signal_source()
 {
-//    switch (simulation)
-//    {
-//        case GENERATE_SIGNAL:
-//        {
-//            generate_3_signals(ui->pwmValue2->value(),
-//                               ui->pwmValue1->value(),
-//                               ui->checkBoxReverseMirror->isChecked(),
-//                               ui->checkBoxHalfData->isChecked()
-//                               );
-//            apply_filters();
-//            break;
-//        }
+    switch (simulation)
+    {
+        case GENERATE_SIGNAL:
+        {
+            generate_3_signals(ui->pwmValue2->value(),
+                               ui->pwmValue1->value(),
+                               ui->checkBoxReverseMirror->isChecked(),
+                               ui->checkBoxHalfData->isChecked()
+                               );
+            apply_filters();
+            break;
+        }
 
-//        case SIMUL_FROM_REALPORT:
-//        {
+        case SIMUL_FROM_VCOM:
+        {
             load_data_from_serialport();
             //      get_data;
 //            break;
-//        }
+        }
 
 //        case SIMULATION_WAV: // read file
 //        {
 //            //      break;  // jeszcze nie zaimplementowano
 //        }
 //        case SIMULATION_STOP:
-//        default:
-//            qDebug() << "State: Simulation stop in externalThread_tick()";
-//            return;
-//    }
+        default:
+            qDebug() << "State: Simulation stop in externalThread_tick()";
+            return;
+    }
 }
 // ----------------------------------------------------------------------------------------
 
