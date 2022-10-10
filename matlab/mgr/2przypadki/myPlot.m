@@ -83,3 +83,10 @@ cd(b);
 figPW
 cd(folderName)
 
+
+% co do oceny przez lekarza, sparametryzowanie, propozycja ćwiczenia, obwiednia mocy i kwadratu mocy
+% Unrecognized function or variable 'co'.
+%  
+% 
+% Sygnały drganiowe
+% prędkości diff
