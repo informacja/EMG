@@ -1,0 +1,5 @@
+runOptionDialog 0
+configFile /Users/kevin/EMGLAB/ahw-simulator/simulator/default.cfg
+outputFileName micro
+allUnits 0
+DataDirectory /Users/kevin/EMGLAB/ahw-simulator/simulator

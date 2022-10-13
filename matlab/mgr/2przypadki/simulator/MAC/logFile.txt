@@ -1,0 +1,629 @@
+Simulator Run Begins: Wed Oct 31 12:51:20 2007
+
+
+This version compiled on Aug 14 2007 at 17:19:50
+Arguments:
+    ./simtext
+    -configuration-dir=/Users/kevin/EMGLAB/ahw-simulator/simulator
+    -data-root=/Users/kevin/EMGLAB/ahw-simulator/simulator/temp
+    -skip-confirm
+    -nowait-for-key
+    -runOnce
+Using globals definition file '/Users/kevin/EMGLAB/ahw-simulator/simulator/simulator.cfg'
+
+Muscle Simulator Running on :
+
+
+Current Settings:
+
+  1 -                      contraction level [5.0]
+  2 -        number of motor units in muscle [200]
+  3 -  -  - electrode_type - between 1 and 4 [2 - concentric]
+  4 - Generate MFPs without extinction events? [0 - false]
+
+  5 -           Neuropathic MU Loss Fraction [0.0]
+  6 -  -  -  -  -Max Adoption Distance In um [150]
+  7 -    Neuropathic MU Enlargement Fraction [1.5]
+
+  8 -      Myopathic Fibre Affected Fraction [0.0]
+  9 - Myopathic New Involvement Percentage In Each Cycle [5]
+ 10 -       Myopathic fibre gradually dying? [0]
+ 11 - Dying and Splitting Depending on Affection Procedure? [1]
+ 12 -  -  Myopathic Threshold of Fibre Death [25.0]
+ 13 -    Percentage Of Affected Fibers Dying [0.0]
+ 14 - Myopathic Fraction of Fibres Becoming Hypertrophic [0.05]
+ 15 - Factor of original area at which hypertrophic fibres split [2.0]
+ 16 - Percentage Of Hypertrophic Fibers Splitting [0.0]
+ 17 -              Myopathic Rate of Atrophy [0.96]
+ 18 -  -  -  - Myopathic Rate of Hypertrophy [1.04]
+
+ 19 -                    tip uptake distance [4500]
+ 20 -                cannula uptake distance [4500]
+ 21 -  -  -  -  -  - radius of cannula shaft [250]
+ 22 -                 Cannula Length (in mm) [10.0]
+ 23 -               Needle X Postion (in mm) [0.0]
+ 24 -  -  -  -  -  -Needle Y Postion (in mm) [0.0]
+ 25 -        Needle Z Postion from NMJ in mm [15.0]
+ 26 -            tip/cannula reference setup [3 - tip versus cannula]
+
+ 27 -  -  -  -  -  -  -  -  - Enable Jitter? [1 - true]
+ 28 -                Jitter (variance) in us [25]
+ 29 - MFP threshold for jitter OR MU GST Inclusion threshold (kV/s^2) [10.0]
+ 30 -  -  - Minimum metric to seek needle to [0.25]
+
+ 31 -            Bandpass filter raw signal? [0 - false]
+ 32 -                        Generate noise? [1 - true]
+ 33 -  -  -  -  -  -  -  -  -  -  S/N ratio? [25.0]
+
+ 34 -                 Recorded Operator Name [Simulated Operator]
+ 35 -                  Recorded Patient Name [Simulated Patient]
+ 36 -  -  -  -  -  -  - Recorded Muscle Name [Biceps Brachii]
+ 37 -                             Patient ID [0]
+ 38 -                             Laterality [2 - right]
+ 39 -  -  -  -  -  -  -  -  -  New Operator? [0 - false]
+ 40 -                           New Patient? [0 - false]
+ 41 -                            New Muscle? [0 - false]
+ 42 -  -  -  -  -  -  -  Last Directory Name [c:\simulator\data\\run000\patient]
+ 43 -                       Use Last Muscle? [0 - false]
+ 44 -           Re-use the old firing times? [0 - false]
+
+ 45 -  -  -  -  -  -  patient directory name [patient]
+ 46 -            maximum recruitment thrshld [50.0]
+ 47 -          total time for EMG generation [4]
+
+ 48 -  - max (scaled) value in 16-bit output [4096]
+ 49 -     internal interp. factor for jitter [30]
+
+ 50 -                   muscle fibre density [10.0]
+ 51 -  -  -  -  -  -  -area of 1 muscl fibre [0.0025]
+ 52 -                min motor unit diameter [2.0]
+ 53 -                max motor unit diameter [8.0]
+ 54 -  -  -  -  -  -  -  -  IPI firing slope [0.8]
+ 55 -                        min firing rate [8.0]
+ 56 -                        max firing rate [42.0]
+ 57 -  -  -  -  -  -  -  - coeff of variance [0.25]
+ 58 -                         MU Layout Type [1 - grid]
+ 59 -               Generate Second Channel? [1 - true]
+ 60 -  -  -  - Dump MFP Peak-to-Peak Values? [0 - false]
+
+Creating Muscle Data and Saving to File
+     Creating Muscle Data ...
+
+Muscle diameter_ = 10.344635
+Defining motor unit centers
+Using GRID MU layout algorithm
+Retrying MU layout -- density was 37.000000, required 40.000001
+	 Muscle Diameter has changed to 10.654526
+Retrying MU layout -- density was 37.000000, required 40.000001
+	 Muscle Diameter has changed to 10.973701
+Retrying MU layout -- density was 36.000000, required 40.000001
+	 Muscle Diameter has changed to 11.421789
+There are 40 motor units that pass over the muscle centre.
+     Creating Muscle Data ...
+
+Muscle diameter_ = 10.344635
+Defining motor unit centers
+Using GRID MU layout algorithm
+There are 41 motor units that pass over the muscle centre.
+     Creating Muscle Data ...
+
+Muscle diameter_ = 10.344635
+Defining motor unit centers
+Using GRID MU layout algorithm
+There are 42 motor units that pass over the muscle centre.
+     Creating Muscle Data ...
+
+Muscle diameter_ = 10.344635
+Defining motor unit centers
+Using GRID MU layout algorithm
+There are 42 motor units that pass over the muscle centre.
+     Creating Muscle Data ...
+
+Muscle diameter_ = 10.344635
+Defining motor unit centers
+Using GRID MU layout algorithm
+Retrying MU layout -- density was 46.000000, required 40.000001
+	 Muscle Diameter has changed to 9.825628
+Retrying MU layout -- density was 44.000000, required 40.000001
+	 Muscle Diameter has changed to 9.484751
+Retrying MU layout -- density was 38.000000, required 40.000001
+	 Muscle Diameter has changed to 9.670137
+Retrying MU layout -- density was 29.000000, required 40.000001
+	 Muscle Diameter has changed to 10.959653
+There are 40 motor units that pass over the muscle centre.
+     Creating Muscle Data ...
+
+Muscle diameter_ = 10.344635
+Defining motor unit centers
+Using GRID MU layout algorithm
+There are 40 motor units that pass over the muscle centre.
+     Creating Muscle Data ...
+
+Muscle diameter_ = 10.344635
+Defining motor unit centers
+Using GRID MU layout algorithm
+There are 41 motor units that pass over the muscle centre.
+     Creating Muscle Data ...
+
+Muscle diameter_ = 10.344635
+Defining motor unit centers
+Using GRID MU layout algorithm
+Retrying MU layout -- density was 49.000000, required 40.000001
+	 Muscle Diameter has changed to 9.605733
+There are 41 motor units that pass over the muscle centre.
+     Creating Muscle Data ...
+
+Muscle diameter_ = 10.344635
+Defining motor unit centers
+Using GRID MU layout algorithm
+There are 40 motor units that pass over the muscle centre.
+     Creating Muscle Data ...
+
+Muscle diameter_ = 10.344635
+Defining motor unit centers
+Using GRID MU layout algorithm
+There are 39 motor units that pass over the muscle centre.
+Found reasonable muscle density of 39.000000, want 40.000001
+ . Doing fibre assignments . . .
+Allocating fibres from (-104, -104) to (103, 103)
+Created 33603 fibres in muscle of 10.344635 mm diameter
+Assigning 33603 fibres among 200 motor units using weighting method
+Number of units intersecting center : 51
+Calcuating MU expected fibre counts
+    Fibres for MU   9 of 200 ( 4.50)%
+    Fibres for MU  19 of 200 ( 9.50)%
+    Fibres for MU  29 of 200 (14.50)%
+    Fibres for MU  39 of 200 (19.50)%
+    Fibres for MU  49 of 200 (24.50)%
+    Fibres for MU  59 of 200 (29.50)%
+    Fibres for MU  69 of 200 (34.50)%
+    Fibres for MU  79 of 200 (39.50)%
+    Fibres for MU  89 of 200 (44.50)%
+    Fibres for MU  99 of 200 (49.50)%
+    Fibres for MU 109 of 200 (54.50)% (13s remain)
+    Fibres for MU 119 of 200 (59.50)% (11s remain)
+    Fibres for MU 129 of 200 (64.50)% (10s remain)
+    Fibres for MU 139 of 200 (69.50)% (08s remain)
+    Fibres for MU 149 of 200 (74.50)% (07s remain)
+    Fibres for MU 159 of 200 (79.50)% (05s remain)
+    Fibres for MU 169 of 200 (84.50)% (04s remain)
+    Fibres for MU 179 of 200 (89.50)% (03s remain)
+    Fibres for MU 189 of 200 (94.50)% (01s remain)
+    Fibres for MU 199 of 200 (99.50)% 
+Adjusted 200 of 200 (1.000000) motor units for chording
+Calcuating MU radii limits based on fibre locations
+
+Updating MU diameters
+
+Mean Relative Radius Change    1.018454
+Std Dev Relative Radius Change 0.069301
+
+Calcuating fibre diameter distributions and z-shifts of NMJ's
+Calculating mean fibre diameters for all motor units
+MN = 1.84816e+06
+Range of means [46.000000 - 63.976966] (desired [46.000000 - 64.000000])
+Mean checksum(1.84951e+06) - MN = 1349.93
+Population mean 55.0402 - desired mean 55 == 0.040173
+Setting up fibre sub-distributions
+Mean fibre diameter = 55.046900
+ Min fibre diameter = 33.583942
+ Max fibre diameter = 81.790535
+Calculating which MU's are in the detection area
+Muscle generation complete
+
+Writing muscle fibre data to file:
+    '/Users/kevin/EMGLAB/ahw-simulator/simulator/temp/run000/patient\MF-unplowed.dat'
+
+
+Writing number of fibres per mu to file:
+    '/Users/kevin/EMGLAB/ahw-simulator/simulator/temp/run000/patient\MUParam.dat'
+
+
+Writing Motor Unit data to file:
+    '/Users/kevin/EMGLAB/ahw-simulator/simulator/temp/run000/patient\MU.dat'
+  -- Firing Time Calculations --
+
+# of MUs in muscle         : 200
+# of MUs in detection area : 200
+
+Minimal Firing Rate:                8.0
+Maximal Firing Rate:                42.0
+Firing Rate Slope:                  0.800
+Coefficient of Variation:           0.250
+
+Contraction level (%MVC)            5.00
+Max MU recruitment threshold (%MVC) 50.00
+
+
+
+  Timing failure occurred 0 times
+
+  Firing rate for muscle 631 pps
+58 active MUs stored in file: /Users/kevin/EMGLAB/ahw-simulator/simulator/temp/run000/patient/Firing-Data\AMU.dat
+Building Fibre R-Tree
+ - fibre 1000 of 33603
+ - fibre 2000 of 33603
+ - fibre 3000 of 33603
+ - fibre 4000 of 33603
+ - fibre 5000 of 33603
+ - fibre 6000 of 33603
+ - fibre 7000 of 33603
+ - fibre 8000 of 33603
+ - fibre 9000 of 33603
+ - fibre 10000 of 33603
+ - fibre 11000 of 33603
+ - fibre 12000 of 33603
+ - fibre 13000 of 33603
+ - fibre 14000 of 33603
+ - fibre 15000 of 33603
+ - fibre 16000 of 33603
+ - fibre 17000 of 33603
+ - fibre 18000 of 33603
+ - fibre 19000 of 33603
+ - fibre 20000 of 33603
+ - fibre 21000 of 33603
+ - fibre 22000 of 33603
+ - fibre 23000 of 33603
+ - fibre 24000 of 33603
+ - fibre 25000 of 33603
+ - fibre 26000 of 33603
+ - fibre 27000 of 33603
+ - fibre 28000 of 33603
+ - fibre 29000 of 33603
+ - fibre 30000 of 33603
+ - fibre 31000 of 33603
+ - fibre 32000 of 33603
+ - fibre 33000 of 33603
+Done R-Tree
+Seeking needle to active fibres
+Searching for active fibres near needle tip
+   Best nearby fibre[0] : MU   5, metric 0.022066
+   Best nearby fibre[1] : MU   5, metric 0.022066
+   Best nearby fibre[2] : MU   5, metric 0.022066
+Searched 86 active fibres within 800.0 um; seeking needle to "best 3"
+Only 1 active fibre found near needle -- moving needle to fibre
+Moving needle 1.025914 mm towards active fibre
+Writing muscle fibre data to file:
+    '/Users/kevin/EMGLAB/ahw-simulator/simulator/temp/run000/patient/emg\MF-plowed1.dat'
+
+
+
+  -- Creating MUP potentials --
+Number of active motor units with fibres in the detection area is 58
+
+>> 58 Active motor units
+     1     2     3     4     5     6     7     8     9    10
+    11    12    13    14    15    16    17    18    19    20
+    21    22    23    24    25    26    27    28    29    30
+    31    32    33    34    35    36    37    38    39    40
+    41    42    43    44    45    46    47    48    49    50
+    51    52    53    54    55    56    57    58
+Jitter Calculation Expansion is  : 30.0 samples
+Jitter Acceleration Threshold is : 10.0 v/ss
+    Creating MFPs for MUP  1 of 58 ( 1.72)% from MU 1
+      - MUP contains 43 fibres, 0 `near' MFPs
+
+    Creating MFPs for MUP  2 of 58 ( 3.45)% from MU 2
+      - MUP contains 36 fibres, 0 `near' MFPs
+
+    Creating MFPs for MUP  3 of 58 ( 5.17)% from MU 3
+      - MUP contains 39 fibres, 0 `near' MFPs
+
+    Creating MFPs for MUP  4 of 58 ( 6.90)% from MU 4
+      - MUP contains 38 fibres, 0 `near' MFPs
+
+    Creating MFPs for MUP  5 of 58 ( 8.62)% from MU 5
+      - MUP contains 40 fibres, 1 `near' MFPs
+
+    Creating MFPs for MUP  6 of 58 (10.34)% from MU 6
+      - MUP contains 39 fibres, 0 `near' MFPs
+
+    Creating MFPs for MUP  7 of 58 (12.07)% from MU 7
+      - MUP contains 49 fibres, 0 `near' MFPs
+
+    Creating MFPs for MUP  8 of 58 (13.79)% from MU 8
+      - MUP contains 43 fibres, 0 `near' MFPs
+
+    Creating MFPs for MUP  9 of 58 (15.52)% from MU 9
+      - MUP contains 45 fibres, 0 `near' MFPs
+
+    Creating MFPs for MUP 10 of 58 (17.24)% from MU 10
+      - MUP contains 43 fibres, 0 `near' MFPs
+
+    Creating MFPs for MUP 11 of 58 (18.97)% from MU 11
+      - MUP contains 49 fibres, 0 `near' MFPs
+
+    Creating MFPs for MUP 12 of 58 (20.69)% from MU 12
+      - MUP contains 42 fibres, 0 `near' MFPs
+
+    Creating MFPs for MUP 13 of 58 (22.41)% from MU 13
+      - MUP contains 46 fibres, 0 `near' MFPs
+
+    Creating MFPs for MUP 14 of 58 (24.14)% from MU 14
+      - MUP contains 53 fibres, 0 `near' MFPs
+
+    Creating MFPs for MUP 15 of 58 (25.86)% from MU 15
+      - MUP contains 45 fibres, 0 `near' MFPs
+
+    Creating MFPs for MUP 16 of 58 (27.59)% from MU 16
+      - MUP contains 45 fibres, 2 `near' MFPs
+
+    Creating MFPs for MUP 17 of 58 (29.31)% from MU 17
+      - MUP contains 47 fibres, 0 `near' MFPs
+
+    Creating MFPs for MUP 18 of 58 (31.03)% from MU 18
+      - MUP contains 43 fibres, 0 `near' MFPs
+
+    Creating MFPs for MUP 19 of 58 (32.76)% from MU 19
+      - MUP contains 51 fibres, 1 `near' MFPs
+
+    Creating MFPs for MUP 20 of 58 (34.48)% from MU 20
+      - MUP contains 46 fibres, 0 `near' MFPs
+
+    Creating MFPs for MUP 21 of 58 (36.21)% from MU 21
+      - MUP contains 47 fibres, 0 `near' MFPs
+
+    Creating MFPs for MUP 22 of 58 (37.93)% from MU 22
+      - MUP contains 45 fibres, 0 `near' MFPs
+
+    Creating MFPs for MUP 23 of 58 (39.66)% from MU 23
+      - MUP contains 46 fibres, 0 `near' MFPs
+
+    Creating MFPs for MUP 24 of 58 (41.38)% from MU 24
+      - MUP contains 49 fibres, 0 `near' MFPs
+
+    Creating MFPs for MUP 25 of 58 (43.10)% from MU 25
+      - MUP contains 53 fibres, 0 `near' MFPs
+
+    Creating MFPs for MUP 26 of 58 (44.83)% (18s remain) from MU 26
+      - MUP contains 54 fibres, 0 `near' MFPs
+
+    Creating MFPs for MUP 27 of 58 (46.55)% (17s remain) from MU 27
+      - MUP contains 59 fibres, 0 `near' MFPs
+
+    Creating MFPs for MUP 28 of 58 (48.28)% (17s remain) from MU 28
+      - MUP contains 58 fibres, 0 `near' MFPs
+
+    Creating MFPs for MUP 29 of 58 (50.00)% (17s remain) from MU 29
+      - MUP contains 54 fibres, 0 `near' MFPs
+
+    Creating MFPs for MUP 30 of 58 (51.72)% (16s remain) from MU 30
+      - MUP contains 58 fibres, 0 `near' MFPs
+
+    Creating MFPs for MUP 31 of 58 (53.45)% (15s remain) from MU 31
+      - MUP contains 62 fibres, 0 `near' MFPs
+
+    Creating MFPs for MUP 32 of 58 (55.17)% (15s remain) from MU 32
+      - MUP contains 59 fibres, 0 `near' MFPs
+
+    Creating MFPs for MUP 33 of 58 (56.90)% (14s remain) from MU 33
+      - MUP contains 59 fibres, 0 `near' MFPs
+
+    Creating MFPs for MUP 34 of 58 (58.62)% (13s remain) from MU 34
+      - MUP contains 61 fibres, 0 `near' MFPs
+
+    Creating MFPs for MUP 35 of 58 (60.34)% (12s remain) from MU 35
+      - MUP contains 63 fibres, 0 `near' MFPs
+
+    Creating MFPs for MUP 36 of 58 (62.07)% (12s remain) from MU 36
+      - MUP contains 58 fibres, 0 `near' MFPs
+
+    Creating MFPs for MUP 37 of 58 (63.79)% (11s remain) from MU 37
+      - MUP contains 60 fibres, 1 `near' MFPs
+
+    Creating MFPs for MUP 38 of 58 (65.52)% (11s remain) from MU 38
+      - MUP contains 60 fibres, 0 `near' MFPs
+
+    Creating MFPs for MUP 39 of 58 (67.24)% (11s remain) from MU 39
+      - MUP contains 67 fibres, 0 `near' MFPs
+
+    Creating MFPs for MUP 40 of 58 (68.97)% (10s remain) from MU 40
+      - MUP contains 67 fibres, 0 `near' MFPs
+
+    Creating MFPs for MUP 41 of 58 (70.69)% (09s remain) from MU 41
+      - MUP contains 66 fibres, 0 `near' MFPs
+
+    Creating MFPs for MUP 42 of 58 (72.41)% (09s remain) from MU 42
+      - MUP contains 65 fibres, 0 `near' MFPs
+
+    Creating MFPs for MUP 43 of 58 (74.14)% (08s remain) from MU 43
+      - MUP contains 69 fibres, 0 `near' MFPs
+
+    Creating MFPs for MUP 44 of 58 (75.86)% (08s remain) from MU 44
+      - MUP contains 66 fibres, 1 `near' MFPs
+
+    Creating MFPs for MUP 45 of 58 (77.59)% (07s remain) from MU 45
+      - MUP contains 68 fibres, 11 `near' MFPs
+
+    Creating MFPs for MUP 46 of 58 (79.31)% (07s remain) from MU 46
+      - MUP contains 68 fibres, 0 `near' MFPs
+
+    Creating MFPs for MUP 47 of 58 (81.03)% (06s remain) from MU 47
+      - MUP contains 73 fibres, 0 `near' MFPs
+
+    Creating MFPs for MUP 48 of 58 (82.76)% (06s remain) from MU 48
+      - MUP contains 74 fibres, 0 `near' MFPs
+
+    Creating MFPs for MUP 49 of 58 (84.48)% (05s remain) from MU 49
+      - MUP contains 71 fibres, 0 `near' MFPs
+
+    Creating MFPs for MUP 50 of 58 (86.21)% (04s remain) from MU 50
+      - MUP contains 77 fibres, 0 `near' MFPs
+
+    Creating MFPs for MUP 51 of 58 (87.93)% (04s remain) from MU 51
+      - MUP contains 72 fibres, 6 `near' MFPs
+
+    Creating MFPs for MUP 52 of 58 (89.66)% (03s remain) from MU 52
+      - MUP contains 74 fibres, 0 `near' MFPs
+
+    Creating MFPs for MUP 53 of 58 (91.38)% (03s remain) from MU 53
+      - MUP contains 70 fibres, 0 `near' MFPs
+
+    Creating MFPs for MUP 54 of 58 (93.10)% (02s remain) from MU 54
+      - MUP contains 77 fibres, 0 `near' MFPs
+
+    Creating MFPs for MUP 55 of 58 (94.83)% (01s remain) from MU 55
+      - MUP contains 71 fibres, 0 `near' MFPs
+
+    Creating MFPs for MUP 56 of 58 (96.55)% (01s remain) from MU 56
+      - MUP contains 78 fibres, 0 `near' MFPs
+
+    Creating MFPs for MUP 57 of 58 (98.28)%  from MU 57
+      - MUP contains 88 fibres, 0 `near' MFPs
+
+    Creating MFPs for MUP 58 of 58 (100.00)%  from MU 58
+      - MUP contains 79 fibres, 0 `near' MFPs
+
+
+Writing Active, Detected Motor Unit data to file:
+    '/Users/kevin/EMGLAB/ahw-simulator/simulator/temp/run000/patient\AMU-inDetect.dat'
+    Recording firings for MUP  0 of 58 ( 0.00)%
+Too many MUPs in record -- suppressing add to DCO
+          MUP  0 ( 1) generated 0 significant firings
+    Recording firings for MUP  1 of 58 ( 1.72)%
+          MUP  1 ( 2) generated 0 significant firings
+    Recording firings for MUP  2 of 58 ( 3.45)%
+          MUP  2 ( 3) generated 0 significant firings
+    Recording firings for MUP  3 of 58 ( 5.17)%
+          MUP  3 ( 4) generated 0 significant firings
+    Recording firings for MUP  4 of 58 ( 6.90)%
+          MUP  4 ( 5) generated 50 significant firings
+    Recording firings for MUP  5 of 58 ( 8.62)%
+          MUP  5 ( 6) generated 0 significant firings
+    Recording firings for MUP  6 of 58 (10.34)%
+          MUP  6 ( 7) generated 0 significant firings
+    Recording firings for MUP  7 of 58 (12.07)%
+          MUP  7 ( 8) generated 0 significant firings
+    Recording firings for MUP  8 of 58 (13.79)%
+          MUP  8 ( 9) generated 0 significant firings
+    Recording firings for MUP  9 of 58 (15.52)%
+          MUP  9 (10) generated 0 significant firings
+    Recording firings for MUP 10 of 58 (17.24)%
+          MUP 10 (11) generated 0 significant firings
+    Recording firings for MUP 11 of 58 (18.97)%
+          MUP 11 (12) generated 0 significant firings
+    Recording firings for MUP 12 of 58 (20.69)%
+          MUP 12 (13) generated 0 significant firings
+    Recording firings for MUP 13 of 58 (22.41)%
+          MUP 13 (14) generated 0 significant firings
+    Recording firings for MUP 14 of 58 (24.14)%
+          MUP 14 (15) generated 0 significant firings
+    Recording firings for MUP 15 of 58 (25.86)%
+          MUP 15 (16) generated 47 significant firings
+    Recording firings for MUP 16 of 58 (27.59)%
+          MUP 16 (17) generated 0 significant firings
+    Recording firings for MUP 17 of 58 (29.31)%
+          MUP 17 (18) generated 0 significant firings
+    Recording firings for MUP 18 of 58 (31.03)%
+          MUP 18 (19) generated 47 significant firings
+    Recording firings for MUP 19 of 58 (32.76)%
+          MUP 19 (20) generated 0 significant firings
+    Recording firings for MUP 20 of 58 (34.48)%
+          MUP 20 (21) generated 0 significant firings
+    Recording firings for MUP 21 of 58 (36.21)%
+          MUP 21 (22) generated 0 significant firings
+    Recording firings for MUP 22 of 58 (37.93)%
+          MUP 22 (23) generated 0 significant firings
+    Recording firings for MUP 23 of 58 (39.66)%
+          MUP 23 (24) generated 0 significant firings
+    Recording firings for MUP 24 of 58 (41.38)%
+          MUP 24 (25) generated 0 significant firings
+    Recording firings for MUP 25 of 58 (43.10)%
+          MUP 25 (26) generated 0 significant firings
+    Recording firings for MUP 26 of 58 (44.83)%
+          MUP 26 (27) generated 0 significant firings
+    Recording firings for MUP 27 of 58 (46.55)%
+          MUP 27 (28) generated 0 significant firings
+    Recording firings for MUP 28 of 58 (48.28)%
+          MUP 28 (29) generated 0 significant firings
+    Recording firings for MUP 29 of 58 (50.00)%
+          MUP 29 (30) generated 0 significant firings
+    Recording firings for MUP 30 of 58 (51.72)%
+          MUP 30 (31) generated 0 significant firings
+    Recording firings for MUP 31 of 58 (53.45)%
+          MUP 31 (32) generated 0 significant firings
+    Recording firings for MUP 32 of 58 (55.17)%
+          MUP 32 (33) generated 0 significant firings
+    Recording firings for MUP 33 of 58 (56.90)%
+          MUP 33 (34) generated 0 significant firings
+    Recording firings for MUP 34 of 58 (58.62)%
+          MUP 34 (35) generated 0 significant firings
+    Recording firings for MUP 35 of 58 (60.34)%
+          MUP 35 (36) generated 0 significant firings
+    Recording firings for MUP 36 of 58 (62.07)%
+          MUP 36 (37) generated 41 significant firings
+    Recording firings for MUP 37 of 58 (63.79)%
+          MUP 37 (38) generated 0 significant firings
+    Recording firings for MUP 38 of 58 (65.52)%
+          MUP 38 (39) generated 0 significant firings
+    Recording firings for MUP 39 of 58 (67.24)%
+          MUP 39 (40) generated 0 significant firings
+    Recording firings for MUP 40 of 58 (68.97)%
+          MUP 40 (41) generated 0 significant firings
+    Recording firings for MUP 41 of 58 (70.69)%
+          MUP 41 (42) generated 0 significant firings
+    Recording firings for MUP 42 of 58 (72.41)%
+          MUP 42 (43) generated 0 significant firings
+    Recording firings for MUP 43 of 58 (74.14)%
+          MUP 43 (44) generated 40 significant firings
+    Recording firings for MUP 44 of 58 (75.86)%
+          MUP 44 (45) generated 38 significant firings
+    Recording firings for MUP 45 of 58 (77.59)%
+          MUP 45 (46) generated 0 significant firings
+    Recording firings for MUP 46 of 58 (79.31)%
+          MUP 46 (47) generated 0 significant firings
+    Recording firings for MUP 47 of 58 (81.03)%
+          MUP 47 (48) generated 0 significant firings
+    Recording firings for MUP 48 of 58 (82.76)%
+          MUP 48 (49) generated 0 significant firings
+    Recording firings for MUP 49 of 58 (84.48)%
+          MUP 49 (50) generated 0 significant firings
+    Recording firings for MUP 50 of 58 (86.21)%
+          MUP 50 (51) generated 37 significant firings
+    Recording firings for MUP 51 of 58 (87.93)%
+          MUP 51 (52) generated 0 significant firings
+    Recording firings for MUP 52 of 58 (89.66)%
+          MUP 52 (53) generated 0 significant firings
+    Recording firings for MUP 53 of 58 (91.38)%
+          MUP 53 (54) generated 0 significant firings
+    Recording firings for MUP 54 of 58 (93.10)%
+          MUP 54 (55) generated 0 significant firings
+    Recording firings for MUP 55 of 58 (94.83)%
+          MUP 55 (56) generated 0 significant firings
+    Recording firings for MUP 56 of 58 (96.55)%
+          MUP 56 (57) generated 0 significant firings
+    Recording firings for MUP 57 of 58 (98.28)%
+          MUP 57 (58) generated 0 significant firings
+
+Generation Complete
+
+Adding noise to simulated signal with S/N ratio of 25.0
+Writing EMG buffer of 156250 samples
+2466 MUPs added
+
+EMG file "/Users/kevin/EMGLAB/ahw-simulator/simulator/temp/run000/patient/emg/emg1.dat" created.
+
+
+Wrote GST file : /Users/kevin/EMGLAB/ahw-simulator/simulator/temp/run000/patient/emg/micro1.gst
+    GST file contains 300 of 2466 generated MUPS -- 12.17%
+    2166 MUPs were generated which could not be recorded in GST file
+    Scanning 156250 values
+    Voltage range is        : -511.980593 to 1278.315306 µV
+    Max Absolute Voltage is : 1278.315306 µV
+    Scale Factor            : 3121 mV
+    Scale Factor Check: Max * scale:
+        1.278315 * 3204.217285 = 4095.999998
+        4096 - scale Factor = -0.000002
+    Converting 156250 values . . .
+    Range of values: (-1640) - (4096)
+
+    Writing 156250 values to '/Users/kevin/EMGLAB/ahw-simulator/simulator/temp/run000/patient/emg/micro1.dat'
+
+
+Output gathered into file:
+    /Users/kevin/EMGLAB/ahw-simulator/simulator/temp/run000/patient/emg/micro1.dat
+
+Output in : '/Users/kevin/EMGLAB/ahw-simulator/simulator/temp/run000/patient/emg'
+
+Simulator Run Complete: Wed Oct 31 12:52:37 2007
+
