@@ -15,10 +15,17 @@
 -->
 
  
-### Zapis do pliku \*.png o nazwie m-pliku
+### Zapis do pliku \*.png wszystkich rysunków
 ```matlab
-[a,fname,c] = fileparts( mfilename('fullpath')); 
-print( strcat(fname,'.png'),'-dpng');
+h2 = findall(groot,'Type','figure');
+h3 = findobj('Type','figure');
+
+urlwrite ('https://raw.githubusercontent.com/informacja/MTF/main/figPW.m', 'figPW.m');
+
+for i = 1:length(h2)
+    figure(h2(i))
+    figPW;
+end
 ```
 
  
