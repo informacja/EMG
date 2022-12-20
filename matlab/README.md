@@ -14,6 +14,13 @@
 ![aMi](docs/aMi.png)](https://marketplace.visualstudio.com/items?itemName=marmottet.ami)  
 -->
 
+### Wywołanie biblioteki i zapis wszystkich figur
+```
+if ~isfile('figPSW.m')
+ urlwrite ('https://raw.githubusercontent.com/informacja/MTF/main/figPSW.m', 'figPSW.m');
+end
+figPSW;
+```
  
 ### Zapis do pliku \*.png wszystkich rysunków
 ```matlab
@@ -30,7 +37,6 @@ for i = 1:length(h2)
 end
 ```
 
- 
 ### Zapis do pliku z numerem figury
 ```matlab
 [a,fname,c] = fileparts( mfilename('fullpath'));                        % get current m-file name
