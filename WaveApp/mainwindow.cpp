@@ -389,7 +389,7 @@ void MainWindow::on_pushButton_clicked()
 void MainWindow::on_textEditFeatures_textChanged()
 {
     QString data = ui->textEditFeatures->toPlainText();    
-    QStringList strListGestureNr = data.split(QRegExp(" "), QString::SkipEmptyParts);
+    QStringList strListGestureNr = data.split(QRegularExpression(" "), Qt::SkipEmptyParts);
     gestureNr.clear();
     for(auto i : strListGestureNr)
     {
