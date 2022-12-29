@@ -16,6 +16,7 @@
 
 ### Wywołanie biblioteki i zapis wszystkich figur
 ```matlab
+% put this at the end of your code
 if ~isfile('figPSW.m')
  urlwrite ('https://raw.githubusercontent.com/informacja/MTF/main/figPSW.m', 'figPSW.m');
 end
