@@ -15,6 +15,7 @@
 -->
 
 ### Instalacja biblioteki
+Copy and paste this in your MATLAB console
 ```matlab
 cd(fullfile(userpath));
 urlwrite ('https://raw.githubusercontent.com/informacja/MTF/main/startup.m', 'startup.m');
