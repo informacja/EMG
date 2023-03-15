@@ -14,6 +14,13 @@
 ![aMi](docs/aMi.png)](https://marketplace.visualstudio.com/items?itemName=marmottet.ami)  
 -->
 
+### Instalacja biblioteki
+```matlab
+cd(fullfile(userpath));
+urlwrite ('https://raw.githubusercontent.com/informacja/MTF/main/startup.m', 'startup.m');
+startup;
+```
+
 ### Wywołanie biblioteki i zapis wszystkich figur
 ```matlab
 % put this at the end of your code
