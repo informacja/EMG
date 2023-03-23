@@ -17,9 +17,12 @@
 ### Instalacja biblioteki
 Copy and paste this in your MATLAB console
 ```matlab
+proj_path = pwd;
 cd(fullfile(userpath));
 urlwrite ('https://raw.githubusercontent.com/informacja/MTF/main/startup.m', 'startup.m');
 startup;
+cd(proj_path);
+disp('Now you can type here "figPW" or figPW("svg") to save last figure. If you want save all opened figures just run figPSW')
 ```
 
 ### Wywołanie biblioteki i zapis wszystkich figur
