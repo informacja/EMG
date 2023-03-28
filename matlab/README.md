@@ -22,7 +22,7 @@ cd(fullfile(userpath));
 urlwrite ('https://raw.githubusercontent.com/informacja/MTF/main/startup.m', 'startup.m');
 startup;
 cd(proj_path);
-fprintf(1,'Now you can type here "figPW" or figPW("svg") to save last figure. If you want save all opened figures just run "figPSW".\nIf you add an extension as a first parmeter timestamp will be added to filename')
+fprintf(1,'Now you can type here "figPW" or figPW("svg") to save last figure. If you want save all opened figures just run "figPSW".\nIf you add an extension as a first parmeter timestamp will be added to filename\n')
 ```
 
 ### Wywołanie biblioteki i zapis wszystkich figur
