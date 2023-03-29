@@ -20,6 +20,8 @@ Copy and paste this in your MATLAB console
 proj_path = pwd;
 cd(fullfile(userpath));
 urlwrite ('https://raw.githubusercontent.com/informacja/MTF/main/startup.m', 'startup.m');
+ urlwrite ('https://raw.githubusercontent.com/informacja/MTF/main/figPSW.m', 'figPSW.m');
+  urlwrite ('https://raw.githubusercontent.com/informacja/MTF/main/figPW.m', 'figPW.m');
 startup;
 cd(proj_path);
 fprintf(1,'Now you can type here "figPW" or figPW("svg") to save last figure. If you want save all opened figures just run "figPSW".\nIf you add an extension as a first parmeter timestamp will be added to filename\n')
